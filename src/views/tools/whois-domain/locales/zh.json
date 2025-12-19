@@ -1,0 +1,12 @@
+{
+    "title": "域名 WHOIS 查询",
+    "desc": "查询域名注册记录和状态。",
+    "placeholder": "例如: google.com",
+    "btn": "查询",
+    "result": {
+        "registrar": "注册商",
+        "status": "状态",
+        "created": "创建时间",
+        "expires": "到期时间"
+    }
+}

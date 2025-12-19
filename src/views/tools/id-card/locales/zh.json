@@ -1,0 +1,24 @@
+{
+    "title": "身份证助手",
+    "desc": "身份证 information 查询 / 随机号码生成",
+    "check_tab": "信息查询",
+    "gen_tab": "随机生成",
+    "input_label": "身份证号码",
+    "structure": {
+        "region": "地址码",
+        "birth": "出生日期",
+        "seq": "顺序码",
+        "check": "校验码"
+    },
+    "check_btn": "查询",
+    "gen_btn": "随机生成",
+    "result": {
+        "valid": "号码有效",
+        "invalid": "号码无效",
+        "checksum_error": "校验位错误",
+        "correct_checksum": "正确校验位",
+        "birth": "出生日期",
+        "gender": "性别",
+        "place": "归属地"
+    }
+}

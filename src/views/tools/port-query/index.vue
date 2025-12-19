@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import BackButton from '../../components/BackButton.vue'
+import BackButton from '../../../components/BackButton.vue'
 
 const { t, locale } = useI18n()
 
@@ -12,7 +12,7 @@ const loading = ref(true)
 const fetchPorts = async () => {
   try {
     loading.value = true
-    const response = await fetch('/tools/data/ports.json')
+    const response = await fetch(`${import.meta.env.BASE_URL}data/ports.json`)
     if (response.ok) {
       ports.value = await response.json()
     }
@@ -78,11 +78,11 @@ const getStatusClass = (status) => {
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
           <thead>
-            <tr class="bg-slate-50/50 dark:bg-slate-900/50">
-              <th v-for="h in ['port', 'proto', 'service', 'desc']" :key="h" class="px-8 py-6 text-left text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                {{ t(`tools.port-query.table.${h}`) }}
-              </th>
-            </tr>
+             <tr class="bg-slate-50/50 dark:bg-slate-900/50">
+               <th v-for="h in ['port', 'proto', 'service', 'desc']" :key="h" class="px-8 py-6 text-left text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                 {{ t(`tools.port-query.table.${h}`) }}
+               </th>
+             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
             <tr v-if="loading">

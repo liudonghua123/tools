@@ -1,0 +1,24 @@
+{
+    "title": "Base64 Image",
+    "desc": "Convert images to Base64/Data URL and vice versa.",
+    "tabs": {
+        "encode": "Image to Base64",
+        "decode": "Base64 to Image"
+    },
+    "encode": {
+        "drop_zone": "Drop image here or click to upload",
+        "paste_info": "You can also paste an image directly (Ctrl+V)",
+        "clear": "Clear Image",
+        "copy_base64": "Copy Base64",
+        "copy_data_url": "Copy Data URL",
+        "preview": "Image Preview"
+    },
+    "decode": {
+        "placeholder": "Paste Base64 or Data URL here...",
+        "clear": "Clear Code",
+        "download": "Download Image",
+        "copy_img": "Copy Image",
+        "invalid": "Invalid Base64 or Image data",
+        "preview": "Result Preview"
+    }
+}

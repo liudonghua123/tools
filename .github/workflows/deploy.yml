@@ -31,7 +31,7 @@ jobs:
         run: node scripts/fetch_regions.js
 
       - name: Build
-        run: npm run build
+        run: npm run build -- --base=/tools/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4

@@ -1,0 +1,12 @@
+{
+    "title": "IP WHOIS",
+    "desc": "Check IP allocation and network info.",
+    "placeholder": "e.g., 1.1.1.1",
+    "btn": "Query",
+    "result": {
+        "range": "IP Range",
+        "netname": "Network Name",
+        "country": "Country",
+        "description": "Description"
+    }
+}

@@ -13,45 +13,18 @@ const categories = [
   { id: 'all', icon: 'M4 6h16M4 12h16M4 18h16' },
   { id: 'identity', icon: 'M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2' },
   { id: 'network', icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064' },
+  { id: 'dev', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' },
 ]
 
-const tools = [
-  {
-    id: 'id-card',
-    cat: 'identity',
-    icon: 'card', 
-    path: '/tool/id-card',
-    color: 'from-blue-500 to-cyan-500'
-  },
-  {
-    id: 'port-query',
-    cat: 'network',
-    icon: 'network',
-    path: '/tool/port-query',
-    color: 'from-purple-500 to-pink-500'
-  },
-  {
-    id: 'whois-domain',
-    cat: 'network',
-    icon: 'whois',
-    path: '/tool/whois-domain',
-    color: 'from-orange-500 to-amber-500'
-  },
-  {
-    id: 'whois-ip',
-    cat: 'network',
-    icon: 'whois',
-    path: '/tool/whois-ip',
-    color: 'from-indigo-500 to-blue-500'
-  },
-  {
-    id: 'base64-image',
-    cat: 'dev',
-    icon: 'image',
-    path: '/tool/base64-image',
-    color: 'from-emerald-500 to-teal-500'
+// Dynamic tool discovery
+const toolConfigs = import.meta.glob('../views/tools/*/config.js', { eager: true })
+const tools = Object.keys(toolConfigs).map((path) => {
+  const config = toolConfigs[path].default
+  return {
+    ...config,
+    path: `/tool/${config.id}`
   }
-]
+})
 
 const filteredTools = computed(() => {
   return tools.filter(tool => {

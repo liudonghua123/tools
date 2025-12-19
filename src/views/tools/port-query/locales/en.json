@@ -1,0 +1,12 @@
+{
+    "title": "Port Query",
+    "desc": "Check TCP/UDP port info.",
+    "search_label": "Port or Service",
+    "search_placeholder": "e.g., 80, ssh",
+    "table": {
+        "port": "Port",
+        "proto": "Protocol",
+        "service": "Service",
+        "desc": "Description"
+    }
+}

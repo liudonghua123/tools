@@ -8,7 +8,7 @@ export default defineConfig({
         vue(),
         tailwindcss(),
     ],
-    base: '/tools/',
+    base: '/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

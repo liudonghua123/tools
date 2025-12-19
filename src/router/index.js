@@ -1,37 +1,25 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+// Dynamic tool discovery
+const toolModules = import.meta.glob('../views/tools/*/index.vue')
+const toolRoutes = Object.keys(toolModules).map((path) => {
+    const segments = path.split('/')
+    const id = segments[segments.length - 2]
+    return {
+        path: `/tool/${id}`,
+        name: id,
+        component: toolModules[path]
+    }
+})
+
 const routes = [
     {
         path: '/',
         name: 'home',
         component: HomeView
     },
-    {
-        path: '/tool/id-card',
-        name: 'id-card',
-        component: () => import('../views/tools/IdCardTool.vue')
-    },
-    {
-        path: '/tool/port-query',
-        name: 'port-query',
-        component: () => import('../views/tools/PortQueryTool.vue')
-    },
-    {
-        path: '/tool/whois-domain',
-        name: 'whois-domain',
-        component: () => import('../views/tools/WhoisDomainTool.vue')
-    },
-    {
-        path: '/tool/whois-ip',
-        name: 'whois-ip',
-        component: () => import('../views/tools/WhoisIpTool.vue')
-    },
-    {
-        path: '/tool/base64-image',
-        name: 'base64-image',
-        component: () => import('../views/tools/Base64ImageTool.vue')
-    }
+    ...toolRoutes
 ]
 
 const router = createRouter({

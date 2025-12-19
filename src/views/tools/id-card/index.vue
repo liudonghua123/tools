@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import BackButton from '../../components/BackButton.vue'
+import BackButton from '../../../components/BackButton.vue'
 
 const { t, locale } = useI18n()
 
@@ -13,7 +13,7 @@ const copiedId = ref(null)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/tools/data/regions.json')
+    const res = await fetch(`${import.meta.env.BASE_URL}data/regions.json`)
     if (res.ok) {
       regionData.value = await res.json()
     }

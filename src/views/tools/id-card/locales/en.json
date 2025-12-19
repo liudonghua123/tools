@@ -1,0 +1,24 @@
+{
+    "title": "ID Card Helper",
+    "desc": "Check ID card info or generate random IDs.",
+    "check_tab": "Check Info",
+    "gen_tab": "Generate",
+    "input_label": "ID Number",
+    "structure": {
+        "region": "Region",
+        "birth": "Birthday",
+        "seq": "Sequence",
+        "check": "Check"
+    },
+    "check_btn": "Check",
+    "gen_btn": "Generate Random",
+    "result": {
+        "valid": "Valid ID",
+        "invalid": "Invalid ID",
+        "checksum_error": "Checksum Error",
+        "correct_checksum": "Suggested Checksum",
+        "birth": "Birthday",
+        "gender": "Gender",
+        "place": "Place"
+    }
+}

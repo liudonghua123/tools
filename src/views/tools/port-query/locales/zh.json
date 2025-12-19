@@ -1,0 +1,12 @@
+{
+    "title": "端口查询",
+    "desc": "常见 TCP/UDP 端口协议查询",
+    "search_label": "端口或服务名",
+    "search_placeholder": "例如: 80, ssh",
+    "table": {
+        "port": "端口",
+        "proto": "协议",
+        "service": "服务",
+        "desc": "描述"
+    }
+}

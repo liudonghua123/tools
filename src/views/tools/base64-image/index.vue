@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import BackButton from '../../../components/BackButton.vue'
 
 const { t } = useI18n()
 const activeTab = ref('encode')
@@ -101,8 +102,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="max-w-5xl mx-auto animate-fade-in px-4 sm:px-0 pt-4 pb-20">
-    <div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-700 overflow-hidden">
+  <div class="max-w-5xl mx-auto animate-fade-in px-4 sm:px-0 pt-4 pb-20 relative">
+    <BackButton />
+
+    <div class="bg-white/70 dark:bg-slate-800/70 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-700 overflow-hidden mt-8">
       <!-- Header -->
       <div class="p-8 sm:p-12 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-br from-emerald-50/50 to-transparent dark:from-emerald-900/10">
         <h2 class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white mb-2">{{ t('tools.base64-image.title') }}</h2>
@@ -242,13 +245,3 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.animate-spin-slow {
-  animation: spin 6s linear infinite;
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-</style>

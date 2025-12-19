@@ -1,0 +1,12 @@
+{
+    "title": "Domain WHOIS",
+    "desc": "Check domain registration records.",
+    "placeholder": "e.g., google.com",
+    "btn": "Query",
+    "result": {
+        "registrar": "Registrar",
+        "status": "Status",
+        "created": "Created",
+        "expires": "Expires"
+    }
+}

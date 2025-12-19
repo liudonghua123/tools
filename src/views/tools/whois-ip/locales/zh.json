@@ -1,0 +1,12 @@
+{
+    "title": "IP WHOIS 查询",
+    "desc": "查询 IP 地址分配及 network 归属信息。",
+    "placeholder": "例如: 1.1.1.1",
+    "btn": "查询",
+    "result": {
+        "range": "IP 范围",
+        "netname": "网络名称",
+        "country": "国家",
+        "description": "描述"
+    }
+}
