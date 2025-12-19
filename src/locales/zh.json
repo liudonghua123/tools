@@ -1,0 +1,83 @@
+{
+    "common": {
+        "back": "返回",
+        "no_results": "未找到结果",
+        "gender": {
+            "male": "男",
+            "female": "女"
+        }
+    },
+    "title": "在线工具",
+    "subtitle": "专业免费的在线工具集合",
+    "home": {
+        "search_placeholder": "搜索工具...",
+        "category": {
+            "all": "全部",
+            "identity": "身份信息",
+            "network": "网络工具",
+            "dev": "开发工具"
+        }
+    },
+    "tools": {
+        "id-card": {
+            "title": "身份证助手",
+            "desc": "身份证信息查询 / 随机号码生成",
+            "check_tab": "信息查询",
+            "gen_tab": "随机生成",
+            "input_label": "身份证号码",
+            "structure": {
+                "region": "地址码",
+                "birth": "出生日期",
+                "seq": "顺序码",
+                "check": "校验码"
+            },
+            "check_btn": "查询",
+            "gen_btn": "随机生成",
+            "result": {
+                "valid": "号码有效",
+                "invalid": "号码无效",
+                "checksum_error": "校验位错误",
+                "correct_checksum": "正确校验位",
+                "birth": "出生日期",
+                "gender": "性别",
+                "place": "归属地"
+            }
+        },
+        "port-query": {
+            "title": "端口查询",
+            "desc": "常见 TCP/UDP 端口协议查询",
+            "search_label": "端口或服务名",
+            "search_placeholder": "例如: 80, ssh",
+            "table": {
+                "port": "端口",
+                "proto": "协议",
+                "service": "服务",
+                "desc": "描述"
+            }
+        },
+        "whois-domain": {
+            "title": "Domain WHOIS",
+            "desc": "Check domain registration info.",
+            "placeholder": "Enter domain (e.g., google.com)",
+            "btn": "Query",
+            "info": {
+                "registrar": "Registrar",
+                "creation": "Created On",
+                "expiry": "Expires On",
+                "status": "Status"
+            }
+        },
+        "whois-ip": {
+            "title": "IP WHOIS",
+            "desc": "Check IP network info.",
+            "placeholder": "Enter IP (e.g., 1.1.1.1)",
+            "btn": "Query",
+            "info": {
+                "inetnum": "IP Range",
+                "netname": "Network Name",
+                "country": "Country",
+                "descr": "Description"
+            }
+        }
+    }
+}

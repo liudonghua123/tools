@@ -1,0 +1,59 @@
+{
+    "common": {
+        "back": "Back",
+        "no_results": "No results found",
+        "gender": {
+            "male": "Male",
+            "female": "Female"
+        }
+    },
+    "title": "Online Tools",
+    "subtitle": "Professional & Free Online Tools Collection",
+    "home": {
+        "search_placeholder": "Search tools...",
+        "category": {
+            "all": "All",
+            "identity": "Identity",
+            "network": "Network",
+            "dev": "Developer"
+        }
+    },
+    "tools": {
+        "id-card": {
+            "title": "ID Card Helper",
+            "desc": "Check ID card info or generate random IDs.",
+            "check_tab": "Check Info",
+            "gen_tab": "Generate",
+            "input_label": "ID Number",
+            "structure": {
+                "region": "Region",
+                "birth": "Birthday",
+                "seq": "Sequence",
+                "check": "Check"
+            },
+            "check_btn": "Check",
+            "gen_btn": "Generate Random",
+            "result": {
+                "valid": "Valid ID",
+                "invalid": "Invalid ID",
+                "checksum_error": "Checksum Error",
+                "correct_checksum": "Suggested Checksum",
+                "birth": "Birthday",
+                "gender": "Gender",
+                "place": "Place"
+            }
+        },
+        "port-query": {
+            "title": "Port Query",
+            "desc": "Check TCP/UDP port info.",
+            "search_label": "Port or Service",
+            "search_placeholder": "e.g., 80, ssh",
+            "table": {
+                "port": "Port",
+                "proto": "Protocol",
+                "service": "Service",
+                "desc": "Description"
+            }
+        }
+    }
+}
