@@ -9,6 +9,7 @@ const activeTab = ref('check')
 const idNumberInput = ref('')
 const generatedIds = ref([])
 const regionData = ref({})
+const copiedId = ref(null)
 
 onMounted(async () => {
   try {
@@ -114,6 +115,18 @@ const selectGeneratedId = (id) => {
 
 const toggleExpand = (idx) => {
   generatedIds.value[idx].expanded = !generatedIds.value[idx].expanded
+}
+
+const copyToClipboard = async (text, id) => {
+  try {
+    await navigator.clipboard.writeText(text)
+    copiedId.value = id
+    setTimeout(() => {
+      copiedId.value = null
+    }, 2000)
+  } catch (err) {
+    console.error('Failed to copy', err)
+  }
 }
 </script>
 
