@@ -56,27 +56,27 @@
             }
         },
         "whois-domain": {
-            "title": "Domain WHOIS",
-            "desc": "Check domain registration info.",
-            "placeholder": "Enter domain (e.g., google.com)",
-            "btn": "Query",
-            "info": {
-                "registrar": "Registrar",
-                "creation": "Created On",
-                "expiry": "Expires On",
-                "status": "Status"
+            "title": "域名 WHOIS 查询",
+            "desc": "查询域名注册记录和状态。",
+            "placeholder": "例如: google.com",
+            "btn": "查询",
+            "result": {
+                "registrar": "注册商",
+                "status": "状态",
+                "created": "创建时间",
+                "expires": "到期时间"
             }
         },
         "whois-ip": {
-            "title": "IP WHOIS",
-            "desc": "Check IP network info.",
-            "placeholder": "Enter IP (e.g., 1.1.1.1)",
-            "btn": "Query",
-            "info": {
-                "inetnum": "IP Range",
-                "netname": "Network Name",
-                "country": "Country",
-                "descr": "Description"
+            "title": "IP WHOIS 查询",
+            "desc": "查询 IP 地址分配及网络归属信息。",
+            "placeholder": "例如: 1.1.1.1",
+            "btn": "查询",
+            "result": {
+                "range": "IP 范围",
+                "netname": "网络名称",
+                "country": "国家",
+                "description": "描述"
             }
         }
     }

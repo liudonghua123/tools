@@ -119,7 +119,16 @@ const toggleExpand = (idx) => {
 
 const copyToClipboard = async (text, id) => {
   try {
-    await navigator.clipboard.writeText(text)
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      const textArea = document.createElement("textarea")
+      textArea.value = text
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+    }
     copiedId.value = id
     setTimeout(() => {
       copiedId.value = null
@@ -192,7 +201,8 @@ const copyToClipboard = async (text, id) => {
             </div>
           </div>
 
-          <div v-if="checkResult" class="p-8 rounded-3xl border-2 transition-all duration-500" :class="checkResult.valid ? 'bg-green-50/30 border-green-200/50 dark:border-green-900/30 text-green-900 dark:text-green-300 shadow-lg shadow-green-500/5' : 'bg-red-50/30 border-red-200/50 dark:border-red-900/30 text-red-900 dark:text-red-300 shadow-lg shadow-red-500/5'">
+          <div v-if="checkResult" class="p-8 rounded-3xl border-2 transition-all duration-500 relative overflow-hidden group/result" :class="checkResult.valid ? 'bg-green-50/30 border-green-200/50 dark:border-green-900/30 text-green-900 dark:text-green-300 shadow-lg shadow-green-500/5' : 'bg-red-50/30 border-red-200/50 dark:border-red-900/30 text-red-900 dark:text-red-300 shadow-lg shadow-red-500/5'">
+             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent group-hover/result:translate-x-full transition-transform duration-1000"></div>
              <div class="flex items-center space-x-3 font-black text-xl mb-8">
                <div v-if="checkResult.valid" class="p-2 bg-green-500 rounded-full text-white">
                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>

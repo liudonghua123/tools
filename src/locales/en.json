@@ -54,6 +54,30 @@
                 "service": "Service",
                 "desc": "Description"
             }
+        },
+        "whois-domain": {
+            "title": "Domain WHOIS",
+            "desc": "Check domain registration records.",
+            "placeholder": "e.g., google.com",
+            "btn": "Query",
+            "result": {
+                "registrar": "Registrar",
+                "status": "Status",
+                "created": "Created",
+                "expires": "Expires"
+            }
+        },
+        "whois-ip": {
+            "title": "IP WHOIS",
+            "desc": "Check IP allocation and network info.",
+            "placeholder": "e.g., 1.1.1.1",
+            "btn": "Query",
+            "result": {
+                "range": "IP Range",
+                "netname": "Network Name",
+                "country": "Country",
+                "description": "Description"
+            }
         }
     }
 }

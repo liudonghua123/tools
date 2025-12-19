@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
     --animate-fade-in: fadeIn 0.5s ease-out;
     --animate-slide-up: slideUp 0.5s ease-out;
