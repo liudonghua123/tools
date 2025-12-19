@@ -69,7 +69,7 @@
         },
         "whois-ip": {
             "title": "IP WHOIS 查询",
-            "desc": "查询 IP 地址分配及网络归属信息。",
+            "desc": "查询 IP 地址分配及 network 归属信息。",
             "placeholder": "例如: 1.1.1.1",
             "btn": "查询",
             "result": {
@@ -77,6 +77,30 @@
                 "netname": "网络名称",
                 "country": "国家",
                 "description": "描述"
+            }
+        },
+        "base64-image": {
+            "title": "图片 Base64 转换",
+            "desc": "图片转 Base64/Data URL 或 Base64 转回图片。",
+            "tabs": {
+                "encode": "图片转 Base64",
+                "decode": "Base64 转图片"
+            },
+            "encode": {
+                "drop_zone": "拖入图片或点击上传",
+                "paste_info": "也可以直接粘贴图片 (Ctrl+V)",
+                "clear": "清除图片",
+                "copy_base64": "复制 Base64",
+                "copy_data_url": "复制 Data URL",
+                "preview": "图片预览"
+            },
+            "decode": {
+                "placeholder": "在此处粘贴 Base64 或 Data URL 代码...",
+                "clear": "清除代码",
+                "download": "下载图片",
+                "copy_img": "复制图片",
+                "invalid": "无效的 Base64 或图片数据",
+                "preview": "结果预览"
             }
         }
     }

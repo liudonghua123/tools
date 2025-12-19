@@ -26,6 +26,11 @@ const routes = [
         path: '/tool/whois-ip',
         name: 'whois-ip',
         component: () => import('../views/tools/WhoisIpTool.vue')
+    },
+    {
+        path: '/tool/base64-image',
+        name: 'base64-image',
+        component: () => import('../views/tools/Base64ImageTool.vue')
     }
 ]
 

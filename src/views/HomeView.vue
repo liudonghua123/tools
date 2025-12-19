@@ -43,6 +43,13 @@ const tools = [
     icon: 'whois',
     path: '/tool/whois-ip',
     color: 'from-indigo-500 to-blue-500'
+  },
+  {
+    id: 'base64-image',
+    cat: 'dev',
+    icon: 'image',
+    path: '/tool/base64-image',
+    color: 'from-emerald-500 to-teal-500'
   }
 ]
 
@@ -157,6 +164,9 @@ const handleCardMouseMove = (e, index) => {
              </svg>
              <svg v-else-if="tool.icon === 'whois'" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+             </svg>
+             <svg v-else-if="tool.icon === 'image'" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
              </svg>
           </div>
           
