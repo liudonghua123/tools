@@ -3,23 +3,25 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --animate-fade-in: fadeIn 0.5s ease-out;
-    --animate-slide-up: slideUp 0.5s ease-out;
+    --animate-fade-in: fadeIn 0.6s ease-out;
+    --animate-slide-up: slideUp 0.6s ease-out both;
 
     @keyframes fadeIn {
         0% {
             opacity: 0;
+            transform: translateY(-10px);
         }
 
         100% {
             opacity: 1;
+            transform: translateY(0);
         }
     }
 
     @keyframes slideUp {
         0% {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
         }
 
         100% {
@@ -31,19 +33,182 @@
 
 /* Custom scrollbar for webkit */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: white;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+    background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: linear-gradient(180deg, #64748b 0%, #475569 100%);
+    background-clip: content-box;
 }
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #475569 0%, #334155 100%);
+    background-clip: content-box;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #64748b 0%, #475569 100%);
+    background-clip: content-box;
+}
+
+/* Selection highlight */
+::selection {
+    background: rgba(99, 102, 241, 0.3);
+    color: inherit;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Page loading animation */
+@keyframes page-load {
+    0% {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+body {
+    animation: page-load 0.4s ease-out;
+}
+
+/* Global focus styles */
+*:focus-visible {
+    outline: 2px solid rgba(99, 102, 241, 0.5);
+    outline-offset: 2px;
+}
+
+/* Glassmorphism utility */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .glass {
+    background: rgba(15, 23, 42, 0.7);
+}
+
+/* Gradient text utility */
+.gradient-text {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glow utilities */
+.glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3),
+                0 0 40px rgba(59, 130, 246, 0.2),
+                0 0 60px rgba(59, 130, 246, 0.1);
+}
+
+.glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3),
+                0 0 40px rgba(139, 92, 246, 0.2),
+                0 0 60px rgba(139, 92, 246, 0.1);
+}
+
+/* Shimmer animation for loading states */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Breathing glow animation */
+@keyframes breathe {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+    }
+}
+
+.breathe {
+    animation: breathe 3s ease-in-out infinite;
+}
+
+/* Rotate on hover */
+.hover-rotate {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-rotate:hover {
+    transform: rotate(12deg) scale(1.1);
+}
+
+/* Scale bounce on hover */
+.hover-bounce {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-bounce:hover {
+    transform: scale(1.05);
+}
+
+/* Floating animation */
+@keyframes floating {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* Staggered fade in for lists */
+.stagger-fade > * {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.stagger-fade > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-fade > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-fade > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-fade > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-fade > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-fade > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-fade > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-fade > *:nth-child(8) { animation-delay: 0.8s; }
+.stagger-fade > *:nth-child(9) { animation-delay: 0.9s; }
+.stagger-fade > *:nth-child(10) { animation-delay: 1s; }
