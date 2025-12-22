@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted, defineAsyncComponent, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -48,31 +48,198 @@ const languages = [
 
 const exampleSnippets = {
   javascript: {
-    hello: `function sayHello() {\n  console.log("Hello, World!");\n}\nsayHello();`,
-    array: `const numbers = [1, 2, 3, 4, 5];\nconst squared = numbers.map(x => x * x);\nconsole.log(squared);`
+    hello: `// Hello World
+function sayHello() {
+  console.log("Hello, World!");
+}
+sayHello();`,
+    array: `// Array Operations
+const numbers = [1, 2, 3, 4, 5];
+const squared = numbers.map(x => x * x);
+console.log('Squared:', squared);
+
+const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+console.log('Sum:', sum);`,
+    async: `// Async/Await
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}`,
+    class: `// Classes
+class Calculator {
+  constructor(initialValue = 0) {
+    this.value = initialValue;
+  }
+  
+  add(n) {
+    this.value += n;
+    return this;
+  }
+  
+  getResult() {
+    return this.value;
+  }
+}
+
+const result = new Calculator(10).add(5).getResult(); // 15`
   },
   typescript: {
-    interface: `interface User {\n  id: number;\n  name: string;\n}\n\nconst user: User = {\n  id: 1,\n  name: "John"\n};\nconsole.log(user);`
+    interface: `// Interface
+interface User {
+  id: number;
+  name: string;
+  email?: string;
+}
+
+const user: User = {
+  id: 1,
+  name: "John Doe"
+};
+
+function printUser(u: User) {
+  console.log(u.name);
+}`,
+    generics: `// Generics
+function wrap<T>(value: T): { value: T } {
+  return { value };
+}
+
+const wrappedNumber = wrap(42);
+const wrappedString = wrap("Hello");`,
+    enum: `// Enums
+enum Status {
+  Pending = "PENDING",
+  Active = "ACTIVE",
+  Inactive = "INACTIVE"
+}
+
+const currentStatus: Status = Status.Active;`
   },
   json: {
-    config: `{\n  "name": "my-app",\n  "version": "1.0.0",\n  "dependencies": {\n    "vue": "^3.0.0"\n  }\n}`
+    config: `{
+  "name": "my-project",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "vue": "^3.0.0"
+  }
+}`,
+    data: `[
+  {
+    "id": 1,
+    "name": "Item 1",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Item 2",
+    "active": false
+  }
+]`
   },
   html: {
-    basic: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Title</title>\n</head>\n<body>\n  <h1>Hello</h1>\n</body>\n</html>`
+    basic: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <header>
+    <h1>Welcome</h1>
+  </header>
+  <main>
+    <p>This is a paragraph.</p>
+  </main>
+</body>
+</html>`,
+    form: `<form action="/submit" method="post">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+  
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email">
+  
+  <button type="submit">Submit</button>
+</form>`
   },
   css: {
-    center: `.container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100vh;\n}`
+    flexbox: `.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  gap: 1rem;
+}
+
+.item {
+  flex: 1;
+  padding: 1rem;
+}`,
+    grid: `.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}`,
+    animation: `@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.card {
+  animation: slideIn 0.3s ease-out;
+}`
   },
   python: {
-    basics: `def greet(name):\n    return f"Hello, {name}"\n\nprint(greet("World"))`
+    basics: `# Function basics
+def greet(name: str) -> str:
+    return f"Hello, {name}"
+
+print(greet("World"))`,
+    list_comp: `# List Comprehension
+numbers = [1, 2, 3, 4, 5]
+squares = [x**2 for x in numbers if x % 2 != 0]
+print(squares) # [1, 9, 25]`,
+    class: `# Classes
+class Dog:
+    def __init__(self, name):
+        self.name = name
+
+    def bark(self):
+        return f"{self.name} says Woof!"
+
+my_dog = Dog("Rex")
+print(my_dog.bark())`
   }
 }
 
 const selectedExample = ref('')
 
+// Initialize example when language changes
 const handleLanguageChange = () => {
-  selectedExample.value = ''
-  // Optionally reset code or keep current
+    selectFirstExample()
+}
+
+const selectFirstExample = () => {
+    const examples = exampleSnippets[singleFileLanguage.value];
+    if (examples) {
+        const firstKey = Object.keys(examples)[0];
+        if (firstKey) {
+            selectedExample.value = firstKey;
+            loadExample();
+        }
+    } else {
+        selectedExample.value = '';
+    }
 }
 
 const loadExample = () => {
@@ -80,6 +247,28 @@ const loadExample = () => {
     singleFileCode.value = exampleSnippets[singleFileLanguage.value][selectedExample.value]
   }
 }
+
+// Initial selection
+onMounted(() => {
+    if (activeMode.value === 'editor') {
+       selectFirstExample()
+    }
+})
+
+// Watch for mode changes to auto-select example when entering editor mode
+// Watch for mode changes to auto-select example when entering editor mode 
+// Wait, imports are at top. Need to check if watch is imported.
+// It was not in the original file imports: "import { ref, computed, onMounted, defineAsyncComponent } from 'vue'"
+// So I need to add it to imports first? 
+// Or I can just standardise the imports in a separate edit if needed, but let's check top of file.
+// Code snippet shows: `import { ref, computed, onMounted, defineAsyncComponent } from 'vue'`
+// So I need to add `watch` to imports. 
+
+watch(activeMode, (newMode) => {
+    if (newMode === 'editor' && !selectedExample.value) {
+        selectFirstExample()
+    }
+})
 </script>
 
 <template>
@@ -238,10 +427,9 @@ const loadExample = () => {
               @change="loadExample"
               class="px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-violet-500 min-w-[120px]"
             >
-              <option value="">Select an example...</option>
               <template v-if="exampleSnippets[singleFileLanguage]">
                 <option v-for="(code, key) in exampleSnippets[singleFileLanguage]" :key="key" :value="key">
-                  {{ key.charAt(0).toUpperCase() + key.slice(1) }}
+                  {{ key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' ') }}
                 </option>
               </template>
             </select>
