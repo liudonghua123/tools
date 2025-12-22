@@ -1,4 +1,4 @@
-import{am as u,an as s,ao as m}from"./markdown-C78r6xLZ.js";import h from"./MonacoEditor-CtsJV_w-.js";import{r as n,y as v,o as f,c as w,j as y,d as l,b,C as x}from"./index-BBoz2HuM.js";import"./monaco-editor-CIrctJzJ.js";const k={class:"flex h-full"},S={class:"w-1/2 border-r border-slate-700"},M={class:"w-1/2 overflow-y-auto bg-slate-900"},T=["innerHTML"],A={__name:"MarkdownPreview",props:{debounceMs:{type:Number,default:300}},setup(p){const g=p,r=n(`# Markdown Preview
+import{am as u,an as s,ao as m}from"./markdown-C78r6xLZ.js";import h from"./MonacoEditor-w0Cn9MOS.js";import{r as n,l as v,o as f,c as w,j as y,d as l,b,C as x}from"./index-EXevfkqS.js";import"./monaco-editor-CIrctJzJ.js";const k={class:"flex h-full"},S={class:"w-1/2 border-r border-slate-700"},M={class:"w-1/2 overflow-y-auto bg-slate-900"},T=["innerHTML"],A={__name:"MarkdownPreview",props:{debounceMs:{type:Number,default:300}},setup(p){const g=p,r=n(`# Markdown Preview
 
 Welcome to the **Markdown** editor! This editor supports various GFM (GitHub Flavored Markdown) features.
 
