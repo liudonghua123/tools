@@ -118,9 +118,6 @@ const getOutputColor = (type) => {
   return 'text-blue-400';
 }
 
-onMounted(() => {
-    loadPhp();
-});
 </script>
 
 <template>
