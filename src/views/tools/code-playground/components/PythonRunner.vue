@@ -147,9 +147,9 @@ const getOutputColor = (type) => {
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex flex-col md:flex-row h-full">
     <!-- Editor -->
-    <div class="w-1/2 flex flex-col border-r border-slate-700">
+    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-b md:border-b-0 md:border-r border-slate-700">
       <!-- Toolbar -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">
         <div class="flex items-center gap-2">
@@ -193,7 +193,7 @@ const getOutputColor = (type) => {
     </div>
 
     <!-- Output -->
-    <div class="w-1/2 flex flex-col bg-slate-900">
+    <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col bg-slate-900">
       <!-- Output Header -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
         <div class="flex items-center gap-3">

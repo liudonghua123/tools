@@ -156,9 +156,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex flex-col md:flex-row h-full">
     <!-- Editor -->
-    <div class="w-1/2 border-r border-slate-700">
+    <div class="w-full md:w-1/2 h-1/2 md:h-full border-b md:border-b-0 md:border-r border-slate-700">
       <MonacoEditor 
         v-model="markdownCode"
         language="markdown"
@@ -170,7 +170,7 @@ onMounted(() => {
     </div>
 
     <!-- Preview -->
-    <div class="w-1/2 overflow-y-auto bg-slate-900">
+    <div class="w-full md:w-1/2 h-1/2 md:h-full overflow-y-auto bg-slate-900">
       <div 
         ref="previewRef"
         class="markdown-preview p-6 prose prose-invert prose-violet max-w-none"

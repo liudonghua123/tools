@@ -132,9 +132,9 @@ const runSql = async () => {
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex flex-col md:flex-row h-full">
     <!-- Sidebar: Database Structure -->
-    <div class="w-64 bg-slate-900 border-r border-slate-700 flex flex-col">
+    <div class="w-full md:w-64 h-48 md:h-full bg-slate-900 border-b md:border-b-0 md:border-r border-slate-700 flex flex-col">
         <div class="px-4 py-3 border-b border-slate-700 font-bold text-slate-300 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
@@ -168,7 +168,7 @@ const runSql = async () => {
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col min-w-0">
+    <div class="flex-1 flex flex-col min-w-0 h-full md:h-auto">
         <!-- Editor -->
         <div class="h-1/2 flex flex-col border-b border-slate-700">
             <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">

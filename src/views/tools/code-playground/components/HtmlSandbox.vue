@@ -194,9 +194,9 @@ const getConsoleColor = (type) => {
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 flex min-h-0">
+    <div class="flex-1 flex flex-col md:flex-row min-h-0">
       <!-- Editor Panel -->
-      <div class="w-1/2 flex flex-col border-r border-slate-700">
+      <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-b md:border-b-0 md:border-r border-slate-700">
         <MonacoEditor 
           v-show="activeTab === 'html'"
           v-model="htmlCode"
@@ -224,7 +224,7 @@ const getConsoleColor = (type) => {
       </div>
 
       <!-- Preview Panel -->
-      <div class="w-1/2 flex flex-col">
+      <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col">
         <!-- Preview -->
         <div class="flex-1 bg-white relative">
           <iframe 
