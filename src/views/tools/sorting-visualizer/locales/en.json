@@ -1,0 +1,27 @@
+{
+    "title": "Sorting Visualizer",
+    "desc": "Visualize classic sorting algorithms step-by-step with performance metrics",
+    "controls": {
+        "algorithm": "Algorithm",
+        "size": "Size",
+        "speed": "Speed",
+        "play": "Play",
+        "pause": "Pause",
+        "step": "Step",
+        "reset": "Reset",
+        "shuffle": "Shuffle"
+    },
+    "metrics": {
+        "comparisons": "Comparisons",
+        "swaps": "Swaps",
+        "access": "Array Access",
+        "time": "Time"
+    },
+    "algorithms": {
+        "bubble": "Bubble Sort",
+        "selection": "Selection Sort",
+        "insertion": "Insertion Sort",
+        "quick": "Quick Sort",
+        "merge": "Merge Sort"
+    }
+}

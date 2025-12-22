@@ -1,0 +1,27 @@
+{
+    "title": "排序算法可视化",
+    "desc": "直观展示经典排序算法的运行过程，支持单步调试和性能统计",
+    "controls": {
+        "algorithm": "算法",
+        "size": "数据量",
+        "speed": "速度",
+        "play": "运行",
+        "pause": "暂停",
+        "step": "单步",
+        "reset": "重置",
+        "shuffle": "打乱"
+    },
+    "metrics": {
+        "comparisons": "比较次数",
+        "swaps": "交换次数",
+        "access": "数组访问",
+        "time": "耗时"
+    },
+    "algorithms": {
+        "bubble": "冒泡排序 (Bubble Sort)",
+        "selection": "选择排序 (Selection Sort)",
+        "insertion": "插入排序 (Insertion Sort)",
+        "quick": "快速排序 (Quick Sort)",
+        "merge": "归并排序 (Merge Sort)"
+    }
+}
