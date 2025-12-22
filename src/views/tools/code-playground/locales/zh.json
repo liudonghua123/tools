@@ -1,0 +1,36 @@
+{
+    "title": "代码沙盒",
+    "desc": "在线代码编辑器，支持实时预览和执行",
+    "modes": {
+        "sandbox": "HTML/CSS/JS 沙盒",
+        "markdown": "Markdown 预览",
+        "python": "Python 运行",
+        "php": "PHP 运行",
+        "sqlite": "SQLite 数据库",
+        "editor": "代码格式化"
+    },
+    "sandbox": {
+        "html_tab": "HTML",
+        "css_tab": "CSS",
+        "js_tab": "JavaScript",
+        "run": "运行",
+        "auto_run": "自动运行",
+        "console": "控制台",
+        "clear": "清空"
+    },
+    "markdown": {
+        "editor": "编辑器",
+        "preview": "预览"
+    },
+    "python": {
+        "run": "运行 Python",
+        "output": "输出",
+        "loading": "加载 Pyodide 中...",
+        "ready": "就绪",
+        "clear": "清空"
+    },
+    "editor": {
+        "language": "语言",
+        "format": "格式化代码"
+    }
+}

@@ -16,5 +16,18 @@ export default defineConfig({
     },
     server: {
         host: '0.0.0.0',
+    },
+    optimizeDeps: {
+        include: ['monaco-editor']
+    },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'monaco-editor': ['monaco-editor'],
+                    'markdown': ['marked', 'mermaid', 'highlight.js']
+                }
+            }
+        }
     }
 })

@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           cache: 'npm'
 
       - name: Install dependencies
@@ -29,6 +29,9 @@ jobs:
 
       - name: Fetch Region Data
         run: node scripts/fetch_regions.js
+
+      - name: Setup PYTHON/PHP/SQLITE... WASM
+        run: node scripts/setup-wasm.js
 
       - name: Build
         run: npm run build -- --base=/tools/

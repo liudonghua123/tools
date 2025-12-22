@@ -1,0 +1,36 @@
+{
+    "title": "Code Playground",
+    "desc": "Online code editor with live preview and execution",
+    "modes": {
+        "sandbox": "HTML/CSS/JS Sandbox",
+        "markdown": "Markdown Preview",
+        "python": "Python Runner",
+        "php": "PHP Runtime",
+        "sqlite": "SQLite Database",
+        "editor": "Code Format"
+    },
+    "sandbox": {
+        "html_tab": "HTML",
+        "css_tab": "CSS",
+        "js_tab": "JavaScript",
+        "run": "Run",
+        "auto_run": "Auto Run",
+        "console": "Console",
+        "clear": "Clear"
+    },
+    "markdown": {
+        "editor": "Editor",
+        "preview": "Preview"
+    },
+    "python": {
+        "run": "Run Python",
+        "output": "Output",
+        "loading": "Loading Pyodide...",
+        "ready": "Ready",
+        "clear": "Clear"
+    },
+    "editor": {
+        "language": "Language",
+        "format": "Format Code"
+    }
+}
