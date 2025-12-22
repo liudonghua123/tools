@@ -1,0 +1,22 @@
+{
+    "title": "Online Diff Viewer",
+    "desc": "High-performance text difference viewer powered by Monaco Editor",
+    "controls": {
+        "inline": "Inline View",
+        "split": "Split View",
+        "copy": "Copy Diff",
+        "clear": "Clear",
+        "swap": "Swap"
+    },
+    "labels": {
+        "original": "Original Text",
+        "modified": "Modified Text"
+    },
+    "info": {
+        "what_is_diff": "What is Diff?",
+        "what_is_diff_desc": "A diff is a data comparison tool that calculates and displays the differences between two files.",
+        "types": "Diff Types",
+        "unified": "Unified format: Shows all changes in one view using + and - markers.",
+        "split": "Split format: Shows two files side-by-side to visualize changes corresponding to lines."
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "title": "在线文本比对 (Diff)",
+    "desc": "基于 Monaco Editor 的高性能文本差异比对工具，支持多种语言高亮",
+    "controls": {
+        "inline": "行内模式",
+        "split": "左右分屏",
+        "copy": "复制差异",
+        "clear": "清空",
+        "swap": "交换"
+    },
+    "labels": {
+        "original": "原始文本 (Original)",
+        "modified": "修改后文本 (Modified)"
+    },
+    "info": {
+        "what_is_diff": "什么是 Diff？",
+        "what_is_diff_desc": "Diff 是用于比较两个文件或文本集之间差异的工具。它通常在软件开发中用于比较源代码版本。",
+        "types": "Diff 类型",
+        "unified": "Unified format: 将所有变更放在一个视图中，使用 + 和 - 标记行。",
+        "split": "Split format: 左右并排显示两个文件，直观展示对应行的变化。"
+    }
+}
