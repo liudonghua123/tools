@@ -11,6 +11,7 @@
     "subtitle": "专业免费的在线工具集合",
     "home": {
         "search_placeholder": "搜索工具...",
+        "open_tool": "打开工具",
         "category": {
             "all": "全部",
             "identity": "身份信息",

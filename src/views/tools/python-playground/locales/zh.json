@@ -1,0 +1,35 @@
+{
+    "title": "Python 科学计算 Playground",
+    "desc": "交互式 Python 科学计算环境，支持 NumPy、Matplotlib、SymPy、SciPy 和 Pandas",
+    "tabs": {
+        "numpy": "NumPy",
+        "matplotlib": "Matplotlib",
+        "sympy": "SymPy",
+        "scipy": "SciPy",
+        "pandas": "Pandas"
+    },
+    "buttons": {
+        "run": "运行代码",
+        "clear": "清空",
+        "copy": "复制代码",
+        "load_example": "加载示例",
+        "copied": "已复制！"
+    },
+    "status": {
+        "loading": "正在加载 Python 环境...",
+        "ready": "就绪",
+        "running": "运行中...",
+        "error": "错误",
+        "not-loaded": "未加载"
+    },
+    "output": {
+        "console": "控制台输出",
+        "plots": "图形",
+        "no_output": "暂无输出。运行代码查看结果！",
+        "error_title": "错误"
+    },
+    "knowledge": {
+        "title": "知识点",
+        "select": "选择一个主题开始学习"
+    }
+}

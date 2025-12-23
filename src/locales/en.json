@@ -11,6 +11,7 @@
     "subtitle": "Professional & Free Online Tools Collection",
     "home": {
         "search_placeholder": "Search tools...",
+        "open_tool": "Open Tool",
         "category": {
             "all": "All",
             "identity": "Identity",

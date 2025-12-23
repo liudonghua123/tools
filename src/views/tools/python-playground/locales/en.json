@@ -1,0 +1,35 @@
+{
+    "title": "Python Playground",
+    "desc": "Interactive Python scientific computing playground with NumPy, Matplotlib, SymPy, SciPy, and Pandas",
+    "tabs": {
+        "numpy": "NumPy",
+        "matplotlib": "Matplotlib",
+        "sympy": "SymPy",
+        "scipy": "SciPy",
+        "pandas": "Pandas"
+    },
+    "buttons": {
+        "run": "Run Code",
+        "clear": "Clear",
+        "copy": "Copy Code",
+        "load_example": "Load Example",
+        "copied": "Copied!"
+    },
+    "status": {
+        "loading": "Loading Python environment...",
+        "ready": "Ready",
+        "running": "Running...",
+        "error": "Error",
+        "not-loaded": "Not Loaded"
+    },
+    "output": {
+        "console": "Console Output",
+        "plots": "Plots",
+        "no_output": "No output yet. Run some code!",
+        "error_title": "Error"
+    },
+    "knowledge": {
+        "title": "Knowledge Points",
+        "select": "Select a topic to learn"
+    }
+}
