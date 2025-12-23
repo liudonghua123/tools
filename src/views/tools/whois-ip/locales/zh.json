@@ -7,6 +7,9 @@
         "range": "IP 范围",
         "netname": "网络名称",
         "country": "国家",
-        "description": "描述"
+        "description": "描述",
+        "dates": "关键日期",
+        "contacts": "联系人信息",
+        "remarks": "描述与备注"
     }
 }

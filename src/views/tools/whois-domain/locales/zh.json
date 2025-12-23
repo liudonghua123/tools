@@ -4,9 +4,14 @@
     "placeholder": "例如: google.com",
     "btn": "查询",
     "result": {
+        "domain": "域名",
         "registrar": "注册商",
         "status": "状态",
         "created": "创建时间",
-        "expires": "到期时间"
+        "expires": "到期时间",
+        "dates": "关键日期",
+        "contacts": "联系信息",
+        "nameservers": "域名服务器 (NS)",
+        "notices": "公告与备注"
     }
 }

@@ -7,6 +7,9 @@
         "range": "IP Range",
         "netname": "Network Name",
         "country": "Country",
-        "description": "Description"
+        "description": "Description",
+        "dates": "Important Dates",
+        "contacts": "Contacts",
+        "remarks": "Description & Remarks"
     }
 }

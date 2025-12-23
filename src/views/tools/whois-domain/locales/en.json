@@ -4,9 +4,14 @@
     "placeholder": "e.g., google.com",
     "btn": "Query",
     "result": {
+        "domain": "Domain Name",
         "registrar": "Registrar",
         "status": "Status",
         "created": "Created",
-        "expires": "Expires"
+        "expires": "Expires",
+        "dates": "Important Dates",
+        "contacts": "Contacts",
+        "nameservers": "Name Servers",
+        "notices": "Notices & Remarks"
     }
 }
