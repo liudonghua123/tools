@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoDiffEditor from './components/MonacoDiffEditor.vue'
+import MonacoEditor from './components/MonacoEditor.vue'
 import { createUnifiedDiff } from './utils/simpleDiff'
 
 const { t } = useI18n()
@@ -157,8 +158,15 @@ const swap = () => {
                  <div class="px-4 py-2 bg-slate-800 border-b border-slate-700 text-xs font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center">
                     <span>Unified Diff Result</span>
                 </div>
-                <div class="flex-1 overflow-auto p-4 custom-scrollbar">
-                     <pre class="font-mono text-xs md:text-sm text-slate-300 whitespace-pre">{{ unifiedDiffText }}</pre>
+                <div class="flex-1 overflow-hidden relative">
+                     <MonacoEditor
+                        :modelValue="unifiedDiffText"
+                        language="diff"
+                        theme="vs-dark"
+                        readOnly
+                        :minimap="false"
+                        height="100%"
+                     />
                 </div>
             </div>
         </div>

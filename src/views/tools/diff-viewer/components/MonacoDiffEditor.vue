@@ -46,8 +46,10 @@ const initEditor = () => {
     diffEditor = monaco.editor.createDiffEditor(containerRef.value, {
         theme: props.theme,
         readOnly: props.readOnly,
+        originalEditable: true,
         automaticLayout: true,
         renderSideBySide: props.renderSideBySide,
+        wordWrap: 'on',
         scrollBeyondLastLine: false,
         padding: { top: 12, bottom: 12 },
         fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace",
@@ -99,7 +101,13 @@ watch(() => props.theme, (newVal) => {
 
 watch(() => props.renderSideBySide, (newVal) => {
     if (diffEditor) {
-        diffEditor.updateOptions({ renderSideBySide: newVal })
+        diffEditor.updateOptions({ 
+            renderSideBySide: newVal,
+            wordWrap: 'on',
+            wordWrapOverride1: 'on',
+            wordWrapOverride2: 'on'
+        });
+        diffEditor.layout();
     }
 })
 
