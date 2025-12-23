@@ -17,7 +17,7 @@
         "highlight.js": "^11.11.1",
         "marked": "^17.0.1",
         "mermaid": "^11.12.2",
-        "monaco-editor": "^0.52.2",
+        "monaco-editor": "^0.55.1",
         "php-wasm": "^0.0.8",
         "pinia": "^2.3.0",
         "pyodide": "^0.29.0",
