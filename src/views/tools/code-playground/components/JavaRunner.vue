@@ -273,8 +273,8 @@ const runJava = async () => {
       ecjPath,
       fileName,
       '-d', '/files/',
-      '-source', String(version),
-      '-target', String(version)
+      '-source', version,
+      '-target', version,
     )
     
     isCompiling.value = false
