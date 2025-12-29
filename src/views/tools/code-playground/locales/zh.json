@@ -8,6 +8,7 @@
         "php": "PHP 运行",
         "java": "Java 运行",
         "ruby": "Ruby 运行",
+        "perl": "Perl 运行",
         "sqlite": "SQLite 数据库",
         "editor": "代码格式化"
     },
@@ -46,6 +47,13 @@
         "run": "运行 Ruby",
         "output": "输出",
         "loading": "加载 Ruby WASM 中...",
+        "ready": "就绪",
+        "clear": "清空"
+    },
+    "perl": {
+        "run": "运行 Perl",
+        "output": "输出",
+        "loading": "加载 WebPerl 中...",
         "ready": "就绪",
         "clear": "清空"
     },

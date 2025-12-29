@@ -8,6 +8,7 @@
         "php": "PHP Runtime",
         "java": "Java Runner",
         "ruby": "Ruby Runner",
+        "perl": "Perl Runner",
         "sqlite": "SQLite Database",
         "editor": "Code Format"
     },
@@ -46,6 +47,13 @@
         "run": "Run Ruby",
         "output": "Output",
         "loading": "Loading Ruby WASM...",
+        "ready": "Ready",
+        "clear": "Clear"
+    },
+    "perl": {
+        "run": "Run Perl",
+        "output": "Output",
+        "loading": "Loading WebPerl...",
         "ready": "Ready",
         "clear": "Clear"
     },

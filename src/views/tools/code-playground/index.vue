@@ -12,6 +12,7 @@ const PhpRunner = defineAsyncComponent(() => import('./components/PhpRunner.vue'
 const SqliteRunner = defineAsyncComponent(() => import('./components/SqliteRunner.vue'))
 const JavaRunner = defineAsyncComponent(() => import('./components/JavaRunner.vue'))
 const RubyRunner = defineAsyncComponent(() => import('./components/RubyRunner.vue'))
+const PerlRunner = defineAsyncComponent(() => import('./components/PerlRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
 const activeMode = ref('sandbox')
@@ -27,6 +28,7 @@ const modes = computed(() => [
   { id: 'php', icon: 'php', label: t('tools.code-playground.modes.php') },
   { id: 'java', icon: 'java', label: t('tools.code-playground.modes.java') },
   { id: 'ruby', icon: 'ruby', label: t('tools.code-playground.modes.ruby') },
+  { id: 'perl', icon: 'perl', label: t('tools.code-playground.modes.perl') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
   { id: 'editor', icon: 'code', label: t('tools.code-playground.modes.editor') }
 ])
@@ -48,7 +50,8 @@ const languages = [
   { id: 'html', label: 'HTML' },
   { id: 'css', label: 'CSS' },
   { id: 'python', label: 'Python' },
-  { id: 'ruby', label: 'Ruby' }
+  { id: 'ruby', label: 'Ruby' },
+  { id: 'perl', label: 'Perl' }
 ]
 
 const exampleSnippets = {
@@ -248,6 +251,23 @@ class Animal
 end
 
 puts Animal.new("Leo").speak`
+  },
+  perl: {
+    basics: `# Perl basics
+sub greet {
+    my $name = shift;
+    "Hello, $name!";
+}
+print greet("World"), "\\n";`,
+    regex: `# Regular Expressions
+my $str = "The quick brown fox jumps over the lazy dog";
+if ($str =~ /(fox)/) {
+    print "Found: $1\\n";
+}`,
+    map: `# Map and Join
+my @nums = (1..5);
+my @doubled = map { $_ * 2 } @nums;
+print "Doubled: ", join(", ", @doubled), "\\n";`
   }
 }
 
@@ -357,6 +377,9 @@ watch(activeMode, (newMode) => {
            <path d="M12 2L3.5 6.5L2 12L3.5 17.5L12 22L20.5 17.5L22 12L20.5 6.5L12 2ZM12 4.5L18.5 8L19.5 12L18.5 16L12 19.5L5.5 16L4.5 12L5.5 8L12 4.5Z" />
            <path d="M12 7.5L8.5 10.5L9.5 14.5L12 16.5L14.5 14.5L15.5 10.5L12 7.5Z" opacity=".5"/>
         </svg>
+        <svg v-else-if="mode.icon === 'perl'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z" />
+        </svg>
         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
         </svg>
@@ -460,6 +483,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Perl Runner -->
+      <Suspense v-else-if="activeMode === 'perl'">
+        <template #default>
+          <PerlRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>

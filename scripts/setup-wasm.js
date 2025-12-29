@@ -184,12 +184,69 @@ async function setupRuby() {
     console.log('Ruby setup complete.');
 }
 
+async function setupWebPerl() {
+    console.log('Setting up WebPerl...');
+    const webperlDir = path.join(publicDir, 'webperl');
+    const wasmFile = path.join(webperlDir, 'emperl.wasm');
+
+    if (fs.existsSync(wasmFile)) {
+        console.log('WebPerl already exists, skipping download/extract.');
+    } else {
+        if (!fs.existsSync(webperlDir)) fs.mkdirSync(webperlDir, { recursive: true });
+
+        const zipUrl = 'https://github.com/haukex/webperl/releases/download/v0.09-beta/webperl_prebuilt_v0.09-beta.zip';
+        const zipPath = path.resolve(__dirname, 'webperl.zip');
+
+        try {
+            await download(zipUrl, zipPath);
+            console.log('Extracting WebPerl...');
+            // Use powershell to extract on windows if unzip is not available, or just use node-stream-zip if we had it.
+            // But we can try 'tar' which is available on modern windows.
+            try {
+                execSync(`tar -xf "${zipPath}" -C "${webperlDir}"`, { stdio: 'inherit' });
+            } catch (tarErr) {
+                console.warn('Tar failed, trying PowerShell Expand-Archive...');
+                execSync(`powershell -command "Expand-Archive -Path '${zipPath}' -DestinationPath '${webperlDir}' -Force"`, { stdio: 'inherit' });
+            }
+            fs.unlinkSync(zipPath);
+            console.log('WebPerl extraction complete.');
+        } catch (e) {
+            console.error('WebPerl setup failed:', e);
+            return;
+        }
+    }
+
+    // Patch webperl.js to fix getScriptURL issue with Vite
+    const webperlJs = path.join(webperlDir, 'webperl.js');
+    if (fs.existsSync(webperlJs)) {
+        let content = fs.readFileSync(webperlJs, 'utf8');
+        if (!content.includes('indexOf(\'webperl.js\')')) {
+            console.log('Patching webperl.js for better base URL detection...');
+            const search = /var getScriptURL = \(function\(\) \{[\s\S]*?var myScript = scripts\[index\];\s*return function\(\) \{ return myScript\.src; \};\s*\}\)\(\);/;
+            const replacement = `var getScriptURL = (function() { 
+	var scripts = document.getElementsByTagName('script');
+	for (var i = scripts.length - 1; i >= 0; i--) {
+		if (scripts[i].src && scripts[i].src.indexOf('webperl.js') !== -1) {
+			return function() { return scripts[i].src; };
+		}
+	}
+	var myScript = scripts[scripts.length - 1];
+	return function() { return myScript.src; };
+})();`;
+            content = content.replace(search, replacement);
+            fs.writeFileSync(webperlJs, content);
+            console.log('WebPerl patch applied.');
+        }
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
         await setupPhp();
         await setupSqlite();
         await setupRuby();
+        await setupWebPerl();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);
