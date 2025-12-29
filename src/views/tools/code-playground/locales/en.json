@@ -6,6 +6,7 @@
         "markdown": "Markdown Preview",
         "python": "Python Runner",
         "php": "PHP Runtime",
+        "java": "Java Runner",
         "sqlite": "SQLite Database",
         "editor": "Code Format"
     },
@@ -28,6 +29,17 @@
         "loading": "Loading Pyodide...",
         "ready": "Ready",
         "clear": "Clear"
+    },
+    "java": {
+        "run": "Run Java",
+        "output": "Output",
+        "loading": "Loading CheerpJ...",
+        "ready": "Ready",
+        "clear": "Clear",
+        "version": "Java Version",
+        "example": "Example",
+        "compiling": "Compiling...",
+        "running": "Running..."
     },
     "editor": {
         "language": "Language",

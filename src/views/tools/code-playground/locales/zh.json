@@ -6,6 +6,7 @@
         "markdown": "Markdown 预览",
         "python": "Python 运行",
         "php": "PHP 运行",
+        "java": "Java 运行",
         "sqlite": "SQLite 数据库",
         "editor": "代码格式化"
     },
@@ -28,6 +29,17 @@
         "loading": "加载 Pyodide 中...",
         "ready": "就绪",
         "clear": "清空"
+    },
+    "java": {
+        "run": "运行 Java",
+        "output": "输出",
+        "loading": "加载 CheerpJ 中...",
+        "ready": "就绪",
+        "clear": "清空",
+        "version": "Java 版本",
+        "example": "示例",
+        "compiling": "编译中...",
+        "running": "运行中..."
     },
     "editor": {
         "language": "语言",

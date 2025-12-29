@@ -10,6 +10,7 @@ const MarkdownPreview = defineAsyncComponent(() => import('./components/Markdown
 const PythonRunner = defineAsyncComponent(() => import('./components/PythonRunner.vue'))
 const PhpRunner = defineAsyncComponent(() => import('./components/PhpRunner.vue'))
 const SqliteRunner = defineAsyncComponent(() => import('./components/SqliteRunner.vue'))
+const JavaRunner = defineAsyncComponent(() => import('./components/JavaRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
 const activeMode = ref('sandbox')
@@ -23,6 +24,7 @@ const modes = computed(() => [
   { id: 'markdown', icon: 'markdown', label: t('tools.code-playground.modes.markdown') },
   { id: 'python', icon: 'python', label: t('tools.code-playground.modes.python') },
   { id: 'php', icon: 'php', label: t('tools.code-playground.modes.php') },
+  { id: 'java', icon: 'java', label: t('tools.code-playground.modes.java') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
   { id: 'editor', icon: 'code', label: t('tools.code-playground.modes.editor') }
 ])
@@ -320,6 +322,10 @@ watch(activeMode, (newMode) => {
         <svg v-else-if="mode.icon === 'sqlite'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
            <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
         </svg>
+        <svg v-else-if="mode.icon === 'java'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+           <path d="M8 16c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-4H8v4zm-2 0v-4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2h-4c-1.1 0-2-.9-2-2h-2c-1.1 0-2-.9-2-2zm10-8c0-1.1-.9-2-2-2H10c-1.1 0-2 .9-2 2v2h8V8z"/>
+           <path d="M7 3v2h10V3H7zm0 14c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2H7z" opacity=".3"/>
+        </svg>
         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
         </svg>
@@ -399,6 +405,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+      
+      <!-- Java Runner -->
+      <Suspense v-else-if="activeMode === 'java'">
+        <template #default>
+          <JavaRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
