@@ -341,7 +341,7 @@ watch(activeMode, (newMode) => {
     </div>
 
     <!-- Mode Tabs -->
-    <div class="flex justify-start md:justify-center gap-2 mb-4 overflow-x-auto whitespace-nowrap pb-2 md:pb-0 scrollbar-hide px-1">
+    <div class="flex justify-start gap-2 mb-4 overflow-x-auto whitespace-nowrap pb-2 md:pb-0 scrollbar-hide px-1">
       <button 
         v-for="mode in modes" 
         :key="mode.id"
