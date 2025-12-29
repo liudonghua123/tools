@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+
+const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
@@ -132,14 +135,14 @@ const getOutputColor = (type) => {
                 <path d="M7 9h10v4H7z" opacity=".3"/> <!-- simplified icon -->
             </svg>
           <span class="font-bold text-white">PHP (WASM)</span>
-          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">Ready</span>
+          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
         </div>
         <button 
           @click="runPhp"
           :disabled="isLoading"
           class="px-4 py-1.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-slate-600 disabled:text-slate-400"
         >
-          {{ isLoading ? 'Loading...' : 'Run' }}
+          {{ isLoading ? 'Loading...' : t('tools.code-playground.common.run') }}
         </button>
       </div>
 
@@ -157,10 +160,10 @@ const getOutputColor = (type) => {
     <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col bg-slate-900">
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Output</span>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.common.output') }}</span>
           <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
         </div>
-        <button @click="clearOutput" class="text-xs text-slate-500 hover:text-white">Clear</button>
+        <button @click="clearOutput" class="text-xs text-slate-500 hover:text-white">{{ t('tools.code-playground.common.clear') }}</button>
       </div>
 
       <div v-if="isLoading" class="flex-1 flex items-center justify-center">

@@ -208,8 +208,8 @@ onMounted(() => {
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z" />
           </svg>
           <span class="font-bold text-white">Perl 5</span>
-          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.perl.ready') }}</span>
-          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.perl.not_loaded', 'Not loaded') }}</span>
+          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
+          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.common.not_loaded', 'Not loaded') }}</span>
         </div>
         <button 
           @click="runPerl"
@@ -227,7 +227,7 @@ onMounted(() => {
           <svg v-else class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
           </svg>
-          {{ isLoading ? 'Loading...' : t('tools.code-playground.perl.run') }}
+          {{ isLoading ? 'Loading...' : t('tools.code-playground.common.run') }}
         </button>
       </div>
 
@@ -248,14 +248,14 @@ onMounted(() => {
       <!-- Output Header -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.perl.output') }}</span>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.common.output') }}</span>
           <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
         </div>
         <button 
           @click="clearOutput"
           class="text-xs text-slate-500 hover:text-white transition-colors"
         >
-          {{ t('tools.code-playground.perl.clear') }}
+          {{ t('tools.code-playground.common.clear') }}
         </button>
       </div>
 

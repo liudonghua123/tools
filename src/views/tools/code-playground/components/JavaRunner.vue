@@ -1,6 +1,9 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, watch, computed, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+
+const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
@@ -363,10 +366,10 @@ const getOutputIcon = (type) => {
 // Button state
 const isDisabled = computed(() => isLoading.value || isCompiling.value || isRunning.value)
 const buttonText = computed(() => {
-  if (isLoading.value) return 'Loading...'
-  if (isCompiling.value) return 'Compiling...'
-  if (isRunning.value) return 'Running...'
-  return 'Run'
+  if (isLoading.value) return t('tools.code-playground.java.loading').split(' ')[0] + '...'
+  if (isCompiling.value) return t('tools.code-playground.java.compiling')
+  if (isRunning.value) return t('tools.code-playground.java.running')
+  return t('tools.code-playground.common.run')
 })
 </script>
 
@@ -383,14 +386,14 @@ const buttonText = computed(() => {
             <path d="M7 3v2h10V3H7zm0 14c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2H7z" opacity=".3"/>
           </svg>
           <span class="font-bold text-white">Java</span>
-          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">Ready</span>
-          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">Not loaded</span>
+          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
+          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.common.not_loaded', 'Not loaded') }}</span>
         </div>
         
         <div class="flex items-center gap-4">
           <!-- Version Selector -->
           <div class="flex items-center gap-2">
-            <label class="text-xs text-slate-400">Version:</label>
+            <label class="text-xs text-slate-400">{{ t('tools.code-playground.java.version') }}:</label>
             <select 
               v-model="javaVersion"
               :disabled="isDisabled || isReady"
@@ -404,7 +407,7 @@ const buttonText = computed(() => {
           
           <!-- Example Selector -->
           <div class="flex items-center gap-2">
-            <label class="text-xs text-slate-400">Example:</label>
+            <label class="text-xs text-slate-400">{{ t('tools.code-playground.java.example') }}:</label>
             <select 
               v-model="selectedExample"
               class="px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-orange-500 min-w-[120px]"
@@ -454,14 +457,14 @@ const buttonText = computed(() => {
       <!-- Output Header -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Output</span>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.common.output') }}</span>
           <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
         </div>
         <button 
           @click="clearOutput"
           class="text-xs text-slate-500 hover:text-white transition-colors"
         >
-          Clear
+          {{ t('tools.code-playground.common.clear') }}
         </button>
       </div>
 

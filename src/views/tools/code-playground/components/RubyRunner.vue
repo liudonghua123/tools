@@ -189,8 +189,8 @@ const getOutputColor = (type) => {
              <path d="M12 7.5L8.5 10.5L9.5 14.5L12 16.5L14.5 14.5L15.5 10.5L12 7.5Z" opacity=".5"/>
           </svg>
           <span class="font-bold text-white">Ruby 3.4</span>
-          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.ruby.ready') }}</span>
-          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">Not loaded</span>
+          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
+          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.common.not_loaded', 'Not loaded') }}</span>
         </div>
         <button 
           @click="runRuby"
@@ -208,7 +208,7 @@ const getOutputColor = (type) => {
           <svg v-else class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
           </svg>
-          {{ isLoading ? 'Loading...' : t('tools.code-playground.ruby.run') }}
+          {{ isLoading ? 'Loading...' : t('tools.code-playground.common.run') }}
         </button>
       </div>
 
@@ -229,14 +229,14 @@ const getOutputColor = (type) => {
       <!-- Output Header -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.ruby.output') }}</span>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.common.output') }}</span>
           <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
         </div>
         <button 
           @click="clearOutput"
           class="text-xs text-slate-500 hover:text-white transition-colors"
         >
-          {{ t('tools.code-playground.ruby.clear') }}
+          {{ t('tools.code-playground.common.clear') }}
         </button>
       </div>
 

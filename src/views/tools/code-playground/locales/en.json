@@ -12,50 +12,47 @@
         "sqlite": "SQLite Database",
         "editor": "Code Format"
     },
+    "common": {
+        "run": "Run",
+        "output": "Output",
+        "ready": "Ready",
+        "clear": "Clear",
+        "not_loaded": "Not loaded"
+    },
     "sandbox": {
         "html_tab": "HTML",
         "css_tab": "CSS",
         "js_tab": "JavaScript",
-        "run": "Run",
         "auto_run": "Auto Run",
-        "console": "Console",
-        "clear": "Clear"
+        "console": "Console"
     },
     "markdown": {
         "editor": "Editor",
         "preview": "Preview"
     },
     "python": {
-        "run": "Run Python",
-        "output": "Output",
-        "loading": "Loading Pyodide...",
-        "ready": "Ready",
-        "clear": "Clear"
+        "loading": "Loading Pyodide..."
     },
     "java": {
-        "run": "Run Java",
-        "output": "Output",
         "loading": "Loading CheerpJ...",
-        "ready": "Ready",
-        "clear": "Clear",
         "version": "Java Version",
         "example": "Example",
         "compiling": "Compiling...",
         "running": "Running..."
     },
     "ruby": {
-        "run": "Run Ruby",
-        "output": "Output",
-        "loading": "Loading Ruby WASM...",
-        "ready": "Ready",
-        "clear": "Clear"
+        "loading": "Loading Ruby WASM..."
     },
     "perl": {
-        "run": "Run Perl",
-        "output": "Output",
-        "loading": "Loading WebPerl...",
-        "ready": "Ready",
-        "clear": "Clear"
+        "loading": "Loading WebPerl..."
+    },
+    "sqlite": {
+        "database": "Database",
+        "query": "SQL Query",
+        "results": "Results",
+        "no_db": "No database loaded",
+        "no_tables": "No tables found",
+        "row_count": "{0} rows returned"
     },
     "editor": {
         "language": "Language",

@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+
+const { t } = useI18n()
 
 const emit = defineEmits(['ready'])
 
@@ -139,14 +142,14 @@ const runSql = async () => {
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
             </svg>
-            Database
+            {{ t('tools.code-playground.sqlite.database') }}
         </div>
         <div class="flex-1 overflow-y-auto p-2">
             <div v-if="!isReady" class="text-xs text-slate-500 text-center py-4">
-                No database loaded
+                {{ t('tools.code-playground.sqlite.no_db') }}
             </div>
             <div v-else-if="dbTables.length === 0" class="text-xs text-slate-500 text-center py-4">
-                No tables found
+                {{ t('tools.code-playground.sqlite.no_tables') }}
             </div>
             <div v-else class="space-y-1">
                 <div v-for="table in dbTables" :key="table.name" class="text-sm">
@@ -173,14 +176,14 @@ const runSql = async () => {
         <div class="h-1/2 flex flex-col border-b border-slate-700">
             <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">
                 <div class="flex items-center gap-2">
-                    <span class="font-bold text-white">SQL Query</span>
+                    <span class="font-bold text-white">{{ t('tools.code-playground.sqlite.query') }}</span>
                 </div>
                 <button 
                   @click="runSql"
                   class="px-4 py-1.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white"
                 >
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  Run
+                  {{ t('tools.code-playground.common.run') }}
                 </button>
             </div>
             <div class="flex-1 min-h-0">
@@ -197,7 +200,7 @@ const runSql = async () => {
         <div class="h-1/2 flex flex-col bg-slate-900 overflow-hidden">
              <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
                 <div class="flex items-center gap-3">
-                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Results</span>
+                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.sqlite.results') }}</span>
                   <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
                 </div>
              </div>
@@ -232,7 +235,7 @@ const runSql = async () => {
                             </tbody>
                         </table>
                         <div class="mt-1 text-xs text-slate-500">
-                            {{ res.values.length }} rows returned
+                            {{ t('tools.code-playground.sqlite.row_count', [res.values.length]) }}
                         </div>
                     </div>
                 </div>

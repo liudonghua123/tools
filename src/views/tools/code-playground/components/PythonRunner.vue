@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+
+const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
@@ -157,8 +160,8 @@ const getOutputColor = (type) => {
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.06-7.44 7-7.93v15.86zm2-15.86c3.94.49 7 3.85 7 7.93s-3.06 7.44-7 7.93V4.07z"/>
           </svg>
           <span class="font-bold text-white">Python</span>
-          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">Ready</span>
-          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">Not loaded</span>
+          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
+          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.common.not_loaded', 'Not loaded') }}</span>
         </div>
         <button 
           @click="runPython"
@@ -176,7 +179,7 @@ const getOutputColor = (type) => {
           <svg v-else class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
           </svg>
-          {{ isLoading ? 'Loading...' : 'Run' }}
+          {{ isLoading ? 'Loading...' : t('tools.code-playground.common.run') }}
         </button>
       </div>
 
@@ -197,14 +200,14 @@ const getOutputColor = (type) => {
       <!-- Output Header -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700">
         <div class="flex items-center gap-3">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Output</span>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.common.output') }}</span>
           <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
         </div>
         <button 
           @click="clearOutput"
           class="text-xs text-slate-500 hover:text-white transition-colors"
         >
-          Clear
+          {{ t('tools.code-playground.common.clear') }}
         </button>
       </div>
 

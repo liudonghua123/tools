@@ -12,50 +12,47 @@
         "sqlite": "SQLite 数据库",
         "editor": "代码格式化"
     },
+    "common": {
+        "run": "运行",
+        "output": "输出",
+        "ready": "就绪",
+        "clear": "清空",
+        "not_loaded": "未加载"
+    },
     "sandbox": {
         "html_tab": "HTML",
         "css_tab": "CSS",
         "js_tab": "JavaScript",
-        "run": "运行",
         "auto_run": "自动运行",
-        "console": "控制台",
-        "clear": "清空"
+        "console": "控制台"
     },
     "markdown": {
         "editor": "编辑器",
         "preview": "预览"
     },
     "python": {
-        "run": "运行 Python",
-        "output": "输出",
-        "loading": "加载 Pyodide 中...",
-        "ready": "就绪",
-        "clear": "清空"
+        "loading": "加载 Pyodide 中..."
     },
     "java": {
-        "run": "运行 Java",
-        "output": "输出",
         "loading": "加载 CheerpJ 中...",
-        "ready": "就绪",
-        "clear": "清空",
         "version": "Java 版本",
         "example": "示例",
         "compiling": "编译中...",
         "running": "运行中..."
     },
     "ruby": {
-        "run": "运行 Ruby",
-        "output": "输出",
-        "loading": "加载 Ruby WASM 中...",
-        "ready": "就绪",
-        "clear": "清空"
+        "loading": "加载 Ruby WASM 中..."
     },
     "perl": {
-        "run": "运行 Perl",
-        "output": "输出",
-        "loading": "加载 WebPerl 中...",
-        "ready": "就绪",
-        "clear": "清空"
+        "loading": "加载 WebPerl 中..."
+    },
+    "sqlite": {
+        "database": "数据库",
+        "query": "SQL 查询",
+        "results": "执行结果",
+        "no_db": "未加载数据库",
+        "no_tables": "未找到表",
+        "row_count": "返回 {0} 行"
     },
     "editor": {
         "language": "语言",
