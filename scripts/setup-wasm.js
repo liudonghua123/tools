@@ -76,7 +76,7 @@ async function setupPyodide() {
     try {
         await download(pyodideUrl, archivePath);
         console.log('Extracting Pyodide...');
-        execSync(`tar -xf "${archivePath}" -C "${pyodideDir}" --strip-components=1`, { stdio: 'inherit' });
+        execSync(`tar -xf "${archivePath}" -C "${pyodideDir}" --strip-components 1`, { stdio: 'inherit' });
         fs.unlinkSync(archivePath);
         console.log('Pyodide setup complete.');
     } catch (e) {
@@ -200,13 +200,15 @@ async function setupWebPerl() {
         try {
             await download(zipUrl, zipPath);
             console.log('Extracting WebPerl...');
-            // Use powershell to extract on windows if unzip is not available, or just use node-stream-zip if we had it.
-            // But we can try 'tar' which is available on modern windows.
+            // Try 'bsdtar' with --strip-components 1 (installed in CI via libarchive-tools)
+            // other tool like unzip, 7z are not support --strip-components 1 
             try {
-                execSync(`tar -xf "${zipPath}" -C "${webperlDir}"`, { stdio: 'inherit' });
-            } catch (tarErr) {
-                console.warn('Tar failed, trying PowerShell Expand-Archive...');
-                execSync(`powershell -command "Expand-Archive -Path '${zipPath}' -DestinationPath '${webperlDir}' -Force"`, { stdio: 'inherit' });
+                // bsdtar -xvf <file> --strip-components 1 -C <dest>
+                // Note: -f needed before the filename, -C before destination
+                execSync(`bsdtar -xf "${zipPath}" --strip-components 1 -C "${webperlDir}"`, { stdio: 'inherit' });
+            } catch (err) {
+                console.error('Failed to extract WebPerl with bsdtar:', err);
+                throw err;
             }
             fs.unlinkSync(zipPath);
             console.log('WebPerl extraction complete.');
