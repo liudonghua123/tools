@@ -7,6 +7,7 @@
         "python": "Python Runner",
         "php": "PHP Runtime",
         "java": "Java Runner",
+        "ruby": "Ruby Runner",
         "sqlite": "SQLite Database",
         "editor": "Code Format"
     },
@@ -40,6 +41,13 @@
         "example": "Example",
         "compiling": "Compiling...",
         "running": "Running..."
+    },
+    "ruby": {
+        "run": "Run Ruby",
+        "output": "Output",
+        "loading": "Loading Ruby WASM...",
+        "ready": "Ready",
+        "clear": "Clear"
     },
     "editor": {
         "language": "Language",

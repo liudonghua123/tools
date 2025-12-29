@@ -7,6 +7,7 @@
         "python": "Python 运行",
         "php": "PHP 运行",
         "java": "Java 运行",
+        "ruby": "Ruby 运行",
         "sqlite": "SQLite 数据库",
         "editor": "代码格式化"
     },
@@ -40,6 +41,13 @@
         "example": "示例",
         "compiling": "编译中...",
         "running": "运行中..."
+    },
+    "ruby": {
+        "run": "运行 Ruby",
+        "output": "输出",
+        "loading": "加载 Ruby WASM 中...",
+        "ready": "就绪",
+        "clear": "清空"
     },
     "editor": {
         "language": "语言",

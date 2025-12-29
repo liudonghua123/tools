@@ -15,6 +15,7 @@ const publicDir = path.resolve(__dirname, '../public');
 const pyodideDir = path.join(publicDir, 'pyodide');
 const phpDir = path.join(publicDir, 'php-wasm');
 const sqlDir = path.join(publicDir, 'sql-wasm');
+const rubyDir = path.join(publicDir, 'ruby-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -154,11 +155,41 @@ async function setupSqlite() {
     console.log('SQLite setup complete.');
 }
 
+async function setupRuby() {
+    console.log('Setting up Ruby WebAssembly...');
+    const nodeModulesRuby = path.resolve(__dirname, '../node_modules/@ruby/3.4-wasm-wasi/dist');
+    const nodeModulesRubyWasi = path.resolve(__dirname, '../node_modules/@ruby/wasm-wasi/dist');
+
+    if (!fs.existsSync(nodeModulesRuby)) {
+        console.error('@ruby/3.4-wasm-wasi not found in node_modules. Run npm install.');
+        return;
+    }
+
+    if (!fs.existsSync(rubyDir)) fs.mkdirSync(rubyDir, { recursive: true });
+
+    try {
+        // Copy main ruby files
+        console.log(`Copying Ruby binary files...`);
+        ['ruby+stdlib.wasm', 'ruby.wasm', 'browser.umd.js', 'browser.script.iife.js'].forEach(file => {
+            const src = path.join(nodeModulesRuby, file);
+            const dest = path.join(rubyDir, file);
+            if (fs.existsSync(src)) {
+                fs.copyFileSync(src, dest);
+                console.log(`Copied ${file} to ${path.relative(publicDir, dest)}`);
+            }
+        });
+    } catch (e) {
+        console.warn('Failed to copy Ruby files:', e);
+    }
+    console.log('Ruby setup complete.');
+}
+
 async function main() {
     try {
         await setupPyodide();
         await setupPhp();
         await setupSqlite();
+        await setupRuby();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);
