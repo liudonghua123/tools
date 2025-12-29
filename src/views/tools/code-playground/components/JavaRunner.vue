@@ -272,7 +272,9 @@ const runJava = async () => {
       'org.eclipse.jdt.internal.compiler.batch.Main',
       ecjPath,
       fileName,
-      '-d', '/files/'
+      '-d', '/files/',
+      '-source', String(version),
+      '-target', String(version)
     )
     
     isCompiling.value = false
