@@ -290,13 +290,17 @@ const runJava = async () => {
     
     console.log = (...args) => {
       const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ')
-      log(message)
-      originalLog.apply(console, args)
+      if (message.trim()) {
+        log(message)
+        originalLog.apply(console, args)
+      }
     }
     console.error = (...args) => {
       const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' ')
-      log(message, 'error')
-      originalError.apply(console, args)
+      if (message.trim()) {
+        log(message, 'error')
+        originalError.apply(console, args)
+      }
     }
 
     try {
