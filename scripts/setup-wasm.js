@@ -276,6 +276,40 @@ async function setupWebr() {
     }
 }
 
+const clangDir = path.join(publicDir, 'wasm-clang');
+
+async function setupClang() {
+    console.log('Setting up Clang WebAssembly...');
+
+    if (!fs.existsSync(clangDir)) fs.mkdirSync(clangDir, { recursive: true });
+
+    // Files to download from the demo site
+    const files = [
+        'worker.js',
+        'shared.js',
+        'clang',
+        'lld',
+        'sysroot.tar',
+        'memfs'
+    ];
+
+    const baseUrl = 'https://binji.github.io/wasm-clang';
+
+    try {
+        for (const file of files) {
+            const dest = path.join(clangDir, file);
+            if (!fs.existsSync(dest)) {
+                await download(`${baseUrl}/${file}`, dest);
+            } else {
+                console.log(`${file} already exists, skipping.`);
+            }
+        }
+        console.log('Clang setup complete.');
+    } catch (e) {
+        console.error('Clang setup failed:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -284,6 +318,7 @@ async function main() {
         await setupRuby();
         await setupWebPerl();
         await setupWebr();
+        await setupClang();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

@@ -4,8 +4,9 @@
     "modes": {
         "sandbox": "HTML/CSS/JS Sandbox",
         "markdown": "Markdown Preview",
-        "python": "Python Runner",
-        "r": "R Runner",
+        "python": "Python",
+        "cpp": "C/C++",
+        "r": "R",
         "php": "PHP Runtime",
         "java": "Java Runner",
         "ruby": "Ruby Runner",

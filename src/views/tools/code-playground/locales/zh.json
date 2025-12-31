@@ -5,6 +5,7 @@
         "sandbox": "HTML/CSS/JS 沙盒",
         "markdown": "Markdown 预览",
         "python": "Python 运行",
+        "cpp": "C/C++",
         "r": "R 运行",
         "php": "PHP 运行",
         "java": "Java 运行",
