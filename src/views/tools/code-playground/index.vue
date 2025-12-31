@@ -29,11 +29,11 @@ const modes = computed(() => [
   { id: 'markdown', icon: 'markdown', label: t('tools.code-playground.modes.markdown') },
   { id: 'python', icon: 'python', label: t('tools.code-playground.modes.python') },
   { id: 'ruby', icon: 'ruby', label: t('tools.code-playground.modes.ruby') },
-  { id: 'perl', icon: 'perl', label: t('tools.code-playground.modes.perl') },
   { id: 'php', icon: 'php', label: t('tools.code-playground.modes.php') },
   { id: 'java', icon: 'java', label: t('tools.code-playground.modes.java') },
   { id: 'cpp', icon: 'cpp', label: t('tools.code-playground.modes.cpp') },
   { id: 'r', icon: 'r', label: t('tools.code-playground.modes.r') },
+  { id: 'perl', icon: 'perl', label: t('tools.code-playground.modes.perl') },
   { id: 'octave', icon: 'octave', label: t('tools.code-playground.modes.octave') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
   { id: 'editor', icon: 'code', label: t('tools.code-playground.modes.editor') }
@@ -337,9 +337,10 @@ watch(activeMode, (newMode) => {
   >
     <!-- Header (Hide in fullscreen if desired, or keep minimal) -->
     <div v-if="!isFullScreen" class="mb-6 text-center">
-      <div class="inline-flex items-center justify-center p-4 bg-violet-100/50 dark:bg-violet-900/30 rounded-3xl mb-4 shadow-xl ring-4 ring-violet-50 dark:ring-violet-900/10">
-        <svg class="w-10 h-10 text-violet-600 dark:text-violet-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      <div class="inline-flex items-center justify-center p-4 bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 dark:from-violet-500/10 dark:to-fuchsia-500/10 rounded-3xl mb-4 shadow-2xl ring-4 ring-violet-500/10 backdrop-blur-sm group hover:scale-105 transition-transform duration-500">
+        <svg class="w-10 h-10 text-violet-600 dark:text-violet-400 filter drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
       <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{{ t('tools.code-playground.title') }}</h1>
@@ -360,42 +361,38 @@ watch(activeMode, (newMode) => {
         ]"
       >
         <!-- Icons -->
-        <svg v-if="mode.icon === 'web'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg v-if="mode.icon === 'web'" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
         </svg>
-        <svg v-else-if="mode.icon === 'markdown'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <svg v-else-if="mode.icon === 'markdown'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 3H22C23.1 3 24 3.9 24 5V19C24 20.1 23.1 21 22 21H2C0.9 21 0 20.1 0 19V5C0 3.9 0.9 3 2 3M2 5V19H22V5H2M5 7H11V10H13V7H19V17H17V12H15V17H13V12H11V17H5V7Z" />
         </svg>
-        <svg v-else-if="mode.icon === 'python'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.06-7.44 7-7.93v15.86zm2-15.86c3.94.49 7 3.85 7 7.93s-3.06 7.44-7 7.93V4.07z"/>
-        </svg>
-        <svg v-else-if="mode.icon === 'cpp'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M22.24 7.03h-2.14l-.32-.94c-.26-.74-.53-1.42-.8-2.03-.55-1.25-1.52-1.92-2.9-2.01l-10-2.33-.2-.03c-2.32-.23-3.69 1.14-4.08 4.09l-.49 3.19H5.03C2.26 6.97 0 9.23 0 12c0 2.75 2.24 4.97 5 5h.06l-.42 2.76c-.41 2.94.94 4.3 3.25 4.07l.2-.03 10-2.33c1.37-.08 2.34-.76 2.89-2.01.27-.61.54-1.29.8-2.03l.32-.94h2.14c.97 0 1.76-.79 1.76-1.76v-5.98c0-.96-.79-1.75-1.76-1.75zM5 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13.43 3.84c-.2.43-.59.66-1.07.72l-10 2.33c-.76.07-1.21-.39-1.07-1.36l1.53-10.03c.14-.94.88-1.52 1.63-1.45l10 2.33c.47.05.8.35 1.01.78.22.42.23.97-.03 1.69l-2 5.3c-.26.73-.25 1.28-.03 1.69z"/>
-        </svg>
-        <svg v-else-if="mode.icon === 'octave'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-           <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">O</text>
-        </svg>
-        <svg v-else-if="mode.icon === 'r'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M4.5 4.5h15v15h-15z" fill="none" stroke="currentColor" stroke-width="2"/>
-           <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">R</text>
-        </svg>
-        <svg v-else-if="mode.icon === 'php'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 15h-9v-2h9v2zm0-4h-9V9h9v4z" />
-        </svg>
-        <svg v-else-if="mode.icon === 'sqlite'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-        </svg>
-        <svg v-else-if="mode.icon === 'java'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M8 16c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-4H8v4zm-2 0v-4c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2h-4c-1.1 0-2-.9-2-2h-2c-1.1 0-2-.9-2-2zm10-8c0-1.1-.9-2-2-2H10c-1.1 0-2 .9-2 2v2h8V8z"/>
-           <path d="M7 3v2h10V3H7zm0 14c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2H7z" opacity=".3"/>
+        <svg v-else-if="mode.icon === 'python'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.97,1C5.82,1,6.13,3.67,6.13,3.67L6.14,6.43H12.06V7.26H3.68C3.68,7.26,1,7.2,1,13.33C1,19.46,3.35,19.2,3.35,19.2H5.43V16.32C5.43,16.32,5.32,12.79,9.01,12.79H15.01C15.01,12.79,18.4,12.77,18.4,9.39V4.65C18.4,4.65,18.89,1,11.97,1M9.04,2.94A1.02,1.02,0,1,1,8,3.96,1.02,1.02,0,0,1,9.04,2.94M12,23c6.15,0,5.84-2.67,5.84-2.67L17.83,17.57H11.91V16.74H20.29C20.29,16.74,23,16.8,23,10.67C23,4.54,20.65,4.8,20.65,4.8H18.57V7.68C18.57,7.68,18.68,11.21,14.99,11.21H8.99C8.99,11.21,5.6,11.23,5.6,14.61V19.35C5.6,19.35,5.11,23,12,23M14.96,21.06A1.02,1.02,0,1,1,16,20.04,1.02,1.02,0,0,1,14.96,21.06Z" />
         </svg>
         <svg v-else-if="mode.icon === 'ruby'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M12 2L3.5 6.5L2 12L3.5 17.5L12 22L20.5 17.5L22 12L20.5 6.5L12 2ZM12 4.5L18.5 8L19.5 12L18.5 16L12 19.5L5.5 16L4.5 12L5.5 8L12 4.5Z" />
-           <path d="M12 7.5L8.5 10.5L9.5 14.5L12 16.5L14.5 14.5L15.5 10.5L12 7.5Z" opacity=".5"/>
+          <path d="M12,2L5.8,7.5L3,12L5.8,16.5L12,22L18.2,16.5L21,12L18.2,7.5L12,2M12,4.5L14,5.5L14,5.6L12,7.2L10,5.6L10,5.5L12,4.5M6,8L9,7L11,8.5L10,12H6L6,8M18,8L18,12H14L13,8.5L15,7L18,8M7.5,13H11L12,17L13,13H16.5L12,20.5L7.5,13Z" />
+        </svg>
+        <svg v-else-if="mode.icon === 'php'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16.5,11.72C16.5,13.78 14.82,15.45 12.75,15.45C10.68,15.45 9,13.78 9,11.72C9,9.65 10.68,7.98 12.75,7.98C14.82,7.98 16.5,9.65 16.5,11.72M22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12M18,11.72C18,8.82 15.65,6.47 12.75,6.47C9.85,6.47 7.5,8.82 7.5,11.72C7.5,14.62 9.85,16.97 12.75,16.97C15.65,16.97 18,14.62 18,11.72M20.14,7H17.29C17.75,8.44 18,9.96 18,11.53C18,13.1 17.75,14.62 17.29,16.06H20.14C20.69,14.65 21,13.11 21,11.53C21,9.95 20.69,8.41 20.14,7M6.71,7C6.25,8.44 6,9.96 6,11.53C6,13.1 6.25,14.62 6.71,16.06H3.86C3.31,14.65 3,13.11 3,11.53C3,9.95 3.31,8.41 3.86,7H6.71Z" />
+        </svg>
+        <svg v-else-if="mode.icon === 'java'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2,18.52C2,19.34 2.66,20 3.48,20H7V18.52H3.48V13H1.36V18.52C1.36,19.34 2.02,20 2.84,20M22.64,13H20.52V18.52H17V20H20.52C21.34,20 22,19.34 22,18.52V13M12,2C9,2 6,4 6,7C6,8.5 7,10 8,10.5V11H12V10.5C13,10 14,8.5 14,7C14,4 11,2 12,2M12,4C13,4 12.5,5.5 12,5.5C11.5,5.5 11,4 12,4M10,8.5V7C10,6.5 10.5,6 11,6C11.5,6 12,6.5 12,7V8.5H10M8.5,13C8.5,12.5 9,12 9.5,12H14.5C15,12 15.5,12.5 15.5,13V18C15.5,18.5 15,19 14.5,19H9.5C9,19 8.5,18.5 8.5,18V13M10,14V17H14V14H10Z" />
+        </svg>
+        <svg v-else-if="mode.icon === 'cpp'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22.24 7.03h-2.14l-.32-.94c-.26-.74-.53-1.42-.8-2.03-.55-1.25-1.52-1.92-2.9-2.01l-10-2.33-.2-.03c-2.32-.23-3.69 1.14-4.08 4.09l-.49 3.19H5.03C2.26 6.97 0 9.23 0 12c0 2.75 2.24 4.97 5 5h.06l-.42 2.76c-.41 2.94.94 4.3 3.25 4.07l.2-.03 10-2.33c1.37-.08 2.34-.76 2.89-2.01.27-.61.54-1.29.8-2.03l.32-.94h2.14c.97 0 1.76-.79 1.76-1.76v-5.98c0-.96-.79-1.75-1.76-1.75zM5 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13.43 3.84c-.2.43-.59.66-1.07.72l-10 2.33c-.76.07-1.21-.39-1.07-1.36l1.53-10.03c.14-.94.88-1.52 1.63-1.45l10 2.33c.47.05.8.35 1.01.78.22.42.23.97-.03 1.69l-2 5.3c-.26.73-.25 1.28-.03 1.69z"/>
+        </svg>
+        <svg v-else-if="mode.icon === 'r'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21.9,18.9L16,13.1c1.2-1,2-2.5,2-4.1c0-3.3-2.7-6-6-6H4v18h3V16h4.5l5.5,5.5H21.9z M7,8.5h5c1.7,0,3,1.3,3,3s-1.3,3-3,3H7V8.5z" />
         </svg>
         <svg v-else-if="mode.icon === 'perl'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z" />
+          <path d="M21,11V13H19.78C19.7,13.39 19.58,13.77 19.43,14.13L20.8,15.5L19.39,16.91L18,15.51C17.65,15.66 17.27,15.79 16.89,15.87V17.08H14.89V15.87C14.5,15.79 14.12,15.66 13.77,15.51L12.37,16.91L10.96,15.5L12.33,14.13C12.18,13.77 12.06,13.39 11.98,13H11V11H11.98C12.06,10.61 12.18,10.23 12.33,9.87L10.96,8.5L12.37,7.09L13.77,8.49C14.12,8.34 14.5,8.21 14.89,8.13V7.08H16.89V8.13C17.27,8.21 17.65,8.34 18,8.49L19.39,7.09L20.8,8.5L19.43,9.87C19.58,10.23 19.7,10.61 19.78,11H21M17.5,12A1.5,1.5 0 0,0 16,10.5A1.5,1.5 0 0,0 14.5,12A1.5,1.5 0 0,0 16,13.5A1.5,1.5 0 0,0 17.5,12M6.5,7C6.04,8.44 5.79,9.96 5.79,11.53C5.79,13.1 6.04,14.62 6.5,16.06H3.64C3.1,14.65 2.79,13.11 2.79,11.53C2.79,9.95 3.1,8.41 3.64,7H6.5Z" />
+        </svg>
+        <svg v-else-if="mode.icon === 'octave'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+        </svg>
+        <svg v-else-if="mode.icon === 'sqlite'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12,3C17.5,3 22,4.8 22,7V17C22,19.2 17.5,21 12,21C6.5,21 2,19.2 2,17V7C2,4.8 6.5,3 12,3M12,5C7,5 4,6.3 4,7C4,7.7 7,9 12,9C17,9 20,7.7 20,7C20,6.3 17,5 12,5M4,9.1V12C4,12.7 7,14 12,14C17,14 20,12.7 20,12V9.1C18.4,10.2 15.4,11 12,11C8.6,11 5.6,10.2 4,9.1M4,14.1V17C4,17.7 7,19 12,19C17,19 20,17.7 20,17V14.1C18.4,15.2 15.4,16 12,16C8.6,16 5.6,15.2 4,14.1Z" />
         </svg>
         <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -456,38 +453,14 @@ watch(activeMode, (newMode) => {
         </template>
       </Suspense>
 
-      <!-- C/C++ Runner -->
-      <Suspense v-else-if="activeMode === 'cpp'">
+      <!-- Ruby Runner -->
+      <Suspense v-else-if="activeMode === 'ruby'">
         <template #default>
-          <CppRunner />
+          <RubyRunner />
         </template>
         <template #fallback>
           <div class="flex items-center justify-center h-full">
-            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        </template>
-      </Suspense>
-
-      <!-- Octave Runner -->
-      <Suspense v-else-if="activeMode === 'octave'">
-        <template #default>
-          <OctaveRunner />
-        </template>
-        <template #fallback>
-          <div class="flex items-center justify-center h-full">
-            <div class="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        </template>
-      </Suspense>
-
-      <!-- R Runner -->
-      <Suspense v-else-if="activeMode === 'r'">
-        <template #default>
-          <RRunner />
-        </template>
-        <template #fallback>
-          <div class="flex items-center justify-center h-full">
-            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-8 h-8 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
@@ -504,18 +477,6 @@ watch(activeMode, (newMode) => {
         </template>
       </Suspense>
 
-      <!-- SQLite Runner -->
-      <Suspense v-else-if="activeMode === 'sqlite'">
-        <template #default>
-          <SqliteRunner />
-        </template>
-        <template #fallback>
-          <div class="flex items-center justify-center h-full">
-            <div class="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        </template>
-      </Suspense>
-      
       <!-- Java Runner -->
       <Suspense v-else-if="activeMode === 'java'">
         <template #default>
@@ -528,14 +489,26 @@ watch(activeMode, (newMode) => {
         </template>
       </Suspense>
 
-      <!-- Ruby Runner -->
-      <Suspense v-else-if="activeMode === 'ruby'">
+      <!-- C/C++ Runner -->
+      <Suspense v-else-if="activeMode === 'cpp'">
         <template #default>
-          <RubyRunner />
+          <CppRunner />
         </template>
         <template #fallback>
           <div class="flex items-center justify-center h-full">
-            <div class="w-8 h-8 border-4 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- R Runner -->
+      <Suspense v-else-if="activeMode === 'r'">
+        <template #default>
+          <RRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
@@ -548,6 +521,30 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Octave Runner -->
+      <Suspense v-else-if="activeMode === 'octave'">
+        <template #default>
+          <OctaveRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- SQLite Runner -->
+      <Suspense v-else-if="activeMode === 'sqlite'">
+        <template #default>
+          <SqliteRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
