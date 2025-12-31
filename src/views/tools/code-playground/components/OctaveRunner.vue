@@ -131,6 +131,7 @@ const initOctave = async () => {
      }
 
      window.Module = {
+         locateFile: (path) => `${baseUrl.endsWith('/') ? baseUrl : baseUrl + '/'}octave-wasm/${path}`,
          print: (text) => {
              if (term) term.write(text + '\r\n')
          },
