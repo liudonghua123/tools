@@ -6,6 +6,7 @@
         "markdown": "Markdown 预览",
         "python": "Python 运行",
         "cpp": "C/C++",
+        "octave": "Octave",
         "r": "R 运行",
         "php": "PHP 运行",
         "java": "Java 运行",

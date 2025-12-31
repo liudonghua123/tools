@@ -310,6 +310,39 @@ async function setupClang() {
     }
 }
 
+const octaveDir = path.join(publicDir, 'octave-wasm');
+
+async function setupOctave() {
+    console.log('Setting up Octave WebAssembly...');
+    const nodeModulesOctave = path.resolve(__dirname, '../node_modules/@liudonghua123/octave-wasm/dist');
+
+    if (!fs.existsSync(nodeModulesOctave)) {
+        console.error('@liudonghua123/octave-wasm not found in node_modules. Run npm install.');
+        return;
+    }
+
+    if (!fs.existsSync(octaveDir)) fs.mkdirSync(octaveDir, { recursive: true });
+
+    try {
+        console.log(`Copying all files from ${nodeModulesOctave} to ${octaveDir}...`);
+        // Recursive copy manually since fs.cpSync is Node 16.7+ (using read/write for safety or simple recursion)
+        const copyRecursive = (src, dest) => {
+            if (fs.statSync(src).isDirectory()) {
+                if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+                fs.readdirSync(src).forEach(child => {
+                    copyRecursive(path.join(src, child), path.join(dest, child));
+                });
+            } else {
+                fs.copyFileSync(src, dest);
+            }
+        };
+        copyRecursive(nodeModulesOctave, octaveDir);
+        console.log('Octave setup complete.');
+    } catch (e) {
+        console.warn('Failed to copy Octave files:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -319,6 +352,7 @@ async function main() {
         await setupWebPerl();
         await setupWebr();
         await setupClang();
+        await setupOctave();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

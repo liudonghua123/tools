@@ -6,6 +6,7 @@
         "markdown": "Markdown Preview",
         "python": "Python",
         "cpp": "C/C++",
+        "octave": "Octave",
         "r": "R",
         "php": "PHP Runtime",
         "java": "Java Runner",

@@ -15,6 +15,7 @@ const RubyRunner = defineAsyncComponent(() => import('./components/RubyRunner.vu
 const PerlRunner = defineAsyncComponent(() => import('./components/PerlRunner.vue'))
 const RRunner = defineAsyncComponent(() => import('./components/RRunner.vue'))
 const CppRunner = defineAsyncComponent(() => import('./components/CppRunner.vue'))
+const OctaveRunner = defineAsyncComponent(() => import('./components/OctaveRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
 const activeMode = ref('sandbox')
@@ -27,12 +28,13 @@ const modes = computed(() => [
   { id: 'sandbox', icon: 'web', label: t('tools.code-playground.modes.sandbox') },
   { id: 'markdown', icon: 'markdown', label: t('tools.code-playground.modes.markdown') },
   { id: 'python', icon: 'python', label: t('tools.code-playground.modes.python') },
-  { id: 'cpp', icon: 'cpp', label: t('tools.code-playground.modes.cpp') },
-  { id: 'r', icon: 'r', label: t('tools.code-playground.modes.r') },
-  { id: 'php', icon: 'php', label: t('tools.code-playground.modes.php') },
-  { id: 'java', icon: 'java', label: t('tools.code-playground.modes.java') },
   { id: 'ruby', icon: 'ruby', label: t('tools.code-playground.modes.ruby') },
   { id: 'perl', icon: 'perl', label: t('tools.code-playground.modes.perl') },
+  { id: 'php', icon: 'php', label: t('tools.code-playground.modes.php') },
+  { id: 'java', icon: 'java', label: t('tools.code-playground.modes.java') },
+  { id: 'cpp', icon: 'cpp', label: t('tools.code-playground.modes.cpp') },
+  { id: 'r', icon: 'r', label: t('tools.code-playground.modes.r') },
+  { id: 'octave', icon: 'octave', label: t('tools.code-playground.modes.octave') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
   { id: 'editor', icon: 'code', label: t('tools.code-playground.modes.editor') }
 ])
@@ -370,6 +372,10 @@ watch(activeMode, (newMode) => {
         <svg v-else-if="mode.icon === 'cpp'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
            <path d="M22.24 7.03h-2.14l-.32-.94c-.26-.74-.53-1.42-.8-2.03-.55-1.25-1.52-1.92-2.9-2.01l-10-2.33-.2-.03c-2.32-.23-3.69 1.14-4.08 4.09l-.49 3.19H5.03C2.26 6.97 0 9.23 0 12c0 2.75 2.24 4.97 5 5h.06l-.42 2.76c-.41 2.94.94 4.3 3.25 4.07l.2-.03 10-2.33c1.37-.08 2.34-.76 2.89-2.01.27-.61.54-1.29.8-2.03l.32-.94h2.14c.97 0 1.76-.79 1.76-1.76v-5.98c0-.96-.79-1.75-1.76-1.75zM5 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13.43 3.84c-.2.43-.59.66-1.07.72l-10 2.33c-.76.07-1.21-.39-1.07-1.36l1.53-10.03c.14-.94.88-1.52 1.63-1.45l10 2.33c.47.05.8.35 1.01.78.22.42.23.97-.03 1.69l-2 5.3c-.26.73-.25 1.28-.03 1.69z"/>
         </svg>
+        <svg v-else-if="mode.icon === 'octave'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+           <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">O</text>
+        </svg>
         <svg v-else-if="mode.icon === 'r'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
            <path d="M4.5 4.5h15v15h-15z" fill="none" stroke="currentColor" stroke-width="2"/>
            <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">R</text>
@@ -458,6 +464,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Octave Runner -->
+      <Suspense v-else-if="activeMode === 'octave'">
+        <template #default>
+          <OctaveRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
