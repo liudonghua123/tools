@@ -242,6 +242,40 @@ async function setupWebPerl() {
     }
 }
 
+const webrDir = path.join(publicDir, 'webr');
+
+async function setupWebr() {
+    console.log('Setting up WebR...');
+    const nodeModulesWebr = path.resolve(__dirname, '../node_modules/webr/dist');
+
+    if (!fs.existsSync(nodeModulesWebr)) {
+        console.error('webr not found in node_modules. Run npm install.');
+        return;
+    }
+
+    if (!fs.existsSync(webrDir)) fs.mkdirSync(webrDir, { recursive: true });
+
+    try {
+        console.log(`Copying all files from ${nodeModulesWebr} to ${webrDir}...`);
+        // Recursive copy manually since fs.cpSync is Node 16.7+ (using read/write for safety or simple recursion)
+        const copyRecursive = (src, dest) => {
+            if (fs.statSync(src).isDirectory()) {
+                if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+                fs.readdirSync(src).forEach(child => {
+                    copyRecursive(path.join(src, child), path.join(dest, child));
+                });
+            } else {
+                fs.copyFileSync(src, dest);
+                // console.log(`Copied ${path.basename(src)}`); // Too verbose
+            }
+        };
+        copyRecursive(nodeModulesWebr, webrDir);
+        console.log('WebR setup complete.');
+    } catch (e) {
+        console.warn('Failed to copy WebR files:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -249,6 +283,7 @@ async function main() {
         await setupSqlite();
         await setupRuby();
         await setupWebPerl();
+        await setupWebr();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

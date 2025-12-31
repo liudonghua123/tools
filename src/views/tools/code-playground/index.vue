@@ -13,6 +13,7 @@ const SqliteRunner = defineAsyncComponent(() => import('./components/SqliteRunne
 const JavaRunner = defineAsyncComponent(() => import('./components/JavaRunner.vue'))
 const RubyRunner = defineAsyncComponent(() => import('./components/RubyRunner.vue'))
 const PerlRunner = defineAsyncComponent(() => import('./components/PerlRunner.vue'))
+const RRunner = defineAsyncComponent(() => import('./components/RRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
 const activeMode = ref('sandbox')
@@ -25,6 +26,7 @@ const modes = computed(() => [
   { id: 'sandbox', icon: 'web', label: t('tools.code-playground.modes.sandbox') },
   { id: 'markdown', icon: 'markdown', label: t('tools.code-playground.modes.markdown') },
   { id: 'python', icon: 'python', label: t('tools.code-playground.modes.python') },
+  { id: 'r', icon: 'r', label: t('tools.code-playground.modes.r') },
   { id: 'php', icon: 'php', label: t('tools.code-playground.modes.php') },
   { id: 'java', icon: 'java', label: t('tools.code-playground.modes.java') },
   { id: 'ruby', icon: 'ruby', label: t('tools.code-playground.modes.ruby') },
@@ -363,6 +365,10 @@ watch(activeMode, (newMode) => {
         <svg v-else-if="mode.icon === 'python'" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.06-7.44 7-7.93v15.86zm2-15.86c3.94.49 7 3.85 7 7.93s-3.06 7.44-7 7.93V4.07z"/>
         </svg>
+        <svg v-else-if="mode.icon === 'r'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+           <path d="M4.5 4.5h15v15h-15z" fill="none" stroke="currentColor" stroke-width="2"/>
+           <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">R</text>
+        </svg>
         <svg v-else-if="mode.icon === 'php'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 15h-9v-2h9v2zm0-4h-9V9h9v4z" />
         </svg>
@@ -435,6 +441,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- R Runner -->
+      <Suspense v-else-if="activeMode === 'r'">
+        <template #default>
+          <RRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>

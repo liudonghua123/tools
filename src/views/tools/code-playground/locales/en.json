@@ -5,6 +5,7 @@
         "sandbox": "HTML/CSS/JS Sandbox",
         "markdown": "Markdown Preview",
         "python": "Python Runner",
+        "r": "R Runner",
         "php": "PHP Runtime",
         "java": "Java Runner",
         "ruby": "Ruby Runner",
