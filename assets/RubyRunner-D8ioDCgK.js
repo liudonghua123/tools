@@ -1,0 +1,31 @@
+import{u as F,r as p,c as o,j as r,d as e,g as h,t as i,e as w,n as V,i as N,b as S,F as L,f as T}from"./index-CpdbSi_Z.js";import $ from"./MonacoEditor-M7Go4pjs.js";import"./monaco-editor-CGO6wXTd.js";const q={class:"flex flex-col md:flex-row h-full"},A={class:"w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-b md:border-b-0 md:border-r border-slate-700"},I={class:"flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50"},W={class:"flex items-center gap-2"},D={key:0,class:"text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full"},G={key:1,class:"text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full"},H=["disabled"],O={key:0,class:"w-4 h-4 animate-spin",fill:"none",stroke:"currentColor",viewBox:"0 0 24 24"},U={key:1,class:"w-4 h-4",fill:"currentColor",viewBox:"0 0 24 24"},P={class:"flex-1 min-h-0"},Y={class:"w-full md:w-1/2 h-1/2 md:h-full flex flex-col bg-slate-900"},J={class:"flex items-center justify-between px-4 py-3 border-b border-slate-700"},K={class:"flex items-center gap-3"},Q={class:"text-xs font-bold text-slate-400 uppercase tracking-wider"},X={key:0,class:"text-xs text-slate-500"},Z={key:0,class:"flex-1 flex items-center justify-center"},ee={class:"text-center space-y-4"},te={class:"text-slate-400"},se={key:1,class:"flex-1 overflow-y-auto p-4 font-mono text-sm space-y-1"},oe={key:0,class:"text-red-400"},re={key:1,class:"text-green-400"},le={class:"whitespace-pre-wrap"},ae={key:0,class:"text-slate-500 italic"},ce={__name:"RubyRunner",emits:["output","error","ready"],setup(ne,{emit:C}){const{t:c}=F(),_=C,x=p(`# Ruby code runs in your browser with ruby-wasm
+# No server required!
+
+puts "Hello from Ruby #{RUBY_VERSION}!"
+
+# Basic math
+numbers = (1..100).to_a
+sum = numbers.sum
+puts "Sum of 1 to 100: #{sum}"
+
+# Blocks and iterators
+squares = 1.upto(10).map { |x| x**2 }
+puts "Squares: #{squares.inspect}"
+
+# Tally (Ruby 2.7+)
+words = %w[apple banana apple cherry banana apple]
+puts "Fruit tally: #{words.tally}"
+
+# Class example
+class Greeter
+  def initialize(name)
+    @name = name
+  end
+
+  def greet
+    "Greetings, #{@name}!"
+  end
+end
+
+puts Greeter.new("Developer").greet
+`),a=p([]),n=p(!1),g=p(!1),v=p(""),y=p(null);let m=null;const M=async()=>{if(m)return m;if(window.rubyVM)return m=window.rubyVM,g.value=!0,m;n.value=!0,v.value=c("tools.code-playground.ruby.loading");try{const s="/tools/",t=`${s.endsWith("/")?s:s+"/"}ruby-wasm/`;if(await new Promise((R,z)=>{if(window["ruby-wasm-wasi"])return R();const f=document.createElement("script");f.src=`${t}browser.umd.js`,f.onload=R,f.onerror=()=>z(new Error("Failed to load browser.umd.js")),document.head.appendChild(f)}),!window["ruby-wasm-wasi"])throw new Error('Ruby WASM script loaded but window["ruby-wasm-wasi"] not found');v.value="Initializing Ruby environment...";const{DefaultRubyVM:u}=window["ruby-wasm-wasi"],d=await fetch(`${t}ruby+stdlib.wasm`);if(!d.ok)throw new Error(`Failed to fetch ruby+stdlib.wasm: ${d.statusText}`);const l=await d.arrayBuffer(),b=await WebAssembly.compile(l),{vm:k}=await u(b);return m=k,window.rubyVM=k,g.value=!0,_("ready"),m}catch(s){throw a.value.push({type:"error",message:`Failed to load Ruby: ${s.message}`}),console.error(s),s}finally{n.value=!1,v.value=""}},B=async()=>{a.value=[],y.value=null;try{const s=console.log,t=console.error;console.log=(...l)=>{s(...l);const b=l.join(" ");a.value.push({type:"log",message:b})},console.error=(...l)=>{t(...l);const b=l.join(" ");a.value.push({type:"error",message:b})};const u=performance.now();try{(await M()).eval(x.value)}catch(l){a.value.push({type:"error",message:l.toString()})}finally{console.log=s,console.error=t}const d=performance.now();y.value=(d-u).toFixed(2)}catch(s){a.value.push({type:"error",message:s.message}),_("error",s)}},j=()=>{a.value=[],y.value=null},E=s=>s==="error"?"text-red-400":"text-blue-400";return(s,t)=>(r(),o("div",q,[e("div",A,[e("div",I,[e("div",W,[t[1]||(t[1]=e("svg",{class:"w-5 h-5 text-red-500",viewBox:"0 0 128 128",fill:"currentColor"},[e("path",{d:"M3.802 99.828c.656 23.608 17.689 23.959 24.945 24.167l-16.759-39.14-8.186 14.973z"}),e("path",{d:"M4.981 65.131l6.987 19.821 30.365-6.812L77 45.922l9.783-31.075L71.38 3.969l-26.19 9.802c-8.252 7.675-24.263 22.86-24.84 23.146-.573.291-10.575 19.195-15.369 28.214z"})],-1)),t[2]||(t[2]=e("span",{class:"font-bold text-white"},"Ruby 3.4",-1)),g.value?(r(),o("span",D,i(w(c)("tools.code-playground.common.ready")),1)):n.value?h("",!0):(r(),o("span",G,i(w(c)("tools.code-playground.common.not_loaded","Not loaded")),1))]),e("button",{onClick:B,disabled:n.value,class:V(["px-4 py-1.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2",n.value?"bg-slate-600 text-slate-400 cursor-not-allowed":"bg-emerald-600 hover:bg-emerald-500 text-white"])},[n.value?(r(),o("svg",O,[...t[3]||(t[3]=[e("path",{"stroke-linecap":"round","stroke-linejoin":"round","stroke-width":"2",d:"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"},null,-1)])])):(r(),o("svg",U,[...t[4]||(t[4]=[e("path",{d:"M8 5v14l11-7z"},null,-1)])])),N(" "+i(n.value?"Loading...":w(c)("tools.code-playground.common.run")),1)],10,H)]),e("div",P,[S($,{modelValue:x.value,"onUpdate:modelValue":t[0]||(t[0]=u=>x.value=u),language:"ruby",theme:"vs-dark",height:"100%",minimap:!1},null,8,["modelValue"])])]),e("div",Y,[e("div",J,[e("div",K,[e("span",Q,i(w(c)("tools.code-playground.common.output")),1),y.value?(r(),o("span",X,i(y.value)+"ms",1)):h("",!0)]),e("button",{onClick:j,class:"text-xs text-slate-500 hover:text-white transition-colors"},i(w(c)("tools.code-playground.common.clear")),1)]),n.value?(r(),o("div",Z,[e("div",ee,[t[5]||(t[5]=e("div",{class:"w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto"},null,-1)),e("div",te,i(v.value),1),t[6]||(t[6]=e("div",{class:"text-xs text-slate-500"},"Initializing Ruby WASM...",-1))])])):(r(),o("div",se,[(r(!0),o(L,null,T(a.value,(u,d)=>(r(),o("div",{key:d,class:V(["flex items-start gap-2",E(u.type)])},[u.type==="error"?(r(),o("span",oe,"✗")):(r(),o("span",re,"›")),e("span",le,i(u.message),1)],2))),128)),a.value.length===0&&!n.value?(r(),o("div",ae,' Click "Run" to execute Ruby code... ')):h("",!0)]))])]))}};export{ce as default};
