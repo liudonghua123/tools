@@ -8,6 +8,7 @@
         "cpp": "C/C++",
         "octave": "Octave",
         "go": "Go",
+        "rust": "Rust 运行",
         "r": "R 运行",
         "php": "PHP 运行",
         "java": "Java 运行",
@@ -61,5 +62,8 @@
     "editor": {
         "language": "语言",
         "format": "格式化代码"
+    },
+    "rust": {
+        "loading": "加载 Rune WASM 中..."
     }
 }

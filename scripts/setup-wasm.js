@@ -17,6 +17,7 @@ const phpDir = path.join(publicDir, 'php-wasm');
 const sqlDir = path.join(publicDir, 'sql-wasm');
 const rubyDir = path.join(publicDir, 'ruby-wasm');
 const goDir = path.join(publicDir, 'go-wasm');
+const rustDir = path.join(publicDir, 'rust-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -344,6 +345,51 @@ async function setupOctave() {
     }
 }
 
+async function setupRust() {
+    console.log('Setting up Rust (Rune) WebAssembly...');
+
+    if (!fs.existsSync(rustDir)) fs.mkdirSync(rustDir, { recursive: true });
+
+    const files = [
+        { name: 'rune.js', url: 'https://rune-rs.github.io/js/rune.js' },
+        { name: 'rune_wasm.wasm', url: 'https://rune-rs.github.io/js/assets/rune_wasm-b9e0a926.wasm' }
+    ];
+
+    try {
+        for (const file of files) {
+            const dest = path.join(rustDir, file.name);
+            if (!fs.existsSync(dest)) {
+                await download(file.url, dest);
+            } else {
+                console.log(`${file.name} already exists, skipping.`);
+            }
+        }
+
+        // Patch rune.js to use local wasm file and support options in init()
+        const runeJsPath = path.join(rustDir, 'rune.js');
+        let content = fs.readFileSync(runeJsPath, 'utf8');
+        const originalWasmPath = '/js/assets/rune_wasm-b9e0a926.wasm';
+        if (content.includes(originalWasmPath)) {
+            console.log('Patching rune.js to use local wasm file...');
+            content = content.replace(originalWasmPath, 'rune_wasm.wasm');
+        }
+
+        const originalInit = 'async function init() {\n      exports.module = await wasm();\n  }';
+        const patchedInit = 'async function init(opt) {\n      exports.module = await wasm(opt);\n  }';
+        if (content.includes('async function init() {')) {
+            console.log('Patching rune.js init() to accept options...');
+            content = content.replace('async function init() {', 'async function init(opt) {');
+            content = content.replace('exports.module = await wasm();', 'exports.module = await wasm(opt);');
+        }
+
+        fs.writeFileSync(runeJsPath, content);
+
+        console.log('Rust (Rune) setup complete.');
+    } catch (e) {
+        console.error('Rust (Rune) setup failed:', e);
+    }
+}
+
 async function setupGo() {
     console.log('Setting up Go WebAssembly...');
 
@@ -382,6 +428,7 @@ async function main() {
         await setupClang();
         await setupOctave();
         await setupGo();
+        await setupRust();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

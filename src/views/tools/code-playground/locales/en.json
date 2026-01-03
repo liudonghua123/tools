@@ -8,6 +8,7 @@
         "cpp": "C/C++",
         "octave": "Octave",
         "go": "Go",
+        "rust": "Rust Runner",
         "r": "R",
         "php": "PHP Runtime",
         "java": "Java Runner",
@@ -61,5 +62,8 @@
     "editor": {
         "language": "Language",
         "format": "Format Code"
+    },
+    "rust": {
+        "loading": "Loading Rune WASM..."
     }
 }
