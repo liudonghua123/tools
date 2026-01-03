@@ -16,6 +16,7 @@ const pyodideDir = path.join(publicDir, 'pyodide');
 const phpDir = path.join(publicDir, 'php-wasm');
 const sqlDir = path.join(publicDir, 'sql-wasm');
 const rubyDir = path.join(publicDir, 'ruby-wasm');
+const goDir = path.join(publicDir, 'go-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -343,6 +344,33 @@ async function setupOctave() {
     }
 }
 
+async function setupGo() {
+    console.log('Setting up Go WebAssembly...');
+
+    if (!fs.existsSync(goDir)) fs.mkdirSync(goDir, { recursive: true });
+
+    const files = [
+        'main.wasm',
+        'wasm_exec.js'
+    ];
+
+    const baseUrl = 'https://raw.githubusercontent.com/Aryan-Bagale/go-browser-interpreter/main';
+
+    try {
+        for (const file of files) {
+            const dest = path.join(goDir, file);
+            if (!fs.existsSync(dest)) {
+                await download(`${baseUrl}/${file}`, dest);
+            } else {
+                console.log(`${file} already exists, skipping.`);
+            }
+        }
+        console.log('Go setup complete.');
+    } catch (e) {
+        console.error('Go setup failed:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -353,6 +381,7 @@ async function main() {
         await setupWebr();
         await setupClang();
         await setupOctave();
+        await setupGo();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

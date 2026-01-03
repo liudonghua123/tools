@@ -7,6 +7,7 @@
         "python": "Python",
         "cpp": "C/C++",
         "octave": "Octave",
+        "go": "Go",
         "r": "R",
         "php": "PHP Runtime",
         "java": "Java Runner",
