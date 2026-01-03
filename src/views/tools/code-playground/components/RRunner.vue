@@ -203,9 +203,8 @@ onUnmounted(() => {
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
             <!-- R Logo placeholder utilizing blue theme -->
-            <svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
-               <path d="M4.5 4.5h15v15h-15z" fill="none" stroke="currentColor" stroke-width="2"/>
-               <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">R</text>
+            <svg class="w-5 h-5 text-blue-400" viewBox="0 0 128 128" fill="currentColor">
+               <path d="M68.52 1.05C33.19 1.05 4.54 22.14 4.54 48.15c0 19.34 1.51 30.55 2.06 32.74v.14c-1.72 2.75-2.06 6.18-2.06 10.3 0 8.07 10.99 14.63 24.51 14.63 12.02 0 22.02-5.15 24-12.02l4.81.34s6.18 10.99 15.45 23.35h32.11L85.17 93.31l1.37-.34h4.12c18.54 0 32.74-20.26 32.74-42.92 0-27.47-23.7-49-54.88-49zm-.52 15.63c22.84 0 41.37 14.42 41.37 32.2 0 17.78-18.52 32.2-41.37 32.2s-28.32-14.42-28.32-32.2c0-17.78 5.48-32.2 28.32-32.2zm10.3 22.84h-10.3v3.6h9.1c2.23 0 5.4 1.44 5.4 5.14 0 3.7-3.17 5.14-5.4 5.14h-9.1v-6.35h-7.71v23.2h7.71v-9.35H77c3.38 0 8.64.43 13.1-4.32 4.46-4.75 4.46-13.06-.58-17.06z" />
             </svg>
             <span class="font-bold text-white">R</span>
             <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>

@@ -184,9 +184,9 @@ const getOutputColor = (type) => {
       <!-- Toolbar -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">
         <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
-             <path d="M12 2L3.5 6.5L2 12L3.5 17.5L12 22L20.5 17.5L22 12L20.5 6.5L12 2ZM12 4.5L18.5 8L19.5 12L18.5 16L12 19.5L5.5 16L4.5 12L5.5 8L12 4.5Z" />
-             <path d="M12 7.5L8.5 10.5L9.5 14.5L12 16.5L14.5 14.5L15.5 10.5L12 7.5Z" opacity=".5"/>
+          <svg class="w-5 h-5 text-red-500" viewBox="0 0 128 128" fill="currentColor">
+             <path d="M3.802 99.828c.656 23.608 17.689 23.959 24.945 24.167l-16.759-39.14-8.186 14.973z" />
+             <path d="M4.981 65.131l6.987 19.821 30.365-6.812L77 45.922l9.783-31.075L71.38 3.969l-26.19 9.802c-8.252 7.675-24.263 22.86-24.84 23.146-.573.291-10.575 19.195-15.369 28.214z" />
           </svg>
           <span class="font-bold text-white">Ruby 3.4</span>
           <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
