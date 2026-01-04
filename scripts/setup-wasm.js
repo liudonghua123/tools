@@ -19,6 +19,7 @@ const rubyDir = path.join(publicDir, 'ruby-wasm');
 const goDir = path.join(publicDir, 'go-wasm');
 const rustDir = path.join(publicDir, 'rust-wasm');
 const zigDir = path.join(publicDir, 'zig-wasm');
+const luaDir = path.join(publicDir, 'lua-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -438,6 +439,33 @@ async function setupZig() {
     }
 }
 
+async function setupLua() {
+    console.log('Setting up Lua (wasmoon) WebAssembly...');
+    const nodeModulesLua = path.resolve(__dirname, '../node_modules/wasmoon/dist');
+
+    if (!fs.existsSync(nodeModulesLua)) {
+        console.error('wasmoon not found in node_modules. Run npm install.');
+        return;
+    }
+
+    if (!fs.existsSync(luaDir)) fs.mkdirSync(luaDir, { recursive: true });
+
+    try {
+        const file = 'glue.wasm';
+        const src = path.join(nodeModulesLua, file);
+        const dest = path.join(luaDir, file);
+        if (fs.existsSync(src)) {
+            fs.copyFileSync(src, dest);
+            console.log(`Copied ${file} to ${path.relative(publicDir, dest)}`);
+        } else {
+            console.warn(`Source file not found: ${src}`);
+        }
+        console.log('Lua setup complete.');
+    } catch (e) {
+        console.warn('Failed to copy Lua files:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -451,6 +479,7 @@ async function main() {
         await setupGo();
         await setupZig();
         await setupRust();
+        await setupLua();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);
