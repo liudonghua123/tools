@@ -8,6 +8,7 @@
         "cpp": "C/C++",
         "octave": "Octave",
         "go": "Go",
+        "zig": "Zig",
         "rust": "Rust Runner",
         "r": "R",
         "php": "PHP Runtime",
@@ -65,5 +66,8 @@
     },
     "rust": {
         "loading": "Loading Rune WASM..."
+    },
+    "zig": {
+        "loading": "Loading Zig..."
     }
 }

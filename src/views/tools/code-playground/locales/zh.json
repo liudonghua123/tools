@@ -8,6 +8,7 @@
         "cpp": "C/C++",
         "octave": "Octave",
         "go": "Go",
+        "zig": "Zig 运行",
         "rust": "Rust 运行",
         "r": "R 运行",
         "php": "PHP 运行",
@@ -65,5 +66,8 @@
     },
     "rust": {
         "loading": "加载 Rune WASM 中..."
+    },
+    "zig": {
+        "loading": "加载 Zig 中..."
     }
 }

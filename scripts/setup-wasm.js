@@ -18,6 +18,7 @@ const sqlDir = path.join(publicDir, 'sql-wasm');
 const rubyDir = path.join(publicDir, 'ruby-wasm');
 const goDir = path.join(publicDir, 'go-wasm');
 const rustDir = path.join(publicDir, 'rust-wasm');
+const zigDir = path.join(publicDir, 'zig-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -417,6 +418,26 @@ async function setupGo() {
     }
 }
 
+async function setupZig() {
+    console.log('Setting up Zig WebAssembly...');
+
+    if (!fs.existsSync(zigDir)) fs.mkdirSync(zigDir, { recursive: true });
+
+    const requiredFiles = ['zig.wasm', 'zls.wasm', 'zig.tar.gz'];
+    let missingFn = [];
+    requiredFiles.forEach(f => {
+        if (!fs.existsSync(path.join(zigDir, f))) {
+            missingFn.push(f);
+        }
+    });
+
+    if (missingFn.length > 0) {
+        console.warn(`Missing Zig files: ${missingFn.join(', ')}. Please verify they are placed in ${zigDir}`);
+    } else {
+        console.log('Zig WASM files found.');
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -428,6 +449,7 @@ async function main() {
         await setupClang();
         await setupOctave();
         await setupGo();
+        await setupZig();
         await setupRust();
         console.log('All WASM assets setup complete.');
     } catch (e) {

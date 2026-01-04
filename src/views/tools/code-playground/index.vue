@@ -17,6 +17,7 @@ const RRunner = defineAsyncComponent(() => import('./components/RRunner.vue'))
 const CppRunner = defineAsyncComponent(() => import('./components/CppRunner.vue'))
 const OctaveRunner = defineAsyncComponent(() => import('./components/OctaveRunner.vue'))
 const GoRunner = defineAsyncComponent(() => import('./components/GoRunner.vue'))
+const ZigRunner = defineAsyncComponent(() => import('./components/ZigRunner.vue'))
 const RustRunner = defineAsyncComponent(() => import('./components/RustRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
@@ -37,6 +38,7 @@ const modes = computed(() => [
   { id: 'r', icon: 'r', label: t('tools.code-playground.modes.r') },
   { id: 'perl', icon: 'perl', label: t('tools.code-playground.modes.perl') },
   { id: 'go', icon: 'go', label: t('tools.code-playground.modes.go', 'Go') },
+  { id: 'zig', icon: 'zig', label: t('tools.code-playground.modes.zig', 'Zig') },
   { id: 'rust', icon: 'rust', label: t('tools.code-playground.modes.rust', 'Rust') },
   { id: 'octave', icon: 'octave', label: t('tools.code-playground.modes.octave') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
@@ -61,7 +63,8 @@ const languages = [
   { id: 'css', label: 'CSS' },
   { id: 'python', label: 'Python' },
   { id: 'ruby', label: 'Ruby' },
-  { id: 'perl', label: 'Perl' }
+  { id: 'perl', label: 'Perl' },
+  { id: 'zig', label: 'Zig' }
 ]
 
 const exampleSnippets = {
@@ -314,14 +317,9 @@ onMounted(() => {
     }
 })
 
-// Watch for mode changes to auto-select example when entering editor mode
-// Watch for mode changes to auto-select example when entering editor mode 
-// Wait, imports are at top. Need to check if watch is imported.
-// It was not in the original file imports: "import { ref, computed, onMounted, defineAsyncComponent } from 'vue'"
-// So I need to add it to imports first? 
-// Or I can just standardise the imports in a separate edit if needed, but let's check top of file.
 // Code snippet shows: `import { ref, computed, onMounted, defineAsyncComponent } from 'vue'`
 // So I need to add `watch` to imports. 
+// Adding imports to the top of the file
 
 watch(activeMode, (newMode) => {
     if (newMode === 'editor' && !selectedExample.value) {
@@ -557,6 +555,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Zig Runner -->
+      <Suspense v-else-if="activeMode === 'zig'">
+        <template #default>
+          <ZigRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
