@@ -15,6 +15,8 @@
         "java": "Java 运行",
         "ruby": "Ruby 运行",
         "perl": "Perl 运行",
+        "lua": "Lua 运行",
+        "fortran": "Fortran 运行",
         "sqlite": "SQLite 数据库",
         "editor": "代码格式化"
     },

@@ -153,3 +153,4 @@ public/go-wasm/
 public/rust-wasm/
 # public/zig-wasm/
 public/lua-wasm/
+public/fortran-wasm/

@@ -20,6 +20,7 @@ const goDir = path.join(publicDir, 'go-wasm');
 const rustDir = path.join(publicDir, 'rust-wasm');
 const zigDir = path.join(publicDir, 'zig-wasm');
 const luaDir = path.join(publicDir, 'lua-wasm');
+const fortranDir = path.join(publicDir, 'fortran-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -466,6 +467,34 @@ async function setupLua() {
     }
 }
 
+async function setupFortran() {
+    console.log('Setting up Fortran (LFortran) WebAssembly...');
+
+    if (!fs.existsSync(fortranDir)) fs.mkdirSync(fortranDir, { recursive: true });
+
+    const files = [
+        'lfortran.wasm',
+        'lfortran.js',
+        'lfortran.data'
+    ];
+
+    const baseUrl = 'https://lfortran.github.io/wasm_builds/release/2ddb58781';
+
+    try {
+        for (const file of files) {
+            const dest = path.join(fortranDir, file);
+            if (!fs.existsSync(dest)) {
+                await download(`${baseUrl}/${file}`, dest);
+            } else {
+                console.log(`${file} already exists, skipping.`);
+            }
+        }
+        console.log('Fortran setup complete.');
+    } catch (e) {
+        console.error('Fortran setup failed:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -480,6 +509,7 @@ async function main() {
         await setupZig();
         await setupRust();
         await setupLua();
+        await setupFortran();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

@@ -20,6 +20,7 @@ const GoRunner = defineAsyncComponent(() => import('./components/GoRunner.vue'))
 const ZigRunner = defineAsyncComponent(() => import('./components/ZigRunner.vue'))
 const RustRunner = defineAsyncComponent(() => import('./components/RustRunner.vue'))
 const LuaRunner = defineAsyncComponent(() => import('./components/LuaRunner.vue'))
+const FortranRunner = defineAsyncComponent(() => import('./components/FortranRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
 const activeMode = ref('sandbox')
@@ -42,6 +43,7 @@ const modes = computed(() => [
   { id: 'zig', icon: 'zig', label: t('tools.code-playground.modes.zig', 'Zig') },
   { id: 'rust', icon: 'rust', label: t('tools.code-playground.modes.rust', 'Rust') },
   { id: 'lua', icon: 'lua', label: t('tools.code-playground.modes.lua', 'Lua') },
+  { id: 'fortran', icon: 'fortran', label: t('tools.code-playground.modes.fortran', 'Fortran') },
   { id: 'octave', icon: 'octave', label: t('tools.code-playground.modes.octave') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
   { id: 'editor', icon: 'code', label: t('tools.code-playground.modes.editor') }
@@ -597,6 +599,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Fortran Runner -->
+      <Suspense v-else-if="activeMode === 'fortran'">
+        <template #default>
+          <FortranRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
