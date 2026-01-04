@@ -1,0 +1,54 @@
+{
+    "chapters": [
+        {
+            "title": "Basic",
+            "examples": [
+                {
+                    "name": "Expression",
+                    "path": "basic/expr2.f90"
+                },
+                {
+                    "name": "Mandelbrot",
+                    "path": "basic/mandelbrot.f90"
+                }
+            ]
+        },
+        {
+            "title": "Experimental Templates",
+            "examples": [
+                {
+                    "name": "Template Add",
+                    "path": "experimental/template_add.f90"
+                },
+                {
+                    "name": "Template Nested",
+                    "path": "experimental/template_nested.f90"
+                },
+                {
+                    "name": "Template Travel",
+                    "path": "experimental/template_travel.f90"
+                },
+                {
+                    "name": "Template Triple",
+                    "path": "experimental/template_triple.f90"
+                },
+                {
+                    "name": "Array Insertion",
+                    "path": "experimental/template_array_01b.f90"
+                },
+                {
+                    "name": "Array Sum",
+                    "path": "experimental/template_array_02b.f90"
+                },
+                {
+                    "name": "Matrix Multiplication",
+                    "path": "experimental/template_array_03.f90"
+                },
+                {
+                    "name": "Array Reverse",
+                    "path": "experimental/template_array_04.f90"
+                }
+            ]
+        }
+    ]
+}
