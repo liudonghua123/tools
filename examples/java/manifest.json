@@ -1,0 +1,36 @@
+{
+    "lang": "java",
+    "name": "Java",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.java"
+                },
+                {
+                    "name": "Variables",
+                    "path": "basic/02_variables.java"
+                },
+                {
+                    "name": "Collections",
+                    "path": "basic/03_collections.java"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.java"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Classes & Inheritance",
+                    "path": "advanced/01_classes.java"
+                }
+            ]
+        }
+    ]
+}

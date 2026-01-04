@@ -1,0 +1,1 @@
+const o="/tools/",n=`${o.endsWith("/")?o:o+"/"}examples/`;async function s(e){const t=await fetch(`${n}${e}/manifest.json`);if(!t.ok)throw new Error(`Failed to load manifest for ${e}`);return await t.json()}async function r(e,t){const a=await fetch(`${n}${e}/${t}`);if(!a.ok)throw new Error(`Failed to load example: ${t}`);return await a.text()}export{r as a,s as f};

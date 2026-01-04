@@ -1,0 +1,36 @@
+{
+    "lang": "sqlite",
+    "name": "SQLite",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.sql"
+                },
+                {
+                    "name": "Data Types",
+                    "path": "basic/02_data_types.sql"
+                },
+                {
+                    "name": "Queries & Filter",
+                    "path": "basic/03_queries.sql"
+                },
+                {
+                    "name": "Joins",
+                    "path": "basic/04_joins.sql"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Aggregates",
+                    "path": "advanced/01_aggregates.sql"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "lang": "r",
+    "name": "R",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.R"
+                },
+                {
+                    "name": "Vectors",
+                    "path": "basic/02_vectors.R"
+                },
+                {
+                    "name": "Data Frames",
+                    "path": "basic/03_dataframes.R"
+                },
+                {
+                    "name": "Plotting",
+                    "path": "basic/04_plotting.R"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.R"
+                }
+            ]
+        }
+    ]
+}

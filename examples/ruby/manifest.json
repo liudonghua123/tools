@@ -1,0 +1,48 @@
+{
+    "lang": "ruby",
+    "name": "Ruby",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.rb"
+                },
+                {
+                    "name": "Data Types",
+                    "path": "basic/02_data_types.rb"
+                },
+                {
+                    "name": "Collections",
+                    "path": "basic/03_collections.rb"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.rb"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Methods & Blocks",
+                    "path": "advanced/01_methods.rb"
+                },
+                {
+                    "name": "OOP",
+                    "path": "advanced/02_oop.rb"
+                },
+                {
+                    "name": "Functional (Enumerable)",
+                    "path": "advanced/03_functional.rb"
+                },
+                {
+                    "name": "Exceptions",
+                    "path": "advanced/04_exceptions.rb"
+                }
+            ]
+        }
+    ]
+}
