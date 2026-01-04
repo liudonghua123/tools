@@ -7,25 +7,24 @@ const { t } = useI18n()
 const emit = defineEmits(['output', 'error', 'ready'])
 
 // Default Ruby code
-const rubyCode = ref(`# Ruby code runs in your browser with ruby-wasm
+// Ruby examples
+const examples = {
+  hello: `# Ruby code runs in your browser with ruby-wasm
 # No server required!
 
-puts "Hello from Ruby #{RUBY_VERSION}!"
-
-# Basic math
+puts "Hello from Ruby #{RUBY_VERSION}!"`,
+  math: `# Basic math
 numbers = (1..100).to_a
 sum = numbers.sum
 puts "Sum of 1 to 100: #{sum}"
 
-# Blocks and iterators
+puts "Square root of 25: #{Math.sqrt(25)}"`,
+  blocks: `# Blocks and iterators
 squares = 1.upto(10).map { |x| x**2 }
 puts "Squares: #{squares.inspect}"
 
-# Tally (Ruby 2.7+)
-words = %w[apple banana apple cherry banana apple]
-puts "Fruit tally: #{words.tally}"
-
-# Class example
+3.times { puts "Ruby is fun!" }`,
+  class: `# Class example
 class Greeter
   def initialize(name)
     @name = name
@@ -36,8 +35,12 @@ class Greeter
   end
 end
 
-puts Greeter.new("Developer").greet
-`)
+puts Greeter.new("Developer").greet`
+}
+
+// Default Ruby code
+const rubyCode = ref(examples.hello)
+const selectedExample = ref('hello')
 
 // State
 const output = ref([])
@@ -116,6 +119,13 @@ const loadRuby = async () => {
   }
 }
 
+// Handle example change
+const onExampleChange = () => {
+  if (examples[selectedExample.value]) {
+    rubyCode.value = examples[selectedExample.value]
+  }
+}
+
 // Run Ruby code
 const runRuby = async () => {
   output.value = []
@@ -183,15 +193,37 @@ const getOutputColor = (type) => {
     <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-b md:border-b-0 md:border-r border-slate-700">
       <!-- Toolbar -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-red-500" viewBox="0 0 128 128" fill="currentColor">
-             <path d="M3.802 99.828c.656 23.608 17.689 23.959 24.945 24.167l-16.759-39.14-8.186 14.973z" />
-             <path d="M4.981 65.131l6.987 19.821 30.365-6.812L77 45.922l9.783-31.075L71.38 3.969l-26.19 9.802c-8.252 7.675-24.263 22.86-24.84 23.146-.573.291-10.575 19.195-15.369 28.214z" />
-          </svg>
-          <span class="font-bold text-white">Ruby 3.4</span>
-          <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
-          <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.common.not_loaded', 'Not loaded') }}</span>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-red-500" viewBox="0 0 128 128" fill="currentColor">
+               <path d="M3.802 99.828c.656 23.608 17.689 23.959 24.945 24.167l-16.759-39.14-8.186 14.973z" />
+               <path d="M4.981 65.131l6.987 19.821 30.365-6.812L77 45.922l9.783-31.075L71.38 3.969l-26.19 9.802c-8.252 7.675-24.263 22.86-24.84 23.146-.573.291-10.575 19.195-15.369 28.214z" />
+            </svg>
+            <span class="font-bold text-white">Ruby 3.4</span>
+            <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
+            <span v-else-if="!isLoading" class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ t('tools.code-playground.common.not_loaded', 'Not loaded') }}</span>
+          </div>
+
+          <!-- Examples Dropdown -->
+          <div class="relative group">
+            <select 
+              v-model="selectedExample"
+              @change="onExampleChange"
+              class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-red-500 transition-all cursor-pointer"
+            >
+              <option value="hello">Hello World</option>
+              <option value="math">Basic Math</option>
+              <option value="blocks">Blocks & Iterators</option>
+              <option value="class">Class Example</option>
+            </select>
+            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
+
         <button 
           @click="runRuby"
           :disabled="isLoading"
@@ -269,4 +301,10 @@ const getOutputColor = (type) => {
 </template>
 
 <style scoped>
+/* Custom select styling to remove default arrow and add custom one */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 </style>
