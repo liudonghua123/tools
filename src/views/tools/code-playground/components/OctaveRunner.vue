@@ -5,74 +5,36 @@ import MonacoEditor from './MonacoEditor.vue'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
-// Examples
-const examples = {
-  hello: {
-    name: 'Hello World',
-    code: `disp("Hello, World!");
-x = 1:10;
-y = x.^2;
-disp("Squares:");
-disp(y);
-`
-  },
-  matrix: {
-    name: 'Matrix Operations',
-    code: `A = [1 2; 3 4];
-B = [5 6; 7 8];
-disp("A + B =");
-disp(A + B);
-disp("A * B =");
-disp(A * B);
-disp("inv(A) =");
-disp(inv(A));
-`
-  },
-  linalg: {
-    name: 'Linear Algebra',
-    code: `# Solving Linear Equations System
-# 3x + 2y - z = 1
-# 2x - 2y + 4z = -2
-# -x + 0.5y - z = 0
-
-A = [3, 2, -1; 2, -2, 4; -1, 0.5, -1];
-b = [1; -2; 0];
-
-disp("Matrix A:");
-disp(A);
-disp("Vector b:");
-disp(b);
-
-x = A \\ b;
-disp("Solution x:");
-disp(x);
-
-disp("Check solution (A*x):");
-disp(A*x);
-
-disp("Eigenvalues of A:");
-disp(eig(A));
-`
-  }
-}
-
-const selectedExample = ref('hello')
-const octaveCode = ref(examples.hello.code)
-
-watch(selectedExample, (newVal) => {
-  if (examples[newVal]) {
-    octaveCode.value = examples[newVal].code
-  }
-})
+// Octave code
+const octaveCode = ref('')
+const selectedExample = ref('')
+const manifest = ref(null)
 
 // State
 const isLoading = ref(false)
 const isReady = ref(false)
 const runTime = ref(null)
 const statusMessage = ref('')
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('octave')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      octaveCode.value = await fetchExample('octave', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Octave manifest:', e)
+  }
+}
+
 
 // Terminal
 let term = null
@@ -181,7 +143,7 @@ const runCode = async () => {
       // We might need to handle stdout buffering if it's synchronous or buffered.
       
       // Attempt to run
-      octaveModule.eval_string(octaveCode.value)
+      octaveModule.eval_string(octaveCode.value.replace(/\r/g, ''))
       
       const endTime = performance.now()
       runTime.value = (endTime - startTime).toFixed(2)
@@ -189,6 +151,21 @@ const runCode = async () => {
       term.write(`\x1b[31mError: ${e.message}\x1b[0m\r\n`)
   } finally {
       isLoading.value = false
+  }
+}
+
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    statusMessage.value = 'Loading example...'
+    octaveCode.value = await fetchExample('octave', selectedExample.value)
+  } catch (e) {
+    if (term) term.write(`\x1b[31mFailed to load example: ${e.message}\x1b[0m\r\n`)
+  } finally {
+    isLoading.value = false
+    statusMessage.value = ''
   }
 }
 
@@ -200,6 +177,7 @@ const clearOutput = () => {
 onMounted(async () => {
   initTerminal()
   await initOctave()
+  loadManifestData()
   window.addEventListener('resize', handleResize)
 })
 
@@ -222,19 +200,33 @@ const handleResize = () => {
     <div class="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-b md:border-b-0 md:border-r border-slate-700">
       <!-- Toolbar -->
       <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
             <svg class="w-5 h-5 text-orange-500" viewBox="0 0 128 128" fill="currentColor">
                 <path d="M123.965 91.902c-7.246-18.297-13.262-37.058-20.184-55.476-3.054-7.84-6.047-15.746-10.215-23.082-1.656-2.633-3.238-5.528-5.953-7.215a4.013 4.013 0 00-2.222-.606c-1.27.028-2.536.594-3.504 1.415-3.645 2.886-5.805 7.082-8.227 10.949-4.277 7.172-8.789 14.687-15.941 19.347-3.36 2.371-7.762 2.63-11 5.172-4.43 3.34-7.442 8.078-11.074 12.184-.829.988-2.11 1.383-3.227 1.918C21.578 60.93 10.738 65.336 0 69.98c9.09 7.032 18.777 13.29 28.05 20.079 2.544-.504 5.098-1.547 7.72-1.082 4.16 1.3 6.597 5.285 8.503 8.93 3.875 7.94 6.676 16.323 9.813 24.57 5.246-.375 9.969-3.079 14.027-6.258 7.809-6.324 13.758-14.5 20.305-22.047 3.14-3.3 6.34-7.23 11.05-8.149 4.762-1.152 9.864.555 13.395 3.836 4.957 4.43 9.344 9.551 15.137 12.942-.777-3.836-2.645-7.278-4.035-10.899zM42.96 79.012c-4.57 2.703-9.426 4.93-14.176 7.289-7.457-4.996-14.723-10.29-22.05-15.465 9.878-4.328 19.91-8.348 29.917-12.387 4.746 3.703 9.637 7.223 14.383 10.926-2.23 3.563-4.914 6.871-8.074 9.637zm10.168-12.414C48.414 63.058 43.64 59.609 39 55.977c2.977-4.055 6.238-7.977 10.14-11.172 2.587-1.657 5.743-2.117 8.426-3.61 6.368-3.18 10.711-9.011 14.86-14.582-5.317 13.805-10.992 27.664-19.297 39.985zm0 0" />
             </svg>
-          <span class="font-bold text-white">Octave</span>
-          <select 
-            v-model="selectedExample"
-            class="ml-2 bg-slate-700 text-xs text-white border-none rounded px-2 py-1 outline-none focus:ring-1 focus:ring-orange-500"
-          >
-            <option v-for="(ex, key) in examples" :key="key" :value="key">
-              {{ ex.name }}
-            </option>
-          </select>
+            <span class="font-bold text-white">Octave</span>
+          </div>
+
+          <!-- Examples Dropdown -->
+          <div class="relative group">
+            <select 
+              v-model="selectedExample"
+              @change="onExampleChange"
+              class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all cursor-pointer"
+            >
+              <optgroup v-for="chapter in manifest?.chapters || []" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples || []" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
+            </select>
+            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
           
           <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
           <span v-else class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ statusMessage || 'Loading...' }}</span>
@@ -294,3 +286,12 @@ const handleResize = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Custom select styling to remove default arrow and add custom one */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+</style>

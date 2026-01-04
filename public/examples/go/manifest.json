@@ -1,0 +1,44 @@
+{
+    "lang": "go",
+    "name": "Go",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.go"
+                },
+                {
+                    "name": "Variables",
+                    "path": "basic/02_variables.go"
+                },
+                {
+                    "name": "Slices & Maps",
+                    "path": "basic/03_collections.go"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.go"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.go"
+                },
+                {
+                    "name": "Structs & Methods",
+                    "path": "advanced/02_structs.go"
+                },
+                {
+                    "name": "Concurrency",
+                    "path": "advanced/03_concurrency.go"
+                }
+            ]
+        }
+    ]
+}

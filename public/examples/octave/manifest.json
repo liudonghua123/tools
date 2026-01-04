@@ -1,0 +1,36 @@
+{
+    "lang": "octave",
+    "name": "Octave",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.m"
+                },
+                {
+                    "name": "Matrices",
+                    "path": "basic/02_matrices.m"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/03_loops.m"
+                },
+                {
+                    "name": "Plotting",
+                    "path": "basic/04_plotting.m"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Numerical Methods",
+                    "path": "advanced/01_numerical.m"
+                }
+            ]
+        }
+    ]
+}

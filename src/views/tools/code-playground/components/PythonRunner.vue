@@ -2,46 +2,16 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
 // Python code
-// Python examples
-const examples = {
-  hello: `# Python code runs in your browser with Pyodide
-# No server required!
-
-print("Hello from Python!")`,
-  math: `# Basic math
-result = sum(range(1, 101))
-print(f"Sum of 1 to 100: {result}")
-
-import math
-print(f"Pi is approximately {math.pi}")
-print(f"Square root of 16 is {math.sqrt(16)}")`,
-  list_comprehension: `# List comprehension
-squares = [x**2 for x in range(1, 11)]
-print(f"Squares: {squares}")
-
-# Filter even numbers
-evens = [x for x in range(1, 21) if x % 2 == 0]
-print(f"Evens: {evens}")`,
-  dictionary: `# Dictionary example
-person = {
-    "name": "Alice",
-    "age": 30,
-    "city": "Wonderland"
-}
-
-for key, value in person.items():
-    print(f"{key}: {value}")`
-}
-
-// Python code
-const pythonCode = ref(examples.hello)
-const selectedExample = ref('hello')
+const pythonCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const output = ref([])
@@ -52,6 +22,23 @@ const runTime = ref(null)
 
 // Pyodide instance
 let pyodide = null
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('python')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      pythonCode.value = await fetchExample('python', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Python manifest:', e)
+  }
+}
+
+// Load Pyodide
 
 // Load Pyodide
 const loadPyodide = async () => {
@@ -124,9 +111,17 @@ const initPyodideInstance = async (loader, pyodidePath) => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    pythonCode.value = examples[selectedExample.value]
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    pythonCode.value = await fetchExample('python', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -141,7 +136,7 @@ const runPython = async () => {
     const startTime = performance.now()
     
     // Run the code
-    await py.runPythonAsync(pythonCode.value)
+    await py.runPythonAsync(pythonCode.value.replace(/\r/g, ''))
     
     const endTime = performance.now()
     runTime.value = (endTime - startTime).toFixed(2)
@@ -165,6 +160,10 @@ const clearOutput = () => {
 const getOutputColor = (type) => {
   return type === 'error' ? 'text-red-400' : 'text-emerald-400'
 }
+
+onMounted(() => {
+  loadManifestData()
+})
 </script>
 
 <template>
@@ -190,10 +189,11 @@ const getOutputColor = (type) => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="math">Basic Math</option>
-              <option value="list_comprehension">List Comprehension</option>
-              <option value="dictionary">Dictionary</option>
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

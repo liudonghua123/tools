@@ -1,0 +1,57 @@
+{
+    "lang": "python",
+    "name": "Python",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.py"
+                },
+                {
+                    "name": "Data Types",
+                    "path": "basic/02_data_types.py"
+                },
+                {
+                    "name": "Collections",
+                    "path": "basic/03_collections.py"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.py"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.py"
+                },
+                {
+                    "name": "OOP",
+                    "path": "advanced/02_oop.py"
+                },
+                {
+                    "name": "Functional",
+                    "path": "advanced/03_functional.py"
+                },
+                {
+                    "name": "Exceptions",
+                    "path": "advanced/04_exceptions.py"
+                }
+            ]
+        },
+        {
+            "title": "Extensions",
+            "examples": [
+                {
+                    "name": "Standard Library",
+                    "path": "extension/01_stdlib.py"
+                }
+            ]
+        }
+    ]
+}

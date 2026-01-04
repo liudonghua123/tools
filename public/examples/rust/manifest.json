@@ -1,0 +1,36 @@
+{
+    "lang": "rust",
+    "name": "Rust (Rune)",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.rs"
+                },
+                {
+                    "name": "Variables",
+                    "path": "basic/02_variables.rs"
+                },
+                {
+                    "name": "Collections",
+                    "path": "basic/03_collections.rs"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.rs"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.rs"
+                }
+            ]
+        }
+    ]
+}

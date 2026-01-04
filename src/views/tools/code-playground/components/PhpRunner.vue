@@ -2,34 +2,16 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// PHP examples
-const examples = {
-  hello: `<?php
-$version = phpversion();
-echo "Hello from PHP $version!\\n";`,
-  array: `<?php
-// Array example
-$fruits = ["Apple", "Banana", "Cherry"];
-echo "Fruits:\\n";
-foreach ($fruits as $fruit) {
-    echo "- $fruit\\n";
-}`,
-  math: `<?php
-// Math
-echo "Sqrt(16) = " . sqrt(16) . "\\n";
-echo "Pi = " . pi() . "\\n";
-echo "Random number: " . rand(1, 100) . "\\n";
-?>`
-}
-
-// Default PHP Code
-const phpCode = ref(examples.hello)
-const selectedExample = ref('hello')
+// PHP code
+const phpCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 const output = ref([])
 const isLoading = ref(false)
@@ -38,6 +20,24 @@ const loadingProgress = ref('')
 const runTime = ref(null)
 
 let php = null
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('php')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      phpCode.value = await fetchExample('php', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load PHP manifest:', e)
+    output.value.push({ type: 'error', message: `Failed to load examples manifest: ${e.message}` })
+  }
+}
+
+// Load PHP
 
 // Load PHP
 const loadPhp = async () => {
@@ -91,9 +91,17 @@ const loadPhp = async () => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    phpCode.value = examples[selectedExample.value]
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    phpCode.value = await fetchExample('php', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -107,7 +115,7 @@ const runPhp = async () => {
         
         // Clean code: remove <?php if present, php-wasm might handle it or not
         // Usually handles raw code.
-        let code = phpCode.value;
+        let code = phpCode.value.replace(/\r/g, '');
         // if (code.startsWith('<?php')) code = code.substring(5);
         // if (code.endsWith('?>')) code = code.substring(0, code.length - 2);
 
@@ -136,6 +144,10 @@ const getOutputColor = (type) => {
   return 'text-blue-400';
 }
 
+onMounted(() => {
+  loadManifestData()
+})
+
 </script>
 
 <template>
@@ -160,9 +172,11 @@ const getOutputColor = (type) => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="array">Arrays</option>
-              <option value="math">Math</option>
+              <optgroup v-for="chapter in manifest?.chapters || []" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples || []" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

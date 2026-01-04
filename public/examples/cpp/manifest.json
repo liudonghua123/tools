@@ -1,0 +1,36 @@
+{
+    "lang": "cpp",
+    "name": "C++",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.cpp"
+                },
+                {
+                    "name": "Variables",
+                    "path": "basic/02_variables.cpp"
+                },
+                {
+                    "name": "Collections",
+                    "path": "basic/03_collections.cpp"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.cpp"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.cpp"
+                }
+            ]
+        }
+    ]
+}

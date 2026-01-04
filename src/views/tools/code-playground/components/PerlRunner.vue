@@ -2,41 +2,15 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// Default Perl code
-// Perl examples
-const examples = {
-  hello: `# Perl code runs in your browser with WebPerl
-# No server required!
-
-print "Hello from Perl $^V!\\n";`,
-  math: `# Basic math
-my $sum = 0;
-$sum += $_ for (1..100);
-print "Sum of 1 to 100: $sum\\n";
-
-print "Square root of 144: " . sqrt(144) . "\\n";`,
-  array: `# Array operations
-my @fruits = ("Apple", "Banana", "Cherry");
-print "Fruits: ", join(", ", @fruits), "\\n";
-
-push(@fruits, "Date");
-print "Added Date: ", join(", ", @fruits), "\\n";`,
-  subroutine: `# Subroutine example
-sub greet {
-    my $name = shift;
-    return "Greetings, $name!";
-}
-
-print greet("Developer"), "\\n";`
-}
-
 // Perl code
-const perlCode = ref(examples.hello)
-const selectedExample = ref('hello')
+const perlCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const output = ref([])
@@ -44,6 +18,23 @@ const isLoading = ref(false)
 const isReady = ref(false)
 const loadingProgress = ref('')
 const runTime = ref(null)
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('perl')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      perlCode.value = await fetchExample('perl', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Perl manifest:', e)
+  }
+}
+
+// Load Perl
 
 // Load Perl
 const loadPerl = async () => {
@@ -152,9 +143,18 @@ const loadPerl = async () => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    perlCode.value = examples[selectedExample.value]
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    perlCode.value = await fetchExample('perl', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -179,7 +179,7 @@ const runPerl = async () => {
         perlRunner.start([]); // Start with empty argv to transition to Running
     }
 
-    perlRunner.eval(`$|=1;${perlCode.value}`);
+    perlRunner.eval(`$|=1;${perlCode.value.replace(/\r/g, '')}`);
     
     const endTime = performance.now();
     runTime.value = (endTime - startTime).toFixed(2);
@@ -204,7 +204,7 @@ const getOutputColor = (type) => {
 }
 
 onMounted(() => {
-    // We could pre-load here if desired
+    loadManifestData()
 })
 </script>
 
@@ -231,10 +231,11 @@ onMounted(() => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="math">Basic Math</option>
-              <option value="array">Array Operations</option>
-              <option value="subroutine">Subroutines</option>
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

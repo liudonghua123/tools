@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
@@ -10,60 +11,31 @@ const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// Examples
-const examples = {
-  hello: {
-    name: 'Hello World',
-    code: `#include <stdio.h>
-
-int main() {
-  printf("Hello, World!\\n");
-  return 0;
-}
-`
-  },
-  loop: {
-    name: 'Loop',
-    code: `#include <stdio.h>
-
-int main() {
-  for (int i = 1; i <= 10; ++i) {
-    printf("Count: %d\\n", i);
-  }
-  return 0;
-}
-`
-  },
-  math: {
-    name: 'Math',
-    code: `#include <iostream>
-#include <vector>
-#include <numeric>
-
-int main() {
-  std::vector<int> v = {1, 2, 3, 4, 5};
-  int sum = std::accumulate(v.begin(), v.end(), 0);
-  std::cout << "Sum: " << sum << std::endl;
-  return 0;
-}
-`
-  }
-}
-
-const selectedExample = ref('hello')
-const cppCode = ref(examples.hello.code)
-
-watch(selectedExample, (newVal) => {
-  if (examples[newVal]) {
-    cppCode.value = examples[newVal].code
-  }
-})
+// C++ code
+const cppCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const isLoading = ref(false)
 const isReady = ref(false)
 const runTime = ref(null)
 const statusMessage = ref('')
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('cpp')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      cppCode.value = await fetchExample('cpp', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load C++ manifest:', e)
+  }
+}
 
 // Worker
 let worker = null
@@ -231,6 +203,21 @@ const runCpp = async () => {
   }
 }
 
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    statusMessage.value = 'Loading example...'
+    cppCode.value = await fetchExample('cpp', selectedExample.value)
+  } catch (e) {
+    term.write(`\x1b[31mFailed to load example: ${e.message}\x1b[0m\r\n`)
+  } finally {
+    isLoading.value = false
+    statusMessage.value = ''
+  }
+}
+
 const clearOutput = () => {
   term.clear()
   runTime.value = null
@@ -239,6 +226,7 @@ const clearOutput = () => {
 onMounted(async () => {
   initTerminal()
   await initWorker()
+  loadManifestData()
   
   window.addEventListener('resize', handleResize)
 })
@@ -267,14 +255,24 @@ const handleResize = () => {
                 <path d="M117.513 18.355l-3.235-5.603a11.536 11.536 0 00-15.75-4.22L61.642 29.83a48.27 48.27 0 00-6.04-2.858C45.335 23.367 33.91 22.067 23.778 27.915a39.22 39.22 0 00-14.35 14.35C3.58 52.56.98 64.122.98 75.83 1.012 101.48 18.67 119.106 43.687 119.106a44.6 44.6 0 0021.782-5.462l33.868 19.553a11.536 11.536 0 0015.75-4.22l3.235-5.604a11.536 11.536 0 00-4.22-15.75L78.68 87.21a48.514 48.514 0 002.822-5.594c3.483-8.491 3.515-18.064-.096-26.471a41.05 41.05 0 00-2.858-6.04l34.744-20.06a11.536 11.536 0 004.22-14.89zM52.022 93.9c-4.992 2.883-11.233 2.915-16.193.096a18.279 18.279 0 01-6.666-6.666c-2.787-4.832-2.787-10.724 0-15.556a18.279 18.279 0 016.666-6.666c4.96-2.819 11.2-2.819 16.193.064a18.279 18.279 0 016.666 6.666c2.787 4.832 2.819 10.724.032 15.556a18.441 18.441 0 01-6.698 6.506zm37.28-3.048l-1.636 2.822a1.868 1.868 0 01-2.532.61L30.133 63.385l1.603-2.822a1.868 1.868 0 012.532-.61l55.034 31.796a1.83 1.83 0 01.61 1.636l-.61 1.25c-.21.21-.42.42-.61.61h-.61l-.61-2.918zm14.89-25.922a1.868 1.868 0 01-.61 2.532l-55.034 31.796-1.503-2.612a1.868 1.868 0 01.61-2.532l55.034-31.796a1.83 1.83 0 01.61.61l.894 1.15-.001.864z" />
             </svg>
           <span class="font-bold text-white">C/C++</span>
-          <select 
-            v-model="selectedExample"
-            class="ml-2 bg-slate-700 text-xs text-white border-none rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500"
-          >
-            <option v-for="(ex, key) in examples" :key="key" :value="key">
-              {{ ex.name }}
-            </option>
-          </select>
+          <div class="relative group ml-2">
+            <select 
+              v-model="selectedExample"
+              @change="onExampleChange"
+              class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer"
+            >
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
+            </select>
+            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
           
           <span v-if="isReady" class="text-xs px-2 py-0.5 bg-emerald-600 text-white rounded-full">{{ t('tools.code-playground.common.ready') }}</span>
           <span v-else class="text-xs px-2 py-0.5 bg-slate-600 text-slate-300 rounded-full">{{ statusMessage || 'Loading...' }}</span>
@@ -334,6 +332,15 @@ const handleResize = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Custom select styling to remove default arrow and add custom one */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+</style>
 
 <style scoped>
 :deep(.xterm) {

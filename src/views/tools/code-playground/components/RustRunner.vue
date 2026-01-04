@@ -2,51 +2,16 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// Rust (Rune) examples
-const examples = {
-  hello: `pub fn main() {
-    println!("Hello, Rune!");
-}`,
-  fibonacci: `fn fib(n) {
-    if n <= 1 {
-        return n;
-    }
-    fib(n - 1) + fib(n - 2)
-}
-
-pub fn main() {
-    let n = 10;
-    println!("Fibonacci({}) = {}", n, fib(n));
-}`,
-  loops: `pub fn main() {
-    for i in 0..5 {
-        if i % 2 == 0 {
-            println!("Even: {}", i);
-        } else {
-            println!("Odd: {}", i);
-        }
-    }
-}`,
-  data_types: `pub fn main() {
-    let list = [1, 2, 3];
-    let map = #{ "a": 1, "b": 2 };
-    
-    println!("List: {:?}", list);
-    println!("Map: {:?}", map);
-    
-    for item in list {
-        println!("Item: {}", item);
-    }
-}`
-}
-
 // Rust code
-const rustCode = ref(examples.hello)
+const rustCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const output = ref([])
@@ -54,7 +19,21 @@ const isLoading = ref(false)
 const isReady = ref(false)
 const loadingProgress = ref('')
 const runTime = ref(null)
-const selectedExample = ref('hello')
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('rust')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      rustCode.value = await fetchExample('rust', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Rust manifest:', e)
+  }
+}
 
 // Load Rust (Rune) WASM
 const loadRustRuntime = async () => {
@@ -124,7 +103,7 @@ const runRust = async () => {
       diagnostics: true
     };
     
-    const result = await window.rune.module.compile(rustCode.value, options);
+    const result = await window.rune.module.compile(rustCode.value.replace(/\r/g, ''), options);
     
     const endTime = performance.now()
     runTime.value = (endTime - startTime).toFixed(2)
@@ -155,9 +134,17 @@ const runRust = async () => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    rustCode.value = examples[selectedExample.value]
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    rustCode.value = await fetchExample('rust', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -175,6 +162,7 @@ const getOutputColor = (type) => {
 onMounted(() => {
   // Pre-load Rust runtime
   loadRustRuntime()
+  loadManifestData()
 })
 
 onUnmounted(() => {
@@ -204,10 +192,11 @@ onUnmounted(() => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="fibonacci">Fibonacci</option>
-              <option value="loops">Loops & Conditions</option>
-              <option value="data_types">Data Types</option>
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

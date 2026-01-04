@@ -2,36 +2,40 @@
 import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['ready'])
 
 // SQL Code
-const sqlCode = ref(`-- Create a table
-CREATE TABLE users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Insert data
-INSERT INTO users (name, email) VALUES 
-('Alice', 'alice@example.com'),
-('Bob', 'bob@example.com'),
-('Charlie', 'charlie@example.com');
-
--- Query data
-SELECT * FROM users;
-`)
-
+const sqlCode = ref('')
+const selectedExample = ref('')
+const manifest = ref(null)
 const output = ref([])
 const dbTables = ref([])
 const isLoading = ref(false)
 const isReady = ref(false)
 const loadingProgress = ref('')
 const runTime = ref(null)
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('sqlite')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      sqlCode.value = await fetchExample('sqlite', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load SQLite manifest:', e)
+  }
+}
+
+
+
 
 let db = null
 let SQL = null
@@ -132,6 +136,28 @@ const runSql = async () => {
         output.value = [{ error: e.message }];
     }
 }
+
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    sqlCode.value = await fetchExample('sqlite', selectedExample.value)
+  } catch (e) {
+    output.value = [{ error: `Failed to load example: ${e.message}` }]
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
+  }
+}
+
+onMounted(() => {
+  loadManifestData()
+})
+
+
+
 </script>
 
 <template>
@@ -175,8 +201,28 @@ const runSql = async () => {
         <!-- Editor -->
         <div class="h-1/2 flex flex-col border-b border-slate-700">
             <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-800/50">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-4">
                     <span class="font-bold text-white">{{ t('tools.code-playground.sqlite.query') }}</span>
+                    
+                    <!-- Examples Dropdown -->
+                    <div class="relative group">
+                      <select 
+                        v-model="selectedExample"
+                        @change="onExampleChange"
+                        class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all cursor-pointer"
+                      >
+                        <optgroup v-for="chapter in manifest?.chapters || []" :key="chapter.title" :label="chapter.title">
+                          <option v-for="ex in chapter.examples || []" :key="ex.path" :value="ex.path">
+                            {{ ex.name }}
+                          </option>
+                        </optgroup>
+                      </select>
+                      <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
                 </div>
                 <button 
                   @click="runSql"
@@ -244,3 +290,12 @@ const runSql = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Custom select styling to remove default arrow and add custom one */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+</style>

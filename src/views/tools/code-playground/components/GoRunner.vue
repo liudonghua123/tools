@@ -2,85 +2,16 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// Go examples
-const examples = {
-  hello: `package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, Go Playground!")
-}`,
-  fibonacci: `package main
-
-import "fmt"
-
-func fibonacci(n int) int {
-    if n <= 1 {
-        return n
-    }
-    return fibonacci(n-1) + fibonacci(n-2)
-}
-
-func main() {
-    fmt.Println("Fibonacci sequence (first 10):")
-    for i := 0; i < 10; i++ {
-        fmt.Printf("%d ", fibonacci(i))
-    }
-    fmt.Println()
-}`,
-  data_structures: `package main
-
-import "fmt"
-
-func main() {
-    // Slices
-    fruits := []string{"apple", "banana", "cherry"}
-    fruits = append(fruits, "date")
-    
-    // Maps
-    scores := map[string]int{
-        "Alice": 95,
-        "Bob":   88,
-    }
-    
-    fmt.Println("Fruits:", fruits)
-    fmt.Println("Scores:", scores)
-    
-    for name, score := range scores {
-        fmt.Printf("%s scored %d\\n", name, score)
-    }
-}`,
-  concurrency: `package main
-
-import (
-    "fmt"
-    "time"
-)
-
-func say(s string) {
-    for i := 0; i < 3; i++ {
-        time.Sleep(100 * time.Millisecond)
-        fmt.Println(s)
-    }
-}
-
-func main() {
-    fmt.Println("Starting goroutines...")
-    go say("world")
-    say("hello")
-    time.Sleep(500 * time.Millisecond)
-    fmt.Println("Done.")
-}`
-}
-
 // Go code
-const goCode = ref(examples.hello)
+const goCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const output = ref([])
@@ -88,10 +19,24 @@ const isLoading = ref(false)
 const isReady = ref(false)
 const loadingProgress = ref('')
 const runTime = ref(null)
-const selectedExample = ref('hello')
 
 // Go runtime instance
 let go = null
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('go')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      goCode.value = await fetchExample('go', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Go manifest:', e)
+  }
+}
 
 // Load Go WASM
 const loadGoRuntime = async () => {
@@ -182,9 +127,18 @@ const runGo = async () => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    goCode.value = examples[selectedExample.value]
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    goCode.value = await fetchExample('go', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -202,6 +156,7 @@ const getOutputColor = (type) => {
 onMounted(() => {
   // Pre-load Go runtime
   loadGoRuntime()
+  loadManifestData()
 })
 
 onUnmounted(() => {
@@ -233,10 +188,11 @@ onUnmounted(() => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="fibonacci">Fibonacci</option>
-              <option value="data_structures">Slices & Maps</option>
-              <option value="concurrency">Concurrency</option>
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

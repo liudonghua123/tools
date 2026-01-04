@@ -3,72 +3,16 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
 import PlotCanvas from './PlotCanvas.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// R code examples
-const examples = {
-  hello: {
-    label: 'Hello World',
-    code: `# Basic R print
-print("Hello from R!")
-`
-  },
-  math: {
-    label: 'Basic Math & Vectors',
-    code: `# Vector operations
-x <- c(1, 2, 3, 4, 5)
-print("Vector x:")
-print(x)
-
-# Mean and Standard Deviation
-print("Mean:")
-print(mean(x))
-print("SD:")
-print(sd(x))
-`
-  },
-  dataframe: {
-    label: 'Data Frames',
-    code: `# Creating a dataframe
-df <- data.frame(
-  Name = c("Alice", "Bob", "Charlie"),
-  Age = c(25, 30, 35),
-  Score = c(90, 85, 95)
-)
-
-print("Original DataFrame:")
-print(df)
-
-# Subset
-print("People over 28:")
-print(subset(df, Age > 28))
-`
-  },
-  linear_regression: {
-    label: 'Linear Regression',
-    code: `# Simple Linear Regression
-x <- c(1, 2, 3, 4, 5)
-y <- c(2, 4, 5, 4, 5)
-
-model <- lm(y ~ x)
-print("Model Summary:")
-print(summary(model))
-`
-  },
-  plotting: {
-    label: 'Plotting (Histogram)',
-    code: `# Basic Histogram
-x <- rnorm(1000)
-hist(x, col="lightblue", main="Histogram of Normal Distribution")
-`
-  }
-}
-
-const currentExample = ref('hello')
-const rCode = ref(examples.hello.code)
+// R code
+const rCode = ref('')
+const selectedExample = ref('')
+const manifest = ref(null)
 
 // State
 const output = ref([])
@@ -80,6 +24,24 @@ const runTime = ref(null)
 
 // WebR instance
 let webR = null
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('r')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      rCode.value = await fetchExample('r', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load R manifest:', e)
+  }
+}
+
+
+
 
 // Initialize WebR
 const initWebR = async () => {
@@ -129,7 +91,7 @@ const runR = async () => {
         
         try {
             console.log(`Running R code: ${rCode.value}`)
-            const codeToRun = rCode.value.trim()
+            const codeToRun = rCode.value.trim().replace(/\r/g, '')
             
             const result = await shelter.captureR(codeToRun);
             
@@ -166,11 +128,19 @@ const runR = async () => {
     }
 }
 
-// Load example
-const loadExample = () => {
-    if (examples[currentExample.value]) {
-        rCode.value = examples[currentExample.value].code
-    }
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    rCode.value = await fetchExample('r', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
+  }
 }
 
 const clearOutput = () => {
@@ -185,7 +155,11 @@ const getOutputColor = (type) => {
 
 onMounted(() => {
     initWebR()
+    loadManifestData()
 })
+
+
+
 
 onUnmounted(() => {
     if (webR) {
@@ -212,16 +186,28 @@ onUnmounted(() => {
           </div>
 
           <!-- Example Selector -->
-          <select 
-            v-model="currentExample"
-            @change="loadExample"
-            class="px-2 py-1 bg-slate-700 border border-slate-600 rounded text-slate-200 text-xs focus:outline-none focus:border-blue-500"
-          >
-            <option v-for="(ex, key) in examples" :key="key" :value="key">
-              {{ ex.label }}
-            </option>
-          </select>
+          <div class="relative group">
+            <select 
+              v-model="selectedExample"
+              @change="onExampleChange"
+              class="appearance-none px-2 pr-6 py-1 bg-slate-700 border border-slate-600 rounded text-slate-200 text-xs focus:outline-none focus:border-blue-500 transition-all cursor-pointer"
+            >
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
+            </select>
+            <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
+
+
+
 
 
         <button 
@@ -310,3 +296,12 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Custom select styling to remove default arrow and add custom one */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+</style>

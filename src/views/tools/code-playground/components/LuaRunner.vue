@@ -2,60 +2,17 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 import { LuaFactory } from 'wasmoon'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// Lua examples
-const examples = {
-  hello: `-- Hello World
-print("Hello, Lua World!")
-`,
-  factorial: `-- Factorial using recursion
-function factorial(n)
-    if n == 0 then
-        return 1
-    else
-        return n * factorial(n - 1)
-    end
-end
-
-print("Factorial of 5 is: " .. factorial(5))
-`,
-  tables: `-- Table manipulation
-local fruits = {"apple", "banana", "cherry"}
-table.insert(fruits, "date")
-
-print("Fruits list:")
-for i, v in ipairs(fruits) do
-    print(i .. ": " .. v)
-end
-
-local scores = {Alice = 95, Bob = 88}
-print("\\nScores:")
-for k, v in pairs(scores) do
-    print(k .. ": " .. v)
-end
-`,
-  loops: `-- Loops example
-print("Counting with while loop:")
-local i = 1
-while i <= 5 do
-    print(i)
-    i = i + 1
-end
-
-print("\\nCounting with for loop:")
-for j = 1, 5 do
-    print(j)
-end
-`
-}
-
 // Lua code
-const luaCode = ref(examples.hello)
+const luaCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const output = ref([])
@@ -63,10 +20,24 @@ const isLoading = ref(false)
 const isReady = ref(false)
 const loadingProgress = ref('')
 const runTime = ref(null)
-const selectedExample = ref('hello')
 
 // Lua runtime instance
 let lua = null
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('lua')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      luaCode.value = await fetchExample('lua', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Lua manifest:', e)
+  }
+}
 
 // Load Lua Runtime
 const loadLuaRuntime = async () => {
@@ -124,7 +95,7 @@ const runLua = async () => {
     const startTime = performance.now()
     
     // Execute the code
-    await lua.doString(luaCode.value)
+    await lua.doString(luaCode.value.replace(/\r/g, ''))
     
     const endTime = performance.now()
     runTime.value = (endTime - startTime).toFixed(2)
@@ -138,9 +109,17 @@ const runLua = async () => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    luaCode.value = examples[selectedExample.value]
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    luaCode.value = await fetchExample('lua', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -157,6 +136,7 @@ const getOutputColor = (type) => {
 
 onMounted(() => {
   loadLuaRuntime()
+  loadManifestData()
 })
 
 onUnmounted(() => {
@@ -191,10 +171,11 @@ onUnmounted(() => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="factorial">Factorial</option>
-              <option value="tables">Tables</option>
-              <option value="loops">Loops</option>
+              <optgroup v-for="chapter in manifest?.chapters || []" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples || []" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

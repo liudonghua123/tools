@@ -1,0 +1,36 @@
+{
+    "lang": "lua",
+    "name": "Lua",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.lua"
+                },
+                {
+                    "name": "Data Types",
+                    "path": "basic/02_data_types.lua"
+                },
+                {
+                    "name": "Tables",
+                    "path": "basic/03_tables.lua"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.lua"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.lua"
+                }
+            ]
+        }
+    ]
+}

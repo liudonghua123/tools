@@ -1,0 +1,36 @@
+{
+    "lang": "zig",
+    "name": "Zig",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.zig"
+                },
+                {
+                    "name": "Variables",
+                    "path": "basic/02_variables.zig"
+                },
+                {
+                    "name": "Collections",
+                    "path": "basic/03_collections.zig"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.zig"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Structs & Methods",
+                    "path": "advanced/01_structs.zig"
+                }
+            ]
+        }
+    ]
+}

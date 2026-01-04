@@ -2,59 +2,40 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 import { WASI, File, OpenFile, ConsoleStdout, PreopenDirectory, Directory } from "@bjorn3/browser_wasi_shim";
 import { untar } from "@andrewbranch/untar.js";
 
 const { t } = useI18n()
 
-// Zig examples
-const examples = {
-  hello: `const std = @import("std");
+const emit = defineEmits(['ready'])
 
-pub fn main() !void {
-    try std.fs.File.stdout().writeAll("Hello, World!\\n");
-}`,
-  loops: `const std = @import("std");
+// Zig code
+const zigCode = ref('')
+const selectedExample = ref('')
+const manifest = ref(null)
 
-pub fn main() !void {
-    var sum: u32 = 0;
-    var i: u32 = 0;
-    while (i <= 10) : (i += 1) {
-        sum += i;
-    }
-    std.debug.print("Sum 0..10 is {d}\\n", .{sum});
-}`,
-  fizzbuzz: `const std = @import("std");
-
-pub fn main() !void {
-    const stdout = std.fs.File.stdout();
-    var i: u8 = 1;
-    while (i <= 20) : (i += 1) {
-        if (i % 15 == 0) {
-            try stdout.writeAll("FizzBuzz\\n");
-        } else if (i % 3 == 0) {
-            try stdout.writeAll("Fizz\\n");
-        } else if (i % 5 == 0) {
-            try stdout.writeAll("Buzz\\n");
-        } else {
-            // Convert i to string and write it
-            var buffer: [3]u8 = undefined; // enough for numbers 1-20
-            const num_str = try std.fmt.bufPrint(&buffer, "{d}", .{i});
-            try stdout.writeAll(num_str);
-            try stdout.writeAll("\\n");
-        }
-    }
-}`
-}
-
-const zigCode = ref(examples.hello)
 const output = ref([])
 const isLoading = ref(false)
 const isRunning = ref(false)
 const isReady = ref(false)
 const loadingProgress = ref('')
 const runTime = ref(null)
-const selectedExample = ref('hello')
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('zig')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      zigCode.value = await fetchExample('zig', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Zig manifest:', e)
+  }
+}
 
 let wasmBinary = null;
 let zigLibDirectory = null; // This will be the Directory object for /lib
@@ -186,7 +167,7 @@ const runZig = async () => {
         ];
         const env = []; // Empty environment
 
-        const wasi = new WASI(args, env, compilerFds);
+        const wasi = new WASI(args, env, compilerFds, { debug: false });
 
         // Instantiate Compiler
         const { instance: compilerInstance } = await WebAssembly.instantiate(wasmBinary, {
@@ -203,20 +184,14 @@ const runZig = async () => {
         // --- STAGE 2: EXECUTION ---
         
         // Retrieve the compiled binary "main.wasm" from cwdMap
-        // Note: cwdMap keys are strings, values are File or Directory objects
-        // The compiler writes "main.wasm" to the CWD
-        
         const compiledFile = cwdMap.get("main.wasm");
         if (!compiledFile || !(compiledFile instanceof File)) {
-            // Debug: list files
-            console.log("Files in CWD:", Array.from(cwdMap.keys()));
             throw new Error("Compilation successful but 'main.wasm' not found.");
         }
 
         output.value.push({ type: 'log', message: "Compilation successful. Running..." });
 
         // Setup FDs for User Program
-        // Reference: https://github.com/zigtools/playground/blob/main/src/workers/runner.ts
         const userFds = [
             new OpenFile(new File([])), // stdin
             ConsoleStdout.lineBuffered((msg) => output.value.push({ type: 'log', message: msg })), // stdout
@@ -224,8 +199,7 @@ const runZig = async () => {
             new PreopenDirectory(".", new Map()), // Preopen .
         ];
 
-        // Args: ["main.wasm"]
-        const userWasi = new WASI(["main.wasm"], [], userFds);
+        const userWasi = new WASI(["main.wasm"], [], userFds, { debug: false });
         
         const { instance: userInstance } = await WebAssembly.instantiate(compiledFile.data, {
             "wasi_snapshot_preview1": userWasi.wasiImport
@@ -244,10 +218,19 @@ const runZig = async () => {
     }
 }
 
-const onExampleChange = () => {
-    if (examples[selectedExample.value]) {
-        zigCode.value = examples[selectedExample.value];
-    }
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    zigCode.value = await fetchExample('zig', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
+  }
 }
 
 const clearOutput = () => {
@@ -261,6 +244,7 @@ const getOutputColor = (type) => {
 
 onMounted(() => {
     loadZigAssets();
+    loadManifestData()
 })
 </script>
 
@@ -288,9 +272,11 @@ onMounted(() => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-orange-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="loops">Loops & Vars</option>
-              <option value="fizzbuzz">FizzBuzz</option>
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,3 +360,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+</style>

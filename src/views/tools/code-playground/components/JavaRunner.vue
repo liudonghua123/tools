@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch, computed, onUnmounted } from 'vue'
+import { ref, watch, computed, onUnmounted, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 
@@ -16,7 +17,9 @@ const versionMap = {
 
 // State
 const javaVersion = ref(8)
-const selectedExample = ref('hello')
+const selectedExample = ref('')
+const manifest = ref(null)
+const javaCode = ref('')
 const output = ref([])
 const isLoading = ref(false)
 const isReady = ref(false)
@@ -28,144 +31,20 @@ const isRunning = ref(false)
 // Current version being initialized
 let currentInitVersion = null
 
-// Example code snippets
-const examples = {
-  hello: {
-    name: 'Hello World',
-    code: `public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello from Java!");
-        System.out.println("Java version: " + System.getProperty("java.version"));
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('java')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      javaCode.value = await fetchExample('java', firstExample.path)
     }
-}`
-  },
-  classes: {
-    name: 'Classes',
-    code: `class Person {
-    private String name;
-    private int age;
-    
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-    
-    public void introduce() {
-        System.out.println("Hi, I'm " + name + ", " + age + " years old.");
-    }
-}
-
-public class Main {
-    public static void main(String[] args) {
-        Person alice = new Person("Alice", 25);
-        Person bob = new Person("Bob", 30);
-        
-        alice.introduce();
-        bob.introduce();
-    }
-}`
-  },
-  collections: {
-    name: 'Collections',
-    code: `import java.util.ArrayList;
-import java.util.HashMap;
-
-public class Main {
-    public static void main(String[] args) {
-        // ArrayList example
-        ArrayList<String> fruits = new ArrayList<>();
-        fruits.add("Apple");
-        fruits.add("Banana");
-        fruits.add("Cherry");
-        
-        System.out.println("Fruits:");
-        for (String fruit : fruits) {
-            System.out.println("  - " + fruit);
-        }
-        
-        // HashMap example
-        HashMap<String, Integer> scores = new HashMap<>();
-        scores.put("Alice", 95);
-        scores.put("Bob", 87);
-        scores.put("Charlie", 92);
-        
-        System.out.println("\\nScores:");
-        for (String name : scores.keySet()) {
-            System.out.println("  " + name + ": " + scores.get(name));
-        }
-    }
-}`
-  },
-  fibonacci: {
-    name: 'Fibonacci',
-    code: `public class Main {
-    public static long fibonacci(int n) {
-        if (n <= 1) return n;
-        return fibonacci(n - 1) + fibonacci(n - 2);
-    }
-    
-    public static void main(String[] args) {
-        System.out.println("Fibonacci sequence:");
-        for (int i = 0; i < 15; i++) {
-            System.out.print(fibonacci(i) + " ");
-        }
-        System.out.println();
-        
-        // Performance test
-        long start = System.currentTimeMillis();
-        long result = fibonacci(35);
-        long end = System.currentTimeMillis();
-        
-        System.out.println("\\nfibonacci(35) = " + result);
-        System.out.println("Time: " + (end - start) + "ms");
-    }
-}`
-  },
-  lambda: {
-    name: 'Lambda (Java 8+)',
-    code: `import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Main {
-    public static void main(String[] args) {
-        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        
-        // Filter even numbers and square them
-        List<Integer> result = numbers.stream()
-            .filter(n -> n % 2 == 0)
-            .map(n -> n * n)
-            .collect(Collectors.toList());
-        
-        System.out.println("Original: " + numbers);
-        System.out.println("Even squares: " + result);
-        
-        // Sum using reduce
-        int sum = numbers.stream()
-            .reduce(0, (a, b) -> a + b);
-        System.out.println("Sum: " + sum);
-        
-        // ForEach with lambda
-        System.out.print("Doubled: ");
-        numbers.forEach(n -> System.out.print(n * 2 + " "));
-        System.out.println();
-    }
-}`
+  } catch (e) {
+    console.error('Failed to load Java manifest:', e)
   }
 }
-
-// Current code
-const javaCode = ref(examples.hello.code)
-
-// Load example when selection changes
-const loadExample = () => {
-  if (examples[selectedExample.value]) {
-    javaCode.value = examples[selectedExample.value].code
-  }
-}
-
-// Watch for example changes
-watch(selectedExample, loadExample)
 
 // Log to output
 const log = (message, type = 'log') => {
@@ -335,6 +214,21 @@ const runJava = async () => {
   }
 }
 
+// Handle example change
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    javaCode.value = await fetchExample('java', selectedExample.value)
+  } catch (e) {
+    log(`Failed to load example: ${e.message}`, 'error')
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
+  }
+}
+
 // Clear output
 const clearOutput = () => {
   output.value = []
@@ -362,6 +256,14 @@ const getOutputIcon = (type) => {
     default: return '›'
   }
 }
+
+onMounted(() => {
+  loadManifestData()
+})
+
+onUnmounted(() => {
+  // CheerpJ doesn't have an explicit cleanup but we can clear files if needed
+})
 
 // Button state
 const isDisabled = computed(() => isLoading.value || isCompiling.value || isRunning.value)
@@ -407,14 +309,24 @@ const buttonText = computed(() => {
           <!-- Example Selector -->
           <div class="flex items-center gap-2">
             <label class="text-xs text-slate-400">{{ t('tools.code-playground.java.example') }}:</label>
-            <select 
-              v-model="selectedExample"
-              class="px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-orange-500 min-w-[120px]"
-            >
-              <option v-for="(example, key) in examples" :key="key" :value="key">
-                {{ example.name }}
-              </option>
-            </select>
+            <div class="relative group">
+              <select 
+                v-model="selectedExample"
+                @change="onExampleChange"
+                class="appearance-none px-2 pr-6 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm focus:outline-none focus:border-orange-500 min-w-[120px] transition-all cursor-pointer"
+              >
+                <optgroup v-for="chapter in manifest?.chapters || []" :key="chapter.title" :label="chapter.title">
+                  <option v-for="ex in chapter.examples || []" :key="ex.path" :value="ex.path">
+                    {{ ex.name }}
+                  </option>
+                </optgroup>
+              </select>
+              <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
           </div>
           
           <!-- Run Button -->

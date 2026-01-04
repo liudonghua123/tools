@@ -1,0 +1,40 @@
+{
+    "lang": "php",
+    "name": "PHP",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Introduction",
+                    "path": "basic/01_intro.php"
+                },
+                {
+                    "name": "Data Types",
+                    "path": "basic/02_data_types.php"
+                },
+                {
+                    "name": "Arrays",
+                    "path": "basic/03_collections.php"
+                },
+                {
+                    "name": "Control Flow",
+                    "path": "basic/04_control_flow.php"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Functions",
+                    "path": "advanced/01_functions.php"
+                },
+                {
+                    "name": "OOP",
+                    "path": "advanced/02_oop.php"
+                }
+            ]
+        }
+    ]
+}

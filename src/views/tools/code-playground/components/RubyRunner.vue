@@ -2,45 +2,15 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
+import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 
 const { t } = useI18n()
 const emit = defineEmits(['output', 'error', 'ready'])
 
-// Default Ruby code
-// Ruby examples
-const examples = {
-  hello: `# Ruby code runs in your browser with ruby-wasm
-# No server required!
-
-puts "Hello from Ruby #{RUBY_VERSION}!"`,
-  math: `# Basic math
-numbers = (1..100).to_a
-sum = numbers.sum
-puts "Sum of 1 to 100: #{sum}"
-
-puts "Square root of 25: #{Math.sqrt(25)}"`,
-  blocks: `# Blocks and iterators
-squares = 1.upto(10).map { |x| x**2 }
-puts "Squares: #{squares.inspect}"
-
-3.times { puts "Ruby is fun!" }`,
-  class: `# Class example
-class Greeter
-  def initialize(name)
-    @name = name
-  end
-
-  def greet
-    "Greetings, #{@name}!"
-  end
-end
-
-puts Greeter.new("Developer").greet`
-}
-
-// Default Ruby code
-const rubyCode = ref(examples.hello)
-const selectedExample = ref('hello')
+// Ruby code
+const rubyCode = ref('')
+const manifest = ref(null)
+const selectedExample = ref('')
 
 // State
 const output = ref([])
@@ -51,6 +21,21 @@ const runTime = ref(null)
 
 // Ruby VM instance
 let rubyVM = null
+
+// Load Manifest and Initial Example
+const loadManifestData = async () => {
+  try {
+    const data = await fetchManifest('ruby')
+    manifest.value = data
+    if (data.chapters && data.chapters.length > 0 && data.chapters[0].examples.length > 0) {
+      const firstExample = data.chapters[0].examples[0]
+      selectedExample.value = firstExample.path
+      rubyCode.value = await fetchExample('ruby', firstExample.path)
+    }
+  } catch (e) {
+    console.error('Failed to load Ruby manifest:', e)
+  }
+}
 
 // Load Ruby
 const loadRuby = async () => {
@@ -120,9 +105,17 @@ const loadRuby = async () => {
 }
 
 // Handle example change
-const onExampleChange = () => {
-  if (examples[selectedExample.value]) {
-    rubyCode.value = examples[selectedExample.value]
+const onExampleChange = async () => {
+  if (!selectedExample.value) return
+  try {
+    isLoading.value = true
+    loadingProgress.value = 'Loading example...'
+    rubyCode.value = await fetchExample('ruby', selectedExample.value)
+  } catch (e) {
+    output.value.push({ type: 'error', message: `Failed to load example: ${e.message}` })
+  } finally {
+    isLoading.value = false
+    loadingProgress.value = ''
   }
 }
 
@@ -155,7 +148,7 @@ const runRuby = async () => {
     try {
       const vm = await loadRuby()
       // ruby-wasm vm.eval returns the result of the last expression
-      vm.eval(rubyCode.value);
+      vm.eval(rubyCode.value.replace(/\r/g, ''));
     } catch (evalError) {
       output.value.push({ type: 'error', message: evalError.toString() });
     } finally {
@@ -185,6 +178,10 @@ const clearOutput = () => {
 const getOutputColor = (type) => {
   return type === 'error' ? 'text-red-400' : 'text-blue-400'
 }
+
+onMounted(() => {
+  loadManifestData()
+})
 </script>
 
 <template>
@@ -211,10 +208,11 @@ const getOutputColor = (type) => {
               @change="onExampleChange"
               class="appearance-none bg-slate-700/50 border border-slate-600 text-slate-200 text-xs rounded px-2 pr-6 py-1 hover:border-slate-500 focus:outline-none focus:ring-1 focus:ring-red-500 transition-all cursor-pointer"
             >
-              <option value="hello">Hello World</option>
-              <option value="math">Basic Math</option>
-              <option value="blocks">Blocks & Iterators</option>
-              <option value="class">Class Example</option>
+              <optgroup v-for="chapter in manifest?.chapters" :key="chapter.title" :label="chapter.title">
+                <option v-for="ex in chapter.examples" :key="ex.path" :value="ex.path">
+                  {{ ex.name }}
+                </option>
+              </optgroup>
             </select>
             <div class="absolute inset-y-0 right-1.5 flex items-center pointer-events-none text-slate-400">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
