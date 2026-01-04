@@ -140,6 +140,7 @@ const runSql = async () => {
 // Handle example change
 const onExampleChange = async () => {
   if (!selectedExample.value) return
+  clearOutput()
   try {
     isLoading.value = true
     loadingProgress.value = 'Loading example...'
@@ -150,6 +151,11 @@ const onExampleChange = async () => {
     isLoading.value = false
     loadingProgress.value = ''
   }
+}
+
+const clearOutput = () => {
+  output.value = []
+  runTime.value = null
 }
 
 onMounted(() => {
@@ -249,6 +255,12 @@ onMounted(() => {
                   <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">{{ t('tools.code-playground.sqlite.results') }}</span>
                   <span v-if="runTime" class="text-xs text-slate-500">{{ runTime }}ms</span>
                 </div>
+                <button 
+                  @click="clearOutput"
+                  class="text-xs text-slate-500 hover:text-white transition-colors"
+                >
+                  {{ t('tools.code-playground.common.clear') }}
+                </button>
              </div>
              
              <div class="flex-1 overflow-auto p-4">

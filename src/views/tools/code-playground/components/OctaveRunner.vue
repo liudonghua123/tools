@@ -157,6 +157,7 @@ const runCode = async () => {
 // Handle example change
 const onExampleChange = async () => {
   if (!selectedExample.value) return
+  clearOutput()
   try {
     isLoading.value = true
     statusMessage.value = 'Loading example...'

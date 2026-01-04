@@ -221,6 +221,7 @@ const runZig = async () => {
 // Handle example change
 const onExampleChange = async () => {
   if (!selectedExample.value) return
+  clearOutput()
   try {
     isLoading.value = true
     loadingProgress.value = 'Loading example...'
