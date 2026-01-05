@@ -478,7 +478,12 @@ async function setupFortran() {
         'lfortran.data'
     ];
 
-    const baseUrl = 'https://lfortran.github.io/wasm_builds/release/2ddb58781';
+    // The latest release is not working, using the same version as https://dev.lfortran.org/
+    // The error is: semantic error: Function 'test_template' not found (not user defined nor intrinsic) when execute template_add.f90 
+    // see also https://github.com/lfortran/lcompilers_frontend/blob/main/utils/commit.json, https://lfortran.github.io/wasm_builds/data.json
+    const { id, build_type } = await (await fetch('https://raw.githubusercontent.com/lfortran/lcompilers_frontend/refs/heads/main/utils/commit.json')).json();
+    console.log(`LFortran version: ${id} (${build_type})`);
+    const baseUrl = `https://lfortran.github.io/wasm_builds/release/${id}`;
 
     try {
         for (const file of files) {

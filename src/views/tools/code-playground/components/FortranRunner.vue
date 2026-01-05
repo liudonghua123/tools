@@ -129,7 +129,7 @@ const runFortran = async () => {
     
     // 1. Compile to WASM string (comma separated bytes)
     // The format is: exit_code,byte1,byte2,...
-    const wasmStr = emitWasm(fortranCode.value)
+    const wasmStr = emitWasm(fortranCode.value.replace(/\r/g, ''))
     const compileEndTime = performance.now()
     const durationCompile = (compileEndTime - startTime).toFixed(2)
 
