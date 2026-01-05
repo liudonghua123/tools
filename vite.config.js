@@ -2,11 +2,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
+import wasmSharpPlugin from "@wasmsharp/vite-plugin"
 
 export default defineConfig({
     plugins: [
         vue(),
         tailwindcss(),
+        wasmSharpPlugin(),
     ],
     base: '/',
     resolve: {

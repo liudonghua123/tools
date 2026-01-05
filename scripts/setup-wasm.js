@@ -21,6 +21,7 @@ const rustDir = path.join(publicDir, 'rust-wasm');
 const zigDir = path.join(publicDir, 'zig-wasm');
 const luaDir = path.join(publicDir, 'lua-wasm');
 const fortranDir = path.join(publicDir, 'fortran-wasm');
+const csharpDir = path.join(publicDir, 'csharp-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -500,6 +501,37 @@ async function setupFortran() {
     }
 }
 
+async function setupCSharp() {
+    console.log('Setting up C# (WasmSharp) WebAssembly...');
+    const nodeModulesCSharp = path.resolve(__dirname, '../node_modules/@wasmsharp/core');
+
+    if (!fs.existsSync(nodeModulesCSharp)) {
+        console.error('@wasmsharp/core not found in node_modules. Run npm install.');
+        return;
+    }
+
+    if (!fs.existsSync(csharpDir)) fs.mkdirSync(csharpDir, { recursive: true });
+
+    try {
+        console.log(`Copying all files from ${nodeModulesCSharp} to ${csharpDir}...`);
+        // Recursive copy function
+        const copyRecursive = (src, dest) => {
+            if (fs.statSync(src).isDirectory()) {
+                if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+                fs.readdirSync(src).forEach(child => {
+                    copyRecursive(path.join(src, child), path.join(dest, child));
+                });
+            } else {
+                fs.copyFileSync(src, dest);
+            }
+        };
+        copyRecursive(nodeModulesCSharp, csharpDir);
+        console.log('C# setup complete.');
+    } catch (e) {
+        console.warn('Failed to copy C# files:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -515,6 +547,7 @@ async function main() {
         await setupRust();
         await setupLua();
         await setupFortran();
+        // await setupCSharp();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);
