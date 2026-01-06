@@ -23,6 +23,8 @@
     "common": {
         "run": "Run",
         "output": "Output",
+        "chat": "Chat",
+        "send": "Send",
         "ready": "Ready",
         "clear": "Clear",
         "not_loaded": "Not loaded"
@@ -71,5 +73,9 @@
     },
     "zig": {
         "loading": "Loading Zig..."
+    },
+    "swipl": {
+        "query_placeholder": "Enter a Prolog query...",
+        "query_help": "Example: parent(tom, X)."
     }
 }

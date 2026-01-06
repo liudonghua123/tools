@@ -22,6 +22,7 @@ const zigDir = path.join(publicDir, 'zig-wasm');
 const luaDir = path.join(publicDir, 'lua-wasm');
 const fortranDir = path.join(publicDir, 'fortran-wasm');
 const csharpDir = path.join(publicDir, 'csharp-wasm');
+const swiplDir = path.join(publicDir, 'swipl-wasm');
 
 // Versions & Sources
 const pyodideVersion = pkg.dependencies.pyodide.replace(/[^0-9.]/g, '');
@@ -532,6 +533,37 @@ async function setupCSharp() {
     }
 }
 
+async function setupSwiProlog() {
+    console.log('Setting up SWI-Prolog WebAssembly...');
+    const nodeModulesSwipl = path.resolve(__dirname, '../node_modules/swipl-wasm/dist');
+
+    if (!fs.existsSync(nodeModulesSwipl)) {
+        console.error('swipl-wasm not found in node_modules. Run npm install.');
+        return;
+    }
+
+    if (!fs.existsSync(swiplDir)) fs.mkdirSync(swiplDir, { recursive: true });
+
+    try {
+        console.log(`Copying all files from ${nodeModulesSwipl} to ${swiplDir}...`);
+        // Recursive copy function
+        const copyRecursive = (src, dest) => {
+            if (fs.statSync(src).isDirectory()) {
+                if (!fs.existsSync(dest)) fs.mkdirSync(dest);
+                fs.readdirSync(src).forEach(child => {
+                    copyRecursive(path.join(src, child), path.join(dest, child));
+                });
+            } else {
+                fs.copyFileSync(src, dest);
+            }
+        };
+        copyRecursive(nodeModulesSwipl, swiplDir);
+        console.log('SWI-Prolog setup complete.');
+    } catch (e) {
+        console.warn('Failed to copy SWI-Prolog files:', e);
+    }
+}
+
 async function main() {
     try {
         await setupPyodide();
@@ -548,6 +580,7 @@ async function main() {
         await setupLua();
         await setupFortran();
         // await setupCSharp();
+        await setupSwiProlog();
         console.log('All WASM assets setup complete.');
     } catch (e) {
         console.error('Setup failed:', e);

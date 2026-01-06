@@ -1,0 +1,25 @@
+{
+  "chapters": [
+    {
+      "title": "Basic Examples",
+      "examples": [
+        {
+          "name": "Hello World",
+          "path": "hello_world.pl"
+        },
+        {
+          "name": "Family Relations",
+          "path": "family.pl"
+        },
+        {
+          "name": "List Operations",
+          "path": "lists.pl"
+        },
+        {
+          "name": "Fibonacci",
+          "path": "fibonacci.pl"
+        }
+      ]
+    }
+  ]
+}

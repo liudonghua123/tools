@@ -23,6 +23,8 @@
     "common": {
         "run": "运行",
         "output": "输出",
+        "chat": "聊天",
+        "send": "发送",
         "ready": "就绪",
         "clear": "清空",
         "not_loaded": "未加载"
@@ -71,5 +73,9 @@
     },
     "zig": {
         "loading": "加载 Zig 中..."
+    },
+    "swipl": {
+        "query_placeholder": "输入 Prolog 查询...",
+        "query_help": "示例: parent(tom, X)."
     }
 }
