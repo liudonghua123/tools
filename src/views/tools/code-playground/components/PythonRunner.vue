@@ -226,10 +226,9 @@ onMounted(() => {
 
       <!-- Editor -->
       <div class="flex-1 min-h-0">
-        <MonacoEditor 
+        <MonacoEditor
           v-model="pythonCode"
           language="python"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

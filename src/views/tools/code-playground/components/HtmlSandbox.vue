@@ -201,23 +201,20 @@ const getConsoleColor = (type) => {
           v-show="activeTab === 'html'"
           v-model="htmlCode"
           language="html"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />
-        <MonacoEditor 
+        <MonacoEditor
           v-show="activeTab === 'css'"
           v-model="cssCode"
           language="css"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />
-        <MonacoEditor 
+        <MonacoEditor
           v-show="activeTab === 'js'"
           v-model="jsCode"
           language="javascript"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

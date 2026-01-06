@@ -236,7 +236,6 @@ onUnmounted(() => {
         <MonacoEditor 
           v-model="rCode"
           language="r"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

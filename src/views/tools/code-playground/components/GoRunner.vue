@@ -227,7 +227,6 @@ onUnmounted(() => {
         <MonacoEditor 
           v-model="goCode"
           language="go"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

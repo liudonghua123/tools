@@ -271,7 +271,6 @@ onMounted(() => {
         <MonacoEditor 
           v-model="perlCode"
           language="perl"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

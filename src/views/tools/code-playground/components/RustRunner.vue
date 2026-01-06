@@ -232,7 +232,6 @@ onUnmounted(() => {
         <MonacoEditor 
           v-model="rustCode"
           language="rust"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

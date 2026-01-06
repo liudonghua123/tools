@@ -244,7 +244,6 @@ onUnmounted(() => {
         <MonacoEditor 
           v-model="csharpCode"
           language="csharp"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

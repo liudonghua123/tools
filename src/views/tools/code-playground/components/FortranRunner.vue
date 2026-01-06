@@ -383,7 +383,6 @@ onUnmounted(() => {
         <MonacoEditor 
           v-model="fortranCode"
           language="fortran"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

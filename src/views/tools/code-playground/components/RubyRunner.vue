@@ -248,7 +248,6 @@ onMounted(() => {
         <MonacoEditor 
           v-model="rubyCode"
           language="ruby"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

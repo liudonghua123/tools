@@ -6,6 +6,7 @@ const toolModules = import.meta.glob('../views/tools/*/index.vue')
 const toolRoutes = Object.keys(toolModules).map((path) => {
     const segments = path.split('/')
     const id = segments[segments.length - 2]
+
     return {
         path: `/tool/${id}`,
         name: id,
@@ -13,13 +14,21 @@ const toolRoutes = Object.keys(toolModules).map((path) => {
     }
 })
 
+// Special route for code-playground with mode parameter
+const codePlaygroundRoute = {
+    path: '/tool/code-playground/:mode?',
+    name: 'code-playground',
+    component: () => import('../views/tools/code-playground/index.vue')
+}
+
 const routes = [
     {
         path: '/',
         name: 'home',
         component: HomeView
     },
-    ...toolRoutes
+    ...toolRoutes.filter(route => route.name !== 'code-playground'), // Exclude the default code-playground route
+    codePlaygroundRoute // Add the special code-playground route with mode parameter
 ]
 
 const router = createRouter({

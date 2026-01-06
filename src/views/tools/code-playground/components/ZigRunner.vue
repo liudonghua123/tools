@@ -312,7 +312,6 @@ onMounted(() => {
         <MonacoEditor 
           v-model="zigCode"
           language="zig"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

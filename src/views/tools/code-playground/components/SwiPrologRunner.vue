@@ -467,7 +467,6 @@ onUnmounted(() => {
         <MonacoEditor
           v-model="prologCode"
           language="prolog"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

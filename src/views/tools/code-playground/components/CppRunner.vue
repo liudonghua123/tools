@@ -303,7 +303,6 @@ const handleResize = () => {
         <MonacoEditor 
           v-model="cppCode"
           language="cpp"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

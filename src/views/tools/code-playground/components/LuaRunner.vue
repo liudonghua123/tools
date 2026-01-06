@@ -211,7 +211,6 @@ onUnmounted(() => {
         <MonacoEditor 
           v-model="luaCode"
           language="lua"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

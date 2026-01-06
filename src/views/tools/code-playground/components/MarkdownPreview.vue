@@ -159,10 +159,9 @@ onMounted(() => {
   <div class="flex flex-col md:flex-row h-full">
     <!-- Editor -->
     <div class="w-full md:w-1/2 h-1/2 md:h-full border-b md:border-b-0 md:border-r border-slate-700">
-      <MonacoEditor 
+      <MonacoEditor
         v-model="markdownCode"
         language="markdown"
-        theme="vs-dark"
         height="100%"
         :minimap="false"
         word-wrap="on"

@@ -354,10 +354,9 @@ const buttonText = computed(() => {
 
       <!-- Editor -->
       <div class="flex-1 min-h-0">
-        <MonacoEditor 
+        <MonacoEditor
           v-model="javaCode"
           language="java"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

@@ -2,6 +2,33 @@
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import * as monaco from 'monaco-editor'
 
+// Create a local theme state
+const isDark = ref(false)
+
+// Initialize theme from localStorage or system preference
+const initTheme = () => {
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme) {
+    isDark.value = savedTheme === 'dark'
+  } else {
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+}
+
+// Initialize on component setup
+initTheme()
+
+// Watch for system theme changes
+if (window.matchMedia) {
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  mediaQuery.addEventListener('change', (e) => {
+    if (!localStorage.getItem('theme')) {
+      // Only update if user hasn't manually set a theme
+      isDark.value = e.matches
+    }
+  })
+}
+
 // Configure Monaco workers
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -24,7 +51,7 @@ self.MonacoEnvironment = {
 const props = defineProps({
   modelValue: { type: String, default: '' },
   language: { type: String, default: 'javascript' },
-  theme: { type: String, default: 'vs-dark' },
+  theme: { type: String, default: null }, // Use null to indicate we want to use global theme
   readOnly: { type: Boolean, default: false },
   height: { type: String, default: '300px' },
   minimap: { type: Boolean, default: true },
@@ -41,11 +68,14 @@ let editor = null
 
 const initEditor = () => {
   if (!containerRef.value) return
-  
+
+  // Use global theme if no specific theme is provided
+  const editorTheme = props.theme || (isDark.value ? 'vs-dark' : 'vs')
+
   editor = monaco.editor.create(containerRef.value, {
     value: props.modelValue,
     language: props.language,
-    theme: props.theme,
+    theme: editorTheme,
     readOnly: props.readOnly,
     automaticLayout: true,
     minimap: { enabled: props.minimap },
@@ -121,8 +151,37 @@ watch(() => props.language, (newVal) => {
 })
 
 watch(() => props.theme, (newVal) => {
-  monaco.editor.setTheme(newVal)
+  const editorTheme = newVal || (isDark.value ? 'vs-dark' : 'vs')
+  monaco.editor.setTheme(editorTheme)
 })
+
+// Watch for global theme changes
+watch(isDark, (newDarkValue) => {
+  if (!props.theme) { // Only update if no specific theme is provided
+    const editorTheme = newDarkValue ? 'vs-dark' : 'vs'
+    if (editor) {
+      monaco.editor.setTheme(editorTheme)
+    }
+  }
+}, { immediate: true })
+
+// Watch for localStorage theme changes from other components
+const handleStorageChange = (e) => {
+  if (e.key === 'theme') {
+    const newTheme = e.newValue
+    if (newTheme) {
+      isDark.value = newTheme === 'dark'
+      // Also update the theme immediately if editor exists
+      if (editor && !props.theme) {
+        const editorTheme = isDark.value ? 'vs-dark' : 'vs'
+        monaco.editor.setTheme(editorTheme)
+      }
+    }
+  }
+}
+
+// Add storage event listener
+window.addEventListener('storage', handleStorageChange)
 
 watch(() => props.readOnly, (newVal) => {
   if (editor) {
@@ -140,6 +199,8 @@ onUnmounted(() => {
   if (editor) {
     editor.dispose()
   }
+  // Remove storage event listener
+  window.removeEventListener('storage', handleStorageChange)
 })
 </script>
 

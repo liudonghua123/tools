@@ -242,7 +242,6 @@ onMounted(() => {
                 <MonacoEditor 
                   v-model="sqlCode"
                   language="sql"
-                  theme="vs-dark"
                   height="100%"
                 />
             </div>

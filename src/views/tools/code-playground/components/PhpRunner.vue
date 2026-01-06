@@ -199,7 +199,6 @@ onMounted(() => {
         <MonacoEditor 
           v-model="phpCode"
           language="php"
-          theme="vs-dark"
           height="100%"
         />
       </div>

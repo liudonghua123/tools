@@ -257,7 +257,6 @@ const handleResize = () => {
         <MonacoEditor 
           v-model="octaveCode"
           language="matlab"
-          theme="vs-dark"
           height="100%"
           :minimap="false"
         />

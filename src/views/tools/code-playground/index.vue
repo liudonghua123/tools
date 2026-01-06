@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed, onMounted, defineAsyncComponent, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 
 // Lazy load heavy components
@@ -25,10 +28,50 @@ const CSharpRunner = defineAsyncComponent(() => import('./components/CSharpRunne
 const SwiPrologRunner = defineAsyncComponent(() => import('./components/SwiPrologRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
+// Initialize activeMode from route params or query
 const activeMode = ref('sandbox')
 const isFullScreen = ref(false)
 const toggleFullScreen = () => {
   isFullScreen.value = !isFullScreen.value
+}
+
+// Initialize from route
+onMounted(() => {
+  // Check route params first, then query params
+  const routeMode = route.params.mode || route.query.mode
+  const routeCode = route.query.code
+
+  if (routeMode && modes.value.some(m => m.id === routeMode)) {
+    activeMode.value = routeMode
+  }
+
+  // Handle code parameter if needed by specific components
+  if (routeCode) {
+    // We'll pass the code to the appropriate component
+    // This will be handled by individual runner components
+  }
+})
+
+// Watch for changes in route to update activeMode
+watch(() => route.params.mode, (newMode) => {
+  if (newMode && modes.value.some(m => m.id === newMode)) {
+    activeMode.value = newMode
+  }
+})
+
+// Watch for changes in activeMode to update the URL
+watch(activeMode, (newMode) => {
+  // Update the URL without reloading the page
+  router.replace({
+    name: 'code-playground',
+    params: { mode: newMode },
+    query: { ...route.query, mode: undefined } // Remove mode from query if it exists
+  })
+})
+
+// Function to change mode and update URL
+function changeMode(mode) {
+  activeMode.value = mode
 }
 
 const modes = computed(() => [
@@ -360,14 +403,14 @@ watch(activeMode, (newMode) => {
 
     <!-- Mode Tabs -->
     <div class="flex justify-start gap-2 mb-4 overflow-x-auto whitespace-nowrap pb-2 md:pb-0 scrollbar-hide px-1">
-      <button 
-        v-for="mode in modes" 
+      <button
+        v-for="mode in modes"
         :key="mode.id"
-        @click="activeMode = mode.id"
+        @click="changeMode(mode.id)"
         :class="[
           'px-5 py-2.5 rounded-xl font-medium transition-all flex items-center gap-2',
-          activeMode === mode.id 
-            ? 'bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-lg shadow-violet-500/25' 
+          activeMode === mode.id
+            ? 'bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-lg shadow-violet-500/25'
             : 'bg-white/60 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
         ]"
       >
@@ -698,10 +741,9 @@ watch(activeMode, (newMode) => {
         <div class="flex-1 min-h-0">
           <Suspense>
             <template #default>
-              <MonacoEditor 
+              <MonacoEditor
                 v-model="singleFileCode"
                 :language="singleFileLanguage"
-                theme="vs-dark"
                 height="100%"
               />
             </template>
