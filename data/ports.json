@@ -732,18 +732,6 @@
     "service_zh": ""
   },
   {
-    "port": "82",
-    "tcp": "",
-    "udp": "Unofficial",
-    "sctp": "",
-    "dccp": "",
-    "service": "",
-    "desc": "TorPark control",
-    "meta": {},
-    "desc_zh": "TorPark 控制",
-    "service_zh": ""
-  },
-  {
     "port": "83",
     "tcp": "Assigned",
     "udp": "",
@@ -823,18 +811,6 @@
     "dccp": "",
     "service": "",
     "desc": "dnsix (DNSIX Security Attribute Token Map)",
-    "meta": {},
-    "desc_zh": "",
-    "service_zh": ""
-  },
-  {
-    "port": "90",
-    "tcp": "Unofficial",
-    "udp": "",
-    "sctp": "",
-    "dccp": "",
-    "service": "PointCast (dotcom)",
-    "desc": "PointCast (dotcom)",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -6516,18 +6492,6 @@
     "service_zh": ""
   },
   {
-    "port": "3978",
-    "tcp": "Unofficial",
-    "udp": "",
-    "sctp": "",
-    "dccp": "",
-    "service": "",
-    "desc": "Palo Alto Networks' Panorama management of firewalls and log collectors pre-PAN-OS 8.0 Panorama-to-managed devices software updates.",
-    "meta": {},
-    "desc_zh": "Palo Alto Networks' Panorama 管理 of firewalls and log collectors pre-PAN-OS 8.0 Panorama-to-managed devices software updates.",
-    "service_zh": ""
-  },
-  {
     "port": "3979",
     "tcp": "Unofficial",
     "udp": "",
@@ -10584,18 +10548,6 @@
     "service_zh": ""
   },
   {
-    "port": "7777",
-    "tcp": "Unofficial",
-    "udp": "",
-    "sctp": "",
-    "dccp": "",
-    "service": "citation needed",
-    "desc": "Unreal Tournament series default server",
-    "meta": {},
-    "desc_zh": "",
-    "service_zh": ""
-  },
-  {
     "port": "7831",
     "tcp": "Unofficial",
     "udp": "",
@@ -10735,18 +10687,6 @@
     "dccp": "",
     "service": "",
     "desc": "Quest AppAssure 5 Engine",
-    "meta": {},
-    "desc_zh": "",
-    "service_zh": ""
-  },
-  {
-    "port": "8007",
-    "tcp": "Yes",
-    "udp": "",
-    "sctp": "",
-    "dccp": "",
-    "service": "Proxmox Backup Server",
-    "desc": "Proxmox Backup Server admin web interface",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
