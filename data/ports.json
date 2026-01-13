@@ -8460,6 +8460,18 @@
     "service_zh": ""
   },
   {
+    "port": "5520",
+    "tcp": "",
+    "udp": "Unofficial",
+    "sctp": "",
+    "dccp": "",
+    "service": "Hytale",
+    "desc": "Hytale multiplayer server",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
     "port": "5550",
     "tcp": "Unofficial",
     "udp": "",

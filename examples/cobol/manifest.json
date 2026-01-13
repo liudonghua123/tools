@@ -1,0 +1,43 @@
+{
+    "chapters": [
+        {
+            "title": "Basics",
+            "examples": [
+                {
+                    "name": "Hello World",
+                    "path": "hello.cob"
+                },
+                {
+                    "name": "Arithmetic Operations",
+                    "path": "arithmetic.cob"
+                },
+                {
+                    "name": "String Handling",
+                    "path": "strings.cob"
+                }
+            ]
+        },
+        {
+            "title": "Control Structures",
+            "examples": [
+                {
+                    "name": "Control Flow",
+                    "path": "control_flow.cob"
+                },
+                {
+                    "name": "Loops",
+                    "path": "loops.cob"
+                }
+            ]
+        },
+        {
+            "title": "Algorithms",
+            "examples": [
+                {
+                    "name": "Prime Numbers",
+                    "path": "primes.cob"
+                }
+            ]
+        }
+    ]
+}
