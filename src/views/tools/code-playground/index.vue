@@ -25,6 +25,7 @@ const RustRunner = defineAsyncComponent(() => import('./components/RustRunner.vu
 const LuaRunner = defineAsyncComponent(() => import('./components/LuaRunner.vue'))
 const FortranRunner = defineAsyncComponent(() => import('./components/FortranRunner.vue'))
 const CSharpRunner = defineAsyncComponent(() => import('./components/CSharpRunner.vue'))
+const CobolRunner = defineAsyncComponent(() => import('./components/CobolRunner.vue'))
 const SwiPrologRunner = defineAsyncComponent(() => import('./components/SwiPrologRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
@@ -90,6 +91,7 @@ const modes = computed(() => [
   { id: 'rust', icon: 'rust', label: t('tools.code-playground.modes.rust', 'Rust') },
   { id: 'lua', icon: 'lua', label: t('tools.code-playground.modes.lua', 'Lua') },
   { id: 'fortran', icon: 'fortran', label: t('tools.code-playground.modes.fortran', 'Fortran') },
+  { id: 'cobol', icon: 'cobol', label: 'Cobol' },
   { id: 'octave', icon: 'octave', label: t('tools.code-playground.modes.octave') },
   { id: 'swipl', icon: 'swipl', label: t('tools.code-playground.modes.swipl', 'SWI-Prolog') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
@@ -462,6 +464,9 @@ watch(activeMode, (newMode) => {
         <svg v-else-if="mode.icon === 'lua'" class="w-4 h-4" viewBox="0 0 128 128" fill="currentColor">
           <path d="M64 12C35.2 12 12 35.2 12 64s23.2 52 52 52 52-23.2 52-52S92.8 12 64 12zm0 94c-23.2 0-42-18.8-42-42s18.8-42 42-42 42 18.8 42 42-18.8 42-42 42zm18-42c0 10-8 18-18 18s-18-8-18-18 8-18 18-18 18 8 18 18z"/>
         </svg>
+        <svg v-else-if="mode.icon === 'cobol'" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+           <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
         <svg v-else-if="mode.icon === 'swipl'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13.5v6.5l5.25 3.28.75-1.22-4.5-2.78v-5.5z"/>
         </svg>
@@ -688,6 +693,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Cobol Runner -->
+      <Suspense v-else-if="activeMode === 'cobol'">
+        <template #default>
+          <CobolRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
