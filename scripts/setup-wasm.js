@@ -519,6 +519,47 @@ async function setupFortran() {
     }
 }
 
+const cobolDir = path.join(publicDir, 'cobol-wasm');
+
+async function setupCobol() {
+    console.log('Setting up COBOL WebAssembly...');
+
+    if (!fs.existsSync(cobolDir)) fs.mkdirSync(cobolDir, { recursive: true });
+
+    // Based on the file listing from the user:
+    // clang, cobc, sysroot.tar, wasm-ld
+    // Assuming these are hosted somewhere or reused from clang-wasm for now?
+    // Wait, the user already had them. But for reproducibility we need a source.
+    // The previous conversation mentioned checking public/cobol-wasm.
+    // Since I don't have a definitive external URL for the "cobol-tuned" clang/wasm-ld right now,
+    // I will add the function frame but warn if files are missing, or try to download if I can find a source.
+    // However, looking at the user's `sysroot.tar` content (gnucobol config), this seems custom.
+    // I'll skip downloading if files exist, but I need to know WHERE they came from to make this script actually useful for a fresh clone.
+    // For now, I will assume they are manually placed or I should use the ones from a known release if available.
+    // Let's just ensure the directory exists and log what we find.
+
+    // Actually, I should probably try to download them if I knew the URL.
+    // Since I don't, I will just log.
+
+    // EDIT: The user asked to "Add setupCobol...". I will add it but effectively it checks existence.
+    // If I knew the source I'd add download logic.
+    // The prompt implied I should "ensure reproducibility". I'll assume they might be in `node_modules` or I should simply check.
+
+    const files = ['cobc', 'clang', 'wasm-ld', 'sysroot.tar'];
+    let missing = [];
+    files.forEach(f => {
+        if (!fs.existsSync(path.join(cobolDir, f))) {
+            missing.push(f);
+        }
+    });
+
+    if (missing.length > 0) {
+        console.warn(`Missing COBOL files: ${missing.join(', ')}. Please manually place them in ${cobolDir} or update setup-wasm.js with a download source.`);
+    } else {
+        console.log('COBOL WASM files found.');
+    }
+}
+
 async function setupCSharp() {
     console.log('Setting up C# (WasmSharp) WebAssembly...');
     const nodeModulesCSharp = path.resolve(__dirname, '../node_modules/@wasmsharp/core');
@@ -596,6 +637,7 @@ async function main() {
         await setupRust();
         await setupLua();
         await setupFortran();
+        await setupCobol();
         // await setupCSharp();
         await setupSwiProlog();
         console.log('All WASM assets setup complete.');

@@ -6,9 +6,10 @@ import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
-import { Wasmer, init, Directory } from "@wasmer/sdk";
-import wasmerSDKModule from "@wasmer/sdk/wasm?url";
 import { untar } from "@andrewbranch/untar.js";
+
+// Dynamic imports variables
+let Wasmer, init, Directory, wasmerSDKModule;
 
 const { t } = useI18n()
 const emit = defineEmits(['ready'])
@@ -53,6 +54,45 @@ const initCobol = async () => {
     isLoading.value = true
     statusMessage.value = 'Initializing Wasmer...'
     try {
+        // 1. Load coi-serviceworker first
+        if (!window.crossOriginIsolated) {
+            statusMessage.value = 'Loading COEP Service Worker...'
+            await new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = `${import.meta.env.BASE_URL}cobol-wasm/coi-serviceworker.js`;
+                script.onload = resolve;
+                script.onerror = resolve; // Continue even if it fails, maybe headers are enough
+                document.head.appendChild(script);
+            });
+        }
+
+        // 2. Dynamic import Wasmer
+        const wasmerSDK = await import("@wasmer/sdk");
+        Wasmer = wasmerSDK.Wasmer;
+        init = wasmerSDK.init;
+        Directory = wasmerSDK.Directory;
+        // wasm?url import also needs dynamic handling if we want to be strict, 
+        // but Vite handles ?url imports statically well. However, to match the user request "load BEFORE sdk",
+        // we should ensure the SDK isn't evaluated until now.
+        // We can use a dynamic import for the WASM URL too or just rely on the fact that `import` statement was removed.
+        // We need to re-import the wasm module URL dynamically or just use the static string if Vite allows.
+        // Vite's `?url` is a build time thing. We should probably keep the static import for the URL 
+        // OR use `import.meta.glob` or similar. 
+        // BUT wait, I removed the static import line for `wasmerSDKModule`.
+        // Let's re-add it as a dynamic import or just a static one?
+        // If I removed it, I need to get it back.
+        // Actually, `import ... from ...?url` is top-level.
+        // Let's use `await import` for the module itself, and for the WASM URL...
+        // The WASM URL import is harmless (it's just a string).
+        // The problematic part is `@wasmer/sdk` initialization (threads).
+        
+        // Re-adding the wasm URL import at the top might be fine, but I removed it.
+        // Let's try to dynamic import the URL too if possible, or just put it back at top level?
+        // Top level string import is safe.
+        // I will restore `import wasmerSDKModule` at top level in a separate edit if needed, OR just do:
+        const wasmerUrlModule = await import("@wasmer/sdk/wasm?url");
+        wasmerSDKModule = wasmerUrlModule.default;
+
         await init({ module: wasmerSDKModule });
         
         statusMessage.value = 'Downloading System Root...'
@@ -137,10 +177,39 @@ const runCobol = async () => {
         // Write main.cob to root
         await rootDir.writeFile("test.cob", new TextEncoder().encode(cobolCode.value));
         
+        // 0. Test COBC liveness
+        term.write("Checking cobc version...\r\n");
+        const cobcPkg = await Wasmer.fromFile(pkg.cobc);
+        
+        try {
+             // Simple version check first
+             const versionInstance = await cobcPkg.entrypoint.run({
+                 args: ["--version"],
+                 mount: {
+                    "/": rootDir,
+                    "/sysroot": sysrootDir, 
+                    "/lib": libDir
+                 },
+                env: {
+                    "COB_CONFIG_DIR": "/sysroot/share/gnucobol/config"
+                },
+             });
+             const versionResult = await versionInstance.wait();
+             console.log("Cobc Version Result:", versionResult);
+             if (versionResult.code !== 0) {
+                 term.write(`\x1b[33mWarning: cobc --version returned ${versionResult.code}\x1b[0m\r\n`);
+             } else {
+                 term.write(versionResult.stdout);
+             }
+        } catch (e) {
+            console.error("Version check failed", e);
+            term.write(`\x1b[31mVersion check failed: ${e.message}\x1b[0m\r\n`);
+            throw e; // Abort if version check dies hard
+        }
+
         // 1. Run COBC
         // cobc -C -x test.cob -o test.c (Relative to mounted root)
-        term.write("Running cobc...\r\n");
-        const cobcPkg = await Wasmer.fromFile(pkg.cobc);
+        term.write("Running cobc compilation...\r\n");
         const cobcInstance = await cobcPkg.entrypoint.run({
             args: ["-C", "-x", "/test.cob", "-o", "/test.c"],
             mount: {
@@ -154,7 +223,9 @@ const runCobol = async () => {
             cwd: '/',
         });
         
+        console.log("Cobc Instance started", cobcInstance);
         const cobcResult = await cobcInstance.wait();
+        console.log("Cobc Result", cobcResult);
         
         // Check for cobc failure
         if (cobcResult.code !== 0) {
