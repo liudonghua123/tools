@@ -355,32 +355,49 @@ async function setupRust() {
 
     if (!fs.existsSync(rustDir)) fs.mkdirSync(rustDir, { recursive: true });
 
-    const files = [
-        { name: 'rune.js', url: 'https://rune-rs.github.io/js/rune.js' },
-        { name: 'rune_wasm.wasm', url: 'https://rune-rs.github.io/js/assets/rune_wasm-b9e0a926.wasm' }
-    ];
+    const runeJsUrl = 'https://rune-rs.github.io/js/rune.js';
+    const runeJsPath = path.join(rustDir, 'rune.js');
 
     try {
-        for (const file of files) {
-            const dest = path.join(rustDir, file.name);
-            if (!fs.existsSync(dest)) {
-                await download(file.url, dest);
+        // Step 1: Download rune.js if not exists
+        if (!fs.existsSync(runeJsPath)) {
+            await download(runeJsUrl, runeJsPath);
+        } else {
+            console.log('rune.js already exists.');
+        }
+
+        // Step 2: Read content and parse WASM path
+        let content = fs.readFileSync(runeJsPath, 'utf8');
+
+        // Regex to find the wasm path: /js/assets/rune_wasm-<hash>.wasm
+        const wasmMatch = content.match(/\/js\/assets\/rune_wasm-[a-f0-9]+\.wasm/);
+
+        if (wasmMatch) {
+            const wasmPathFromJs = wasmMatch[0];
+            const wasmUrl = `https://rune-rs.github.io${wasmPathFromJs}`;
+            const wasmLocalName = 'rune_wasm.wasm';
+            const wasmDest = path.join(rustDir, wasmLocalName);
+
+            // Step 3: Download WASM
+            if (!fs.existsSync(wasmDest)) {
+                await download(wasmUrl, wasmDest);
             } else {
-                console.log(`${file.name} already exists, skipping.`);
+                console.log(`${wasmLocalName} already exists, skipping.`);
+            }
+
+            // Step 4: Patch rune.js path
+            console.log(`Patching rune.js to use local wasm file (replacing ${wasmPathFromJs})...`);
+            content = content.replace(wasmPathFromJs, wasmLocalName);
+        } else {
+            // Check if already patched
+            if (content.includes('rune_wasm.wasm')) {
+                console.log('rune.js seems to be already patched with rune_wasm.wasm.');
+            } else {
+                console.warn('Could not find match for rune_wasm file in rune.js. Skipping WASM download/patch.');
             }
         }
 
-        // Patch rune.js to use local wasm file and support options in init()
-        const runeJsPath = path.join(rustDir, 'rune.js');
-        let content = fs.readFileSync(runeJsPath, 'utf8');
-        const originalWasmPath = '/js/assets/rune_wasm-b9e0a926.wasm';
-        if (content.includes(originalWasmPath)) {
-            console.log('Patching rune.js to use local wasm file...');
-            content = content.replace(originalWasmPath, 'rune_wasm.wasm');
-        }
-
-        const originalInit = 'async function init() {\n      exports.module = await wasm();\n  }';
-        const patchedInit = 'async function init(opt) {\n      exports.module = await wasm(opt);\n  }';
+        // Existing patch for init(opt)
         if (content.includes('async function init() {')) {
             console.log('Patching rune.js init() to accept options...');
             content = content.replace('async function init() {', 'async function init(opt) {');
