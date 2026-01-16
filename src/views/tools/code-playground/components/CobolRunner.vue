@@ -67,14 +67,14 @@ const initCobol = async () => {
         }
 
         // 2. Dynamic import Wasmer
-        const wasmerSDK = await import("@wasmer/sdk");
+        const wasmerSDK = await import(/* @vite-ignore */ `${import.meta.env.BASE_URL}cobol-wasm/wasmer-sdk/index.mjs`);
         Wasmer = wasmerSDK.Wasmer;
         init = wasmerSDK.init;
         Directory = wasmerSDK.Directory;
         
         // Load customized wasmer build, set default entrypont of command to wasm-ld
         // See also https://github.com/wasmerio/wasmer-js/issues/466
-        await init({ module: `${import.meta.env.BASE_URL}cobol-wasm/wasmer_js_bg.wasm` });
+        await init({ module: `${import.meta.env.BASE_URL}cobol-wasm/wasmer-sdk/wasmer_js_bg.wasm` });
         
         statusMessage.value = 'Downloading System Root...'
         // Download sysroot
