@@ -55,16 +55,16 @@ const initCobol = async () => {
     statusMessage.value = 'Initializing Wasmer...'
     try {
         // 1. Load coi-serviceworker first
-        if (!window.crossOriginIsolated) {
-            statusMessage.value = 'Loading COEP Service Worker...'
-            await new Promise((resolve) => {
-                const script = document.createElement('script');
-                script.src = `${import.meta.env.BASE_URL}cobol-wasm/coi-serviceworker.js`;
-                script.onload = resolve;
-                script.onerror = resolve; // Continue even if it fails, maybe headers are enough
-                document.head.appendChild(script);
-            });
-        }
+        // if (!window.crossOriginIsolated) {
+        //     statusMessage.value = 'Loading COEP Service Worker...'
+        //     await new Promise((resolve) => {
+        //         const script = document.createElement('script');
+        //         script.src = `${import.meta.env.BASE_URL}cobol-wasm/coi-serviceworker.js`;
+        //         script.onload = resolve;
+        //         script.onerror = resolve; // Continue even if it fails, maybe headers are enough
+        //         document.head.appendChild(script);
+        //     });
+        // }
 
         // 2. Dynamic import Wasmer
         const wasmerSDK = await import(/* @vite-ignore */ `${import.meta.env.BASE_URL}cobol-wasm/wasmer-sdk/index.mjs`);
