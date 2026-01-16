@@ -71,29 +71,10 @@ const initCobol = async () => {
         Wasmer = wasmerSDK.Wasmer;
         init = wasmerSDK.init;
         Directory = wasmerSDK.Directory;
-        // wasm?url import also needs dynamic handling if we want to be strict, 
-        // but Vite handles ?url imports statically well. However, to match the user request "load BEFORE sdk",
-        // we should ensure the SDK isn't evaluated until now.
-        // We can use a dynamic import for the WASM URL too or just rely on the fact that `import` statement was removed.
-        // We need to re-import the wasm module URL dynamically or just use the static string if Vite allows.
-        // Vite's `?url` is a build time thing. We should probably keep the static import for the URL 
-        // OR use `import.meta.glob` or similar. 
-        // BUT wait, I removed the static import line for `wasmerSDKModule`.
-        // Let's re-add it as a dynamic import or just a static one?
-        // If I removed it, I need to get it back.
-        // Actually, `import ... from ...?url` is top-level.
-        // Let's use `await import` for the module itself, and for the WASM URL...
-        // The WASM URL import is harmless (it's just a string).
-        // The problematic part is `@wasmer/sdk` initialization (threads).
         
-        // Re-adding the wasm URL import at the top might be fine, but I removed it.
-        // Let's try to dynamic import the URL too if possible, or just put it back at top level?
-        // Top level string import is safe.
-        // I will restore `import wasmerSDKModule` at top level in a separate edit if needed, OR just do:
-        const wasmerUrlModule = await import("@wasmer/sdk/wasm?url");
-        wasmerSDKModule = wasmerUrlModule.default;
-
-        await init({ module: wasmerSDKModule });
+        // Load customized wasmer build, set default entrypont of command to wasm-ld
+        // See also https://github.com/wasmerio/wasmer-js/issues/466
+        await init({ module: `${import.meta.env.BASE_URL}cobol-wasm/wasmer_js_bg.wasm` });
         
         statusMessage.value = 'Downloading System Root...'
         // Download sysroot
@@ -172,68 +153,47 @@ const runCobol = async () => {
         // Construct directories based on partitioned data
         const sysrootDir = new Directory(pkg.sysrootFiles);
         const libDir = new Directory(pkg.libFiles);
-        const rootDir = new Directory(pkg.rootFiles); // "."
+        const rootDir = new Directory(pkg.rootFiles);
+        const srcDir = new Directory();
+
+        const mount = {
+          "/": rootDir,
+          "/sysroot": sysrootDir,
+          "/lib": libDir,
+          "/src": srcDir,
+        }
+        const env = {
+          "COB_CONFIG_DIR": "/sysroot/share/gnucobol/config"
+        }
+        const cwd = '/src'
         
         // Write main.cob to root
-        await rootDir.writeFile("test.cob", new TextEncoder().encode(cobolCode.value));
+        await srcDir.writeFile("test.cob", new TextEncoder().encode(cobolCode.value));
         
-        // 0. Test COBC liveness
-        term.write("Checking cobc version...\r\n");
         const cobcPkg = await Wasmer.fromFile(pkg.cobc);
         
-        try {
-             // Simple version check first
-             const versionInstance = await cobcPkg.entrypoint.run({
-                 args: ["--version"],
-                 mount: {
-                    "/": rootDir,
-                    "/sysroot": sysrootDir, 
-                    "/lib": libDir
-                 },
-                env: {
-                    "COB_CONFIG_DIR": "/sysroot/share/gnucobol/config"
-                },
-             });
-             const versionResult = await versionInstance.wait();
-             console.log("Cobc Version Result:", versionResult);
-             if (versionResult.code !== 0) {
-                 term.write(`\x1b[33mWarning: cobc --version returned ${versionResult.code}\x1b[0m\r\n`);
-             } else {
-                 term.write(versionResult.stdout);
-             }
-        } catch (e) {
-            console.error("Version check failed", e);
-            term.write(`\x1b[31mVersion check failed: ${e.message}\x1b[0m\r\n`);
-            throw e; // Abort if version check dies hard
-        }
-
         // 1. Run COBC
         // cobc -C -x test.cob -o test.c (Relative to mounted root)
         term.write("Running cobc compilation...\r\n");
         const cobcInstance = await cobcPkg.entrypoint.run({
-            args: ["-C", "-x", "/test.cob", "-o", "/test.c"],
-            mount: {
-                "/": rootDir,
-                "/sysroot": sysrootDir, // For COB_CONFIG_DIR
-                "/lib": libDir
-            },
-            env: {
-                "COB_CONFIG_DIR": "/sysroot/share/gnucobol/config"
-            },
-            cwd: '/',
+            args: ["-C", "-x", "/src/test.cob", "-o", "/src/test.c"],
+            mount,
+            env,
+            cwd,
         });
         
-        console.log("Cobc Instance started", cobcInstance);
         const cobcResult = await cobcInstance.wait();
-        console.log("Cobc Result", cobcResult);
         
+        // Log all output for debugging
+        // if (cobcResult.stdout) term.write(cobcResult.stdout);
+        // if (cobcResult.stderr) term.write(cobcResult.stderr);
+
         // Check for cobc failure
         if (cobcResult.code !== 0) {
-            term.write(cobcResult.stderr); 
             throw new Error(`cobc failed with code ${cobcResult.code}`);
         }
         term.write("cobc done.\r\n");
-
+        
         // 2. Run Clang
         // clang ... -o test.o -x c test.c
         term.write("Running clang...\r\n");
@@ -246,20 +206,18 @@ const runCobol = async () => {
                 "-internal-isystem", "/sysroot/include/wasm32-wasi",
                 "-internal-isystem", "/sysroot/include",
                 "-ferror-limit", "19", 
-                "-o", "/test.o", "-x", "c", "/test.c"
+                "-o", "/src/test.o", "-x", "c", "/src/test.c"
             ],
-            mount: {
-                "/": rootDir,
-                "/sysroot": sysrootDir,
-                "/lib": libDir
-            },
-            cwd: '/',
+            mount,
+            env,
+            cwd,
         });
         
         const clangResult = await clangInstance.wait();
+        if (clangResult.stdout) term.write(clangResult.stdout);
+        if (clangResult.stderr) term.write(clangResult.stderr);
         
         if (clangResult.code !== 0) {
-             term.write(clangResult.stderr);
              throw new Error(`clang failed with code ${clangResult.code}`);
         }
         term.write("clang done.\r\n");
@@ -269,20 +227,16 @@ const runCobol = async () => {
         const wasmldPkg = await Wasmer.fromFile(pkg.wasmld);
         const wasmldInstance = await wasmldPkg.entrypoint.run({
             args: [
-                 "-m", "wasm32", 
-                 "-L/sysroot/lib", "-L/sysroot/lib/wasm32-wasi", "/sysroot/lib/wasm32-wasi/crt1-command.o",
-                 "--export-dynamic", "--export=__heap_base", "--export=__stack_pointer", "--export=__data_end",
-                 "-lpthread", "-lc", "/lib/clang/16/lib/wasi/libclang_rt.builtins-wasm32.a",
-                 "/test.o",
-                 "-lc", "-lcob", "-lgmp", "-lm", 
-                 "-o", "/test.wasm"
+              "-m", "wasm32", "-L/sysroot/lib", "-L/sysroot/lib/wasm32-wasi",
+              "--shared-memory", "--max-memory=4294967296", "--import-memory",
+              "--export-dynamic", "--export=__heap_base", "--export=__stack_pointer", "--export=__data_end", "--export=__wasm_init_tls", "--export=__wasm_signal", "--export=__tls_size", "--export=__tls_align", "--export=__tls_base",
+              "/sysroot/lib/wasm32-wasi/crt1-command.o", "/lib/clang/16/lib/wasi/libclang_rt.builtins-wasm32.a", "test.o",
+              "-lc", "-lpthread", "-lcob", "-lgmp", "-lwasi-emulated-signal", "-lwasi-emulated-getpid", "-lwasi-emulated-mman", "-lsetjmp", "-ldl",
+              "-o", "test.wasm"
             ],
-            mount: {
-                "/": rootDir,
-                "/sysroot": sysrootDir,
-                "/lib": libDir
-            },
-            cwd: '/',
+            mount,
+            env,
+            cwd,
         });
 
         const ldResult = await wasmldInstance.wait();
@@ -294,7 +248,7 @@ const runCobol = async () => {
         term.write("Linking done.\r\n");
         
         // 4. Run Result
-        const testWasm = await rootDir.readFile("test.wasm");
+        const testWasm = await srcDir.readFile("test.wasm");
         term.write("Running program...\r\n");
         
         const appInstance = await Wasmer.fromFile(testWasm);

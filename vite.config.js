@@ -24,7 +24,8 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        include: ['monaco-editor']
+        include: ['monaco-editor'],
+        exclude: ['@wasmer/sdk'],
     },
     build: {
         rollupOptions: {
