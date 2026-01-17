@@ -21,6 +21,8 @@
         "@wasmer/sdk": "^0.10.0",
         "@wasmsharp/core": "^0.10.2",
         "@wasmsharp/vite-plugin": "^0.10.0",
+        "chart.js": "^4.5.1",
+        "echarts": "^6.0.0",
         "fflate": "^0.8.2",
         "highlight.js": "^11.11.1",
         "katex": "^0.16.27",
