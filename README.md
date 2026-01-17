@@ -7,12 +7,89 @@
 
 A professional, high-performance, and beautifully designed online toolbox. Built with a focus on user experience (UX), speed, and developer-friendly architecture.
 
+[中文版 (README-ZH_CN.md)](README-ZH_CN.md)
+
+## 📸 Preview
+
+![Dashboard](screenshots/dashboard.png)
+
 ## 🌟 Key Features
 
-- **🌐 Network Tools**: Whois Domain (RDAP), Whois IP (RDAP), Port Query (fetched from Wikipedia).
-- **🆔 Identity & Utility**: ID Card tools, Regex Tester, Diff Tool, Code Playground.
-- **🎨 Modern Design**: Responsive, Glassmorphism UI, Dark Mode.
-- **🌍 Global Ready**: Full i18n (EN/ZH) support.
+| Tool Name | Description | Key Features |
+| :--- | :--- | :--- |
+| **[Code Playground](https://liudonghua123.github.io/tools/#/code-playground)** | Multi-language online development environment | **19+ Languages**, 100% Client-side, WASM Runtimes |
+| **[Diff Viewer](https://liudonghua123.github.io/tools/#/diff-viewer)** | Professional text comparison tool | Side-by-side/Inline views, Syntax highlighting |
+| **[Sorting Visualizer](https://liudonghua123.github.io/tools/#/sorting-visualizer)** | Interactive algorithm visualization | Animations, Step-by-step execution, Stats |
+| **[Base64 Image](https://liudonghua123.github.io/tools/#/base64-image)** | Image to Base64 & vice versa | Local processing, Drag-and-drop support |
+| **[Char Encoding](https://liudonghua123.github.io/tools/#/char-encoding)** | Comprehensive text encoding converter | Multi-encoding, Hex/Binary views |
+| **[ID Card Tool](https://liudonghua123.github.io/tools/#/id-card)** | Identity verification and info utility | Checksum validation, Info extraction |
+| **[Port Query](https://liudonghua123.github.io/tools/#/port-query)** | Network port information service | Wikipedia-backed data, Searchable |
+| **[Whois Domain](https://liudonghua123.github.io/tools/#/whois-domain)** | RDAP-based domain records query | Real-time lookup, Detailed info |
+| **[Whois IP](https://liudonghua123.github.io/tools/#/whois-ip)** | RDAP-based IP address query | Geolocation, ISP info |
+
+---
+
+## 🚀 Featured: Code Playground
+
+The **Code Playground** is our flagship tool, providing a full-featured IDE experience directly in your browser. 
+
+### ⚡ Pure Frontend Offline Support
+Unlike traditional online compilers that rely on backend servers, our playground executes code **entirely on the client side** using WebAssembly (WASM). 
+- **Zero Latency**: Code runs at near-native speeds.
+- **Privacy First**: Your code never leaves your browser.
+- **Offline Capable**: Once loaded, you can code without an internet connection.
+
+### 📸 Interface Preview
+
+| Languages Menu | Python Support |
+| :---: | :---: |
+| ![Languages Menu](screenshots/playground-tabs.png) | ![Python Support](screenshots/playground-python.png) |
+
+| Java Support | C++ Support |
+| :---: | :---: |
+| ![Java Support](screenshots/playground-java.png) | ![C++ Support](screenshots/playground-cpp.png) |
+
+| Multi-language Editor | Complete Language Support Matrix |
+| :---: | :---: |
+| ![Multi-language Editor](screenshots/playground-editor.png) | ![Complete Language Support Matrix](screenshots/playground-full-languages.png) |
+
+### 📚 Supported Languages & Runtimes
+We support a wide array of programming languages, each running on specialized browser-based engines.
+
+| Category | Languages | Runtime Technology |
+| :--- | :--- | :--- |
+| **Web & Base** | HTML5, CSS3, JavaScript, Markdown | Native Browser Engine |
+| **Scripting** | Python 3.11, Ruby 3.2, PHP 8.2 | Pyodide, Ruby.wasm, Php-wasm |
+| **Systems** | C/C++, Rust, Go, Zig | LLVM/Clang WASM, Go WASM |
+| **Enterprise** | Java (8/11/17), C# (.NET) | CheerpJ JVM, Dotnet-WASM |
+| **Scientific** | Octave, R, Fortran | Octave-WASM, WebR |
+| **Others** | Perl, Lua, Cobol, SWI-Prolog, SQLite | WebPerl, Lua-WASM, sql.js |
+
+### 📋 Full Language List (19+ Modes)
+The sandbox currently supports **19 distinct execution modes**:
+`HTML/CSS/JS Sandbox`, `Markdown Preview`, `Python 3`, `Ruby`, `PHP`, `Java (8/11/17)`, `C/C++ (Clang)`, `R`, `Perl`, `Go`, `C#`, `Zig`, `Rust`, `Lua`, `Fortran`, `Cobol`, `Octave`, `SWI-Prolog`, `SQLite`.
+
+Additionally, the **Single-file Editor** supports syntax highlighting and code snippets for: `JavaScript`, `TypeScript`, `JSON`, `HTML`, `CSS`, `Python`, `Ruby`, `Perl`, `Zig`, and `Lua`.
+
+---
+
+## 🛠️ Individual Tool Highlights
+
+### Diff Viewer & Sorting Visualizer
+Professional-grade tools for developers and students.
+
+| Diff Viewer | Sorting Visualizer |
+| :---: | :---: |
+| ![Diff Viewer](screenshots/diff-viewer.png) | ![Sorting Visualizer](screenshots/sorting-visualizer.png) |
+
+### Utility Tools
+Fast, secure, and intuitive utilities for everyday tasks.
+
+| Base64 Image | Char Encoding | ID Card Tool |
+| :---: | :---: | :---: |
+| ![Base64 Image](screenshots/base64-image.png) | ![Char Encoding](screenshots/char-encoding.png) | ![ID Card Tool](screenshots/id-card.png) |
+
+---
 
 ## 🏗️ Architecture & Project Structure
 
