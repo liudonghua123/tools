@@ -1470,7 +1470,7 @@
     "sctp": "",
     "dccp": "",
     "service": "RFC",
-    "desc": ".mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-parser-output .citation q{quotes:\"\\\"\"\"\\\"\"\"'\"\"'\"}.mw-parser-output .citation:target{background-color:rgba(0,127,255,0.133)}.mw-parser-output .id-lock-free.id-lock-free a{background:url(\"//upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg\")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-limited.id-lock-limited a,.mw-parser-output .id-lock-registration.id-lock-registration a{background:url(\"//upload.wikimedia.org/wikipedia/commons/d/d6/Lock-gray-alt-2.svg\")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-subscription.id-lock-subscription a{background:url(\"//upload.wikimedia.org/wikipedia/commons/a/aa/Lock-red-alt-2.svg\")right 0.1em center/9px no-repeat}.mw-parser-output .cs1-ws-icon a{background:url(\"//upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg\")right 0.1em center/12px no-repeat}body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-free a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-limited a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-registration a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-subscription a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .cs1-ws-icon a{background-size:contain;padding:0 1em 0 0}.mw-parser-output .cs1-code{color:inherit;background:inherit;border:none;padding:inherit}.mw-parser-output .cs1-hidden-error{display:none;color:var(--color-error,#d33)}.mw-parser-output .cs1-visible-error{color:var(--color-error,#d33)}.mw-parser-output .cs1-maint{display:none;color:#085;margin-left:0.3em}.mw-parser-output .cs1-kern-left{padding-left:0.2em}.mw-parser-output .cs1-kern-right{padding-right:0.2em}.mw-parser-output .citation .mw-selflink{font-weight:inherit}@media screen{.mw-parser-output .cs1-format{font-size:95%}html.skin-theme-clientpref-night .mw-parser-output .cs1-maint{color:#18911f}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .cs1-maint{color:#18911f}}RFC1060",
+    "desc": ".mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-parser-output .citation q{quotes:\"\\\"\"\"\\\"\"\"'\"\"'\"}.mw-parser-output .citation:target{background-color:rgba(0,127,255,0.133)}.mw-parser-output .id-lock-free.id-lock-free a{background:url(\"//upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg\")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-limited.id-lock-limited a,.mw-parser-output .id-lock-registration.id-lock-registration a{background:url(\"//upload.wikimedia.org/wikipedia/commons/d/d6/Lock-gray-alt-2.svg\")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-subscription.id-lock-subscription a{background:url(\"//upload.wikimedia.org/wikipedia/commons/a/aa/Lock-red-alt-2.svg\")right 0.1em center/9px no-repeat}.mw-parser-output .cs1-ws-icon a{background:url(\"//upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg\")right 0.1em center/12px no-repeat}body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-free a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-limited a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-registration a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-subscription a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .cs1-ws-icon a{background-size:contain;padding:0 1em 0 0}.mw-parser-output .cs1-code{color:inherit;background:inherit;border:none;padding:inherit}.mw-parser-output .cs1-hidden-error{display:none;color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-visible-error{color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-maint{display:none;color:#085;margin-left:0.3em}.mw-parser-output .cs1-kern-left{padding-left:0.2em}.mw-parser-output .cs1-kern-right{padding-right:0.2em}.mw-parser-output .citation .mw-selflink{font-weight:inherit}@media screen{.mw-parser-output .cs1-format{font-size:95%}html.skin-theme-clientpref-night .mw-parser-output .cs1-maint{color:#18911f}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .cs1-maint{color:#18911f}}RFC1060",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -9624,6 +9624,18 @@
     "service_zh": ""
   },
   {
+    "port": "6567",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "Mindustry",
+    "desc": "Mindustry multiplayer server",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
     "port": "6571",
     "tcp": "Unofficial",
     "udp": "",
@@ -10896,6 +10908,18 @@
     "service_zh": ""
   },
   {
+    "port": "8093",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "GitLab",
+    "desc": "GitLab Runner session server",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
     "port": "8096",
     "tcp": "Unofficial",
     "udp": "",
@@ -11052,6 +11076,18 @@
     "service_zh": ""
   },
   {
+    "port": "8182",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "",
+    "desc": "NexusM Media Server HTTP port",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
     "port": "8184",
     "tcp": "Unofficial",
     "udp": "",
@@ -11177,8 +11213,8 @@
     "udp": "",
     "sctp": "",
     "dccp": "",
-    "service": "Winbox",
-    "desc": "Default on a MikroTik RouterOS for a Windows application used to administer MikroTik RouterOS",
+    "service": "Mikrotik",
+    "desc": "WinBox: Mikrotik RouterOS GUI Configurator",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -11508,6 +11544,30 @@
     "service_zh": ""
   },
   {
+    "port": "8728",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "MikroTik RouterOS",
+    "desc": "MikroTik RouterOS API",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
+    "port": "8729",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "MikroTik RouterOS",
+    "desc": "MikroTik RouterOS API-SSL",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
     "port": "8765",
     "tcp": "Unofficial",
     "udp": "No",
@@ -11529,6 +11589,18 @@
     "desc": "Voice channel of TeamSpeak 2, a proprietary Voice over IP protocol targeted at gamers",
     "meta": {},
     "desc_zh": "Voice channel of TeamSpeak 2, a proprietary Voice over IP 协议 targeted at gamers",
+    "service_zh": ""
+  },
+  {
+    "port": "8787",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "Cloudflare",
+    "desc": "Cloudflare Workers development default",
+    "meta": {},
+    "desc_zh": "",
     "service_zh": ""
   },
   {
@@ -14517,6 +14589,18 @@
     "desc": "BINKP, Fidonet mail transfers over TCP/IP",
     "meta": {},
     "desc_zh": "BINKP, Fidonet 邮件 transfers over TCP/IP",
+    "service_zh": ""
+  },
+  {
+    "port": "24576",
+    "tcp": "style=\"background: #8FD; color:black; vertical-align: middle; text-align: center; \" class=\"partial table-partial\"|Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "",
+    "desc": "MINT Protocol used for Motorola, Zebra, and Extreme Networks wireless.",
+    "meta": {},
+    "desc_zh": "MINT 协议 used for Motorola, Zebra, and Extreme Networks wireless.",
     "service_zh": ""
   },
   {
