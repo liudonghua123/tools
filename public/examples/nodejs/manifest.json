@@ -1,0 +1,56 @@
+{
+    "lang": "nodejs",
+    "name": "Node.js",
+    "chapters": [
+        {
+            "title": "Basic Knowledge",
+            "examples": [
+                {
+                    "name": "Hello World",
+                    "path": "basic/01_hello.js"
+                },
+                {
+                    "name": "Variables & Types",
+                    "path": "basic/02_variables.js"
+                },
+                {
+                    "name": "Arrays",
+                    "path": "basic/03_arrays.js"
+                },
+                {
+                    "name": "Objects",
+                    "path": "basic/04_objects.js"
+                },
+                {
+                    "name": "Functions",
+                    "path": "basic/05_functions.js"
+                },
+                {
+                    "name": "Loops",
+                    "path": "basic/06_loops.js"
+                }
+            ]
+        },
+        {
+            "title": "Advanced Topics",
+            "examples": [
+                {
+                    "name": "Async/Await",
+                    "path": "advanced/01_async.js"
+                },
+                {
+                    "name": "Classes",
+                    "path": "advanced/02_classes.js"
+                },
+                {
+                    "name": "Error Handling",
+                    "path": "advanced/03_errors.js"
+                },
+                {
+                    "name": "Modules",
+                    "path": "advanced/04_modules.js"
+                }
+            ]
+        }
+    ]
+}

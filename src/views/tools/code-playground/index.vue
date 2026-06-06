@@ -26,6 +26,7 @@ const LuaRunner = defineAsyncComponent(() => import('./components/LuaRunner.vue'
 const FortranRunner = defineAsyncComponent(() => import('./components/FortranRunner.vue'))
 const CSharpRunner = defineAsyncComponent(() => import('./components/CSharpRunner.vue'))
 const CobolRunner = defineAsyncComponent(() => import('./components/CobolRunner.vue'))
+const NodejsRunner = defineAsyncComponent(() => import('./components/NodejsRunner.vue'))
 const SwiPrologRunner = defineAsyncComponent(() => import('./components/SwiPrologRunner.vue'))
 const MonacoEditor = defineAsyncComponent(() => import('./components/MonacoEditor.vue'))
 
@@ -92,6 +93,7 @@ const modes = computed(() => [
   { id: 'lua', icon: 'lua', label: t('tools.code-playground.modes.lua', 'Lua') },
   { id: 'fortran', icon: 'fortran', label: t('tools.code-playground.modes.fortran', 'Fortran') },
   { id: 'cobol', icon: 'cobol', label: 'Cobol' },
+  { id: 'nodejs', icon: 'nodejs', label: 'Node.js' },
   { id: 'octave', icon: 'octave', label: t('tools.code-playground.modes.octave') },
   { id: 'swipl', icon: 'swipl', label: t('tools.code-playground.modes.swipl', 'SWI-Prolog') },
   { id: 'sqlite', icon: 'sqlite', label: t('tools.code-playground.modes.sqlite') },
@@ -467,6 +469,10 @@ watch(activeMode, (newMode) => {
         <svg v-else-if="mode.icon === 'cobol'" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
         </svg>
+        <svg v-else-if="mode.icon === 'nodejs'" class="w-4 h-4" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M212.553 169.054l-71.204-40.807a15.998 15.998 0 0 0-15.698 0l-71.205 40.807a15.995 15.995 0 0 0-7.927 14.09v81.626a15.995 15.995 0 0 0 7.927 14.09l71.205 40.807a15.998 15.998 0 0 0 15.698 0l71.204-40.807a15.995 15.995 0 0 0 7.927-14.09v-81.626a15.995 15.995 0 0 0-7.927-14.09zm-80.446-5.936a4.002 4.002 0 0 1 3.918 0l71.204 40.807a4.998 4.998 0 0 1 2.479 4.406v81.626a4.998 4.998 0 0 1-2.479 4.406l-71.204 40.807a3.999 3.999 0 0 1-3.918 0l-71.204-40.807a4.998 4.998 0 0 1-2.479-4.406v-81.626a4.998 4.998 0 0 1 2.479-4.406l71.204-40.807z"/>
+            <path d="M140.102 184.868c26.301 0 42.255-12.173 42.255-32.446 0-15.021-11.033-24.803-34.15-27.49l-8.588-.992c-10.747-1.26-12.842-4.448-12.842-8.342 0-4.2 3.15-7.35 11.032-7.35 8.636 0 13.353 3.15 14.353 10.497h15.023c-.849-17.851-13.203-28.132-30.377-28.132-16.921 0-29.526 9.453-29.526 24.807 0 19.273 14.105 24.305 30.626 26.244l8.588.994c9.447 1.106 13.1 4.153 13.1 8.347 0 4.994-4.353 8.489-12.23 8.489-10.252 0-15.771-4.348-17.271-11.54H111.62c1.501 19.576 15.024 26.914 28.482 26.914zm-44.254-43.83v-36.71l-15.023 8.489v28.221h-14.605v18.742h14.605v20.241c0 11.033 4.353 16.918 18.242 16.918 5.253 0 9.95-.5 13.85-1.254v-16.424c-2.9.5-5.251.75-7.098.75-4.353 0-5.753-1.752-5.753-6.504v-31.727h16.674l2.398-18.742H95.848z"/>
+        </svg>
         <svg v-else-if="mode.icon === 'swipl'" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13.5v6.5l5.25 3.28.75-1.22-4.5-2.78v-5.5z"/>
         </svg>
@@ -705,6 +711,18 @@ watch(activeMode, (newMode) => {
         <template #fallback>
           <div class="flex items-center justify-center h-full">
             <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </template>
+      </Suspense>
+
+      <!-- Node.js Runner -->
+      <Suspense v-else-if="activeMode === 'nodejs'">
+        <template #default>
+          <NodejsRunner />
+        </template>
+        <template #fallback>
+          <div class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </template>
       </Suspense>
