@@ -401,8 +401,8 @@
     "udp": "",
     "sctp": "",
     "dccp": "",
-    "service": "why?",
-    "desc": "Removed by IANA on 2017-05-18.",
+    "service": "",
+    "desc": "Removed by IANA on 2017-05-18, previously used for NI FTP.",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -3474,7 +3474,7 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "SaltoSystems - Handshake for IP-Components",
+    "desc": "SaltoSystemsHandshake for IP-Components",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -6930,7 +6930,7 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "SaltoSystems - DTLS Based Communication for NCoder",
+    "desc": "SaltoSystemsDTLS Based Communication for NCoder",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -8370,9 +8370,9 @@
     "sctp": "",
     "dccp": "",
     "service": "VMware",
-    "desc": "VMware VAMI (Virtual Appliance Management Infrastructure)—used for initial setup of various administration settings on Virtual Appliances designed using the VAMI architecture.",
+    "desc": "VMware VAMI (Virtual Appliance Management Infrastructure) — used for initial setup of various administration settings on Virtual Appliances designed using the VAMI architecture.",
     "meta": {},
-    "desc_zh": "VMware VAMI (Virtual Appliance 管理 Infrastructure)—used for initial setup of various administration settings on Virtual Appliances designed using the VAMI architecture.",
+    "desc_zh": "VMware VAMI (Virtual Appliance 管理 Infrastructure) — used for initial setup of various administration settings on Virtual Appliances designed using the VAMI architecture.",
     "service_zh": ""
   },
   {
@@ -8790,9 +8790,9 @@
     "sctp": "",
     "dccp": "",
     "service": "VNC",
-    "desc": "VNC Remote Frame Buffer RFB protocol over HTTP",
+    "desc": "VNC Remote Framebuffer (RFB) protocol over HTTP",
     "meta": {},
-    "desc_zh": "VNC Remote Frame Buffer RFB 协议 over HTTP",
+    "desc_zh": "VNC Remote Framebuffer (RFB) 协议 over HTTP",
     "service_zh": ""
   },
   {
@@ -8801,11 +8801,11 @@
     "udp": "",
     "sctp": "",
     "dccp": "",
-    "service": "Remote Frame Buffer protocol",
-    "desc": "Remote Frame Buffer protocol (RFB)",
+    "service": "Remote Framebuffer (RFB) protocol",
+    "desc": "Remote Framebuffer (RFB) protocol",
     "meta": {},
-    "desc_zh": "Remote Frame Buffer 协议 (RFB)",
-    "service_zh": "Remote Frame Buffer 协议"
+    "desc_zh": "Remote Framebuffer (RFB) 协议",
+    "service_zh": "Remote Framebuffer (RFB) 协议"
   },
   {
     "port": "5905",
@@ -8970,9 +8970,9 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "Tigermeeting API for cloud management - TigerDriver",
+    "desc": "Tigermeeting API for cloud managementTigerDriver",
     "meta": {},
-    "desc_zh": "Tigermeeting API for cloud 管理 - TigerDriver",
+    "desc_zh": "",
     "service_zh": ""
   },
   {
@@ -10938,9 +10938,9 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "SaltoSystems - Pro Access Space Service",
+    "desc": "SaltoSystemsPro Access Space Service",
     "meta": {},
-    "desc_zh": "SaltoSystems - Pro 访问 Space 服务",
+    "desc_zh": "SaltoSystemsPro 访问 Space 服务",
     "service_zh": ""
   },
   {
@@ -10950,7 +10950,7 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "SaltoSystems - Used for LocalIO-Bridge for USB-Devices",
+    "desc": "SaltoSystemsUsed for LocalIO-Bridge for USB-Devices",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -12441,6 +12441,18 @@
     "desc": "Bitcoin Lightning Network",
     "meta": {},
     "desc_zh": "Bitcoin Lightning 网络",
+    "service_zh": ""
+  },
+  {
+    "port": "9761",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "Roboteq",
+    "desc": "Roboteq Motor controller",
+    "meta": {},
+    "desc_zh": "",
     "service_zh": ""
   },
   {
@@ -14088,6 +14100,18 @@
     "service_zh": ""
   },
   {
+    "port": "18789",
+    "tcp": "Unofficial",
+    "udp": "",
+    "sctp": "",
+    "dccp": "",
+    "service": "OpenClaw",
+    "desc": "OpenClaw Gateway",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
     "port": "19000",
     "tcp": "Unofficial",
     "udp": "",
@@ -14280,6 +14304,18 @@
     "service_zh": ""
   },
   {
+    "port": "19818",
+    "tcp": "Unofficial",
+    "udp": "Unofficial",
+    "sctp": "",
+    "dccp": "",
+    "service": "",
+    "desc": "Vereign mesh network. Client-to-client data transfer over secure direct tunnel. It uses TCP and UDP",
+    "meta": {},
+    "desc_zh": "Vereign mesh 网络. Client-to-client 数据 传输 over 安全 direct tunnel. It uses TCP and UDP",
+    "service_zh": ""
+  },
+  {
     "port": "19880",
     "tcp": "Unofficial",
     "udp": "",
@@ -14430,9 +14466,9 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "Syncthing Relay Server (strelaysrv) - Status service",
+    "desc": "Syncthing Relay Server (strelaysrv)Status service",
     "meta": {},
-    "desc_zh": "Syncthing Relay Server (strelaysrv) - Status 服务",
+    "desc_zh": "Syncthing Relay Server (strelaysrv)Status 服务",
     "service_zh": ""
   },
   {
@@ -14593,8 +14629,8 @@
   },
   {
     "port": "24576",
-    "tcp": "style=\"background: #8FD; color:black; vertical-align: middle; text-align: center; \" class=\"partial table-partial\"|Unofficial",
-    "udp": "",
+    "tcp": "",
+    "udp": "Unofficial",
     "sctp": "",
     "dccp": "",
     "service": "",
@@ -15221,8 +15257,8 @@
     "udp": "",
     "sctp": "",
     "dccp": "",
-    "service": "Fivem",
-    "desc": "Fivem (Default Port) GTA V multiplayer",
+    "service": "FiveM",
+    "desc": "FiveM (Default Port) GTA V multiplayer",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -15738,7 +15774,7 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "Palo Alto Networks' Panorama.",
+    "desc": "Palo Alto Networks' Panorama",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -15750,9 +15786,9 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "S-CONNECT protocol - data exchange (TCP) and manual device pairing (UDP).",
+    "desc": "S-CONNECT protocoldata exchange (TCP) and manual device pairing (UDP)",
     "meta": {},
-    "desc_zh": "S-CONNECT 协议 - 数据 exchange (TCP) and manual device pairing (UDP).",
+    "desc_zh": "",
     "service_zh": ""
   },
   {
@@ -15762,9 +15798,9 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "S-CONNECT protocol - automatic device pairing.",
+    "desc": "S-CONNECT protocolautomatic device pairing",
     "meta": {},
-    "desc_zh": "S-CONNECT 协议 - automatic device pairing.",
+    "desc_zh": "",
     "service_zh": ""
   },
   {
@@ -15858,7 +15894,7 @@
     "sctp": "",
     "dccp": "",
     "service": "Mosh",
-    "desc": "Range from which Mosh – a remote-terminal application similar to SSH – typically assigns ports for ongoing sessions between Mosh servers and Mosh clients.",
+    "desc": "Range from which Mosh – a remote-terminal application similar to SSH – typically assigns ports for ongoing sessions between Mosh servers and Mosh clients",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -15869,8 +15905,20 @@
     "udp": "",
     "sctp": "",
     "dccp": "",
-    "service": "",
+    "service": "ActiveMQ",
     "desc": "ActiveMQ Classic",
+    "meta": {},
+    "desc_zh": "",
+    "service_zh": ""
+  },
+  {
+    "port": "61616",
+    "tcp": "",
+    "udp": "compressible",
+    "sctp": "",
+    "dccp": "",
+    "service": "",
+    "desc": "Ports with efficient compression in 6LoWPAN header compression",
     "meta": {},
     "desc_zh": "",
     "service_zh": ""
@@ -15882,9 +15930,9 @@
     "sctp": "",
     "dccp": "",
     "service": "",
-    "desc": "Apple's lockdownd protocol – used for communicating with iPhones and iPads.",
+    "desc": "Apple's lockdownd protocol – used for communicating with iPhones and iPads",
     "meta": {},
-    "desc_zh": "Apple's lockdownd 协议 – used for communicating with iPhones and iPads.",
+    "desc_zh": "Apple's lockdownd 协议 – used for communicating with iPhones and iPads",
     "service_zh": ""
   },
   {
