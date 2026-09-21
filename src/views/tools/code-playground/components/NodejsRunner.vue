@@ -4,11 +4,10 @@ import { useI18n } from 'vue-i18n'
 import MonacoEditor from './MonacoEditor.vue'
 import { fetchManifest, fetchExample } from '../utils/ExampleLoader'
 import { Terminal } from '@xterm/xterm'
-import { FitAddon } from '@xterm/addon-fit'
 import '@xterm/xterm/css/xterm.css'
 
 // Dynamic imports variables
-let Wasmer, init, Directory, WasmerClass;
+let Wasmer, Directory;
 
 const { t } = useI18n()
 const emit = defineEmits(['ready'])
@@ -26,7 +25,6 @@ const statusMessage = ref('')
 
 // Terminal
 let term = null
-let fitAddon = null
 const terminalContainer = ref(null)
 
 const initTerminal = () => {
@@ -39,10 +37,9 @@ const initTerminal = () => {
             foreground: '#e2e8f0'
         }
     })
-    fitAddon = new FitAddon()
-    term.loadAddon(fitAddon)
     term.open(terminalContainer.value)
-    fitAddon.fit()
+    term.resize(500, 40);
+    console.log('Terminal init, container width:', terminalContainer.value?.clientWidth, 'cols:', term.cols);
     term.write('\x1b[38;5;244mResult will appear here...\x1b[0m\r\n')
 }
 
@@ -53,14 +50,9 @@ const initNodejs = async () => {
     isLoading.value = true
     statusMessage.value = 'Initializing Wasmer...'
     try {
-        // 1. Dynamic import Wasmer SDK
-        const wasmerSDK = await import(/* @vite-ignore */ `${import.meta.env.BASE_URL}nodejs-wasm/wasmer-sdk/index.mjs`);
+        // 1. Dynamic import Wasmer SDK using sandbox API
+        const wasmerSDK = await import(/* @vite-ignore */ `${import.meta.env.BASE_URL}nodejs-wasm/wasmer-sdk/dist/index.js`);
         Wasmer = wasmerSDK.Wasmer;
-        init = wasmerSDK.init;
-        Directory = wasmerSDK.Directory;
-
-        // Initialize Wasmer with the WASM JS bindings
-        await init({ module: `${import.meta.env.BASE_URL}nodejs-wasm/wasmer-sdk/wasmer_js_bg.wasm` });
 
         statusMessage.value = 'Loading Node.js WASM...'
 
@@ -91,37 +83,31 @@ const runNodejs = async () => {
     term.clear();
     const startTime = performance.now();
 
+    // Create wasmer instance for sandbox
+    const wasmer = new Wasmer();
+
     try {
-        // Create directory with the JS code
-        const srcDir = new Directory();
-        await srcDir.writeFile("test.js", new TextEncoder().encode(nodejsCode.value));
+        // Load the wasm package
+        const edgejsPkg = await wasmer.packages.load(edgejsWasm);
 
-        // Load the edgejs.wasm module
-        const edgejsPkg = await Wasmer.fromFile(edgejsWasm);
+        // Create sandbox with the package
+        const sandbox = await wasmer.sandboxes.create({ packages: [edgejsPkg] });
 
-        // Run Node.js with the test.js file
+        // Run Node.js with the code
         term.write("Running Node.js code...\r\n");
 
-        const instance = await edgejsPkg.entrypoint.run({
-            args: ["node", "/test.js"],
-            mount: {
-                "/": srcDir,
-            },
-            // stdin via env to pass code directly if supported
-        });
+        const output = await sandbox
+            .command(edgejsPkg, ["-e", nodejsCode.value])
+            .run();
 
-        const result = await instance.wait();
+        // Write output directly
+        const outputText = output.text();
+        // Replace \n with \r\n for proper terminal line endings
+        const normalizedText = outputText.split('\n').join('\r\n');
+        term.write(normalizedText);
 
-        if (result.stdout) {
-            term.write(result.stdout);
-        }
-        if (result.stderr) {
-            term.write(`\x1b[31m${result.stderr}\x1b[0m`);
-        }
-
-        if (result.code !== 0) {
-            term.write(`\r\n\x1b[33mProgram exited with code ${result.code}\x1b[0m\r\n`);
-        }
+        await sandbox.close();
+        await wasmer.close();
 
         const endTime = performance.now();
         runTime.value = (endTime - startTime).toFixed(2);
@@ -185,7 +171,6 @@ onUnmounted(() => {
 })
 
 const handleResize = () => {
-  if (fitAddon) fitAddon.fit()
 }
 
 </script>
